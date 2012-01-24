@@ -47,10 +47,6 @@ S.Card = Class.extend({
   onPlay      : function( player, target ){}
 });
 
-S.PathCard = S.Card.extend({
-  usedOn  : [ 'PathCard' ]
-});
-
 S.GoalCard = S.Card.extend({
   
 });
