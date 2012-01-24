@@ -1,11 +1,11 @@
 
-S.CharacterCard = S.Card.extend({
+S.RoleCard = S.Card.extend({
   usedOn  : [ 'Player' ]
 });
 
-S.GoldDigger_blue   = S.CharacterCard.extend({});
-S.GoldDigger_green  = S.CharacterCard.extend({});
-S.Boss              = S.CharacterCard.extend({});
-S.Geologist         = S.CharacterCard.extend({});
-S.Profiteer         = S.CharacterCard.extend({});
-S.Saboteur          = S.CharacterCard.extend({});
+S.GoldDigger_blue   = S.RoleCard.extend({});
+S.GoldDigger_green  = S.RoleCard.extend({});
+S.Boss              = S.RoleCard.extend({});
+S.Geologist         = S.RoleCard.extend({});
+S.Profiteer         = S.RoleCard.extend({});
+S.Saboteur          = S.RoleCard.extend({});

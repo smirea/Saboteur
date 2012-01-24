@@ -5,7 +5,7 @@ var S = {};
 
 S.Player = Class.extend({
   name          : 'Player-Name',
-  characterCard : null,
+  roleCard : null,
   cards         : [],
   activeCards   : [],
   lamp          : true,
