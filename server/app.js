@@ -29,7 +29,23 @@ app.configure('production', function(){
 
 // Routes
 */
-app.get('/', routes.index);
+app.get('/', function(req, res){
+  res.sendfile(__dirname + '/views/index.html');
+});
+
+var io = require('socket.io').listen(app);
+
+io.sockets.on('connection', function (socket) {
+  io.sockets.emit('this', { will: 'be received by everyone'});
+
+  socket.on('private message', function (data) {
+    console.log('I received a private message by ', data);
+  });
+
+  socket.on('disconnect', function () {
+    io.sockets.emit('user disconnected');
+  });
+});
 
 app.listen(3000);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
