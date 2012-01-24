@@ -8,8 +8,8 @@
 <script src="js/game/options.js"></script>
 <script src="js/game/Saboteur.js"></script>
 <script>
+  var Game = new Saboteur();
   $(function(){
-    
   });
 </script>
 

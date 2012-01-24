@@ -1,6 +1,22 @@
-var Saboteur = {
+var SaboteurOptions = {
   options : {
-    
+    target        : null,
+    players       : [ 'Stefan', 'Comp_1', 'Comp_2' ],
+    startingCards : 6,
+    discardCards  : 10,
+    goalCards     : 3,
+    goldCards     : 1,
+    layout        : {
+      width     : 7,
+      height    : 11,
+      startX    : 5,
+      startY    : 1,
+      goalY     : 9
+    }
+  },
+  classes : {
+    main  : 'Saboteur',
+    card  : 'Saboteur-card'
   },
   cards : {
     character : {
@@ -35,4 +51,4 @@ var Saboteur = {
       FreeAtLast    : 4
     }
   }
-}; 
+};

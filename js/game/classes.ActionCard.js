@@ -1,64 +1,64 @@
 
-var ActionCard = Card.extend({
-  usedOn  : [ ActionCard ]
+S.ActionCard = S.Card.extend({
+  usedOn  : [  'ActionCard' ]
 });
 
 
-var BrokenLamp    = ActionCard.extend({
-  usedOn  : [ Player ]
+S.BrokenLamp    = S.ActionCard.extend({
+  usedOn  : [ 'Player' ]
 });
-var BrokenCart    = ActionCard.extend({
-  usedOn  : [ Player ]
+S.BrokenCart    = S.ActionCard.extend({
+  usedOn  : [ 'Player' ]
 });
-var BrokenPickaxe = ActionCard.extend({
-  usedOn  : [ Player ]
-});
-
-
-var Lamp          = ActionCard.extend({
-  usedOn  : [ BrokenLamp ]
-});
-var Cart          = ActionCard.extend({
-  usedOn  : [ BrokenCart ]
-});
-var Pickaxe       = ActionCard.extend({
-  usedOn  : [ BrokenPickaxe ]
-});
-var LampPickaxe   = ActionCard.extend({
-  usedOn  : [ BrokenLamp, BrokenPickaxe ]
-});
-var PickaxeCart   = ActionCard.extend({
-  usedOn  : [ BrokenPickaxe, BrokenCart ]
-});
-var CartLamp      = ActionCard.extend({
-  usedOn  : [ BrokenCart, BrokenLamp ]
+S.BrokenPickaxe = S.ActionCard.extend({
+  usedOn  : [ 'Player' ]
 });
 
 
-var Rockfall      = ActionCard.extend({
-  usedOn  : [ PathCard ]
+S.Lamp          = S.ActionCard.extend({
+  usedOn  : [ 'BrokenLamp' ]
 });
-var Map           = ActionCard.extend({
-  usedOn  : [ GoalCard ]
+S.Cart          = S.ActionCard.extend({
+  usedOn  : [ 'BrokenCart' ]
 });
-var Theft         = ActionCard.extend({
-  usedOn  : [ Player ]
+S.Pickaxe       = S.ActionCard.extend({
+  usedOn  : [ 'BrokenPickaxe' ]
 });
-var HandsOff      = ActionCard.extend({
-  usedOn  : [ Theft ]
+S.LampPickaxe   = S.ActionCard.extend({
+  usedOn  : [ 'BrokenLamp', 'BrokenPickaxe' ]
 });
-var SwapHand      = ActionCard.extend({
-  usedOn  : [ Player ]
+S.PickaxeCart   = S.ActionCard.extend({
+  usedOn  : [ 'BrokenPickaxe', 'BrokenCart' ]
 });
-var Inspection    = ActionCard.extend({
-  usedOn  : [ Player ]
+S.CartLamp      = S.ActionCard.extend({
+  usedOn  : [ 'BrokenCart', 'BrokenLamp' ]
 });
-var SwapHats      = ActionCard.extend({
-  usedOn  : [ Player ]
+
+
+S.Rockfall      = S.ActionCard.extend({
+  usedOn  : [ 'PathCard' ]
 });
-var Trapped       = ActionCard.extend({
-  usedOn  : [ Player ]
+S.Map           = S.ActionCard.extend({
+  usedOn  : [ 'GoalCard' ]
 });
-var FreeAtLast    = ActionCard.extend({
-  usedOn  : [ Trapped ]
+S.Theft         = S.ActionCard.extend({
+  usedOn  : [ 'Player' ]
+});
+S.HandsOff      = S.ActionCard.extend({
+  usedOn  : [ 'Theft' ]
+});
+S.SwapHand      = S.ActionCard.extend({
+  usedOn  : [ 'Player' ]
+});
+S.Inspection    = S.ActionCard.extend({
+  usedOn  : [ 'Player' ]
+});
+S.SwapHats      = S.ActionCard.extend({
+  usedOn  : [ 'Player' ]
+});
+S.Trapped       = S.ActionCard.extend({
+  usedOn  : [ 'Player' ]
+});
+S.FreeAtLast    = S.ActionCard.extend({
+  usedOn  : [ 'Trapped' ]
 });
