@@ -4,8 +4,8 @@
   
   $cls = '.class.js';
   $includes = array(
-    'require_first' => array( "inheritance.js", "Utils.js", "Preloader.js",
-                              "SaboteurOptions.js",
+    'require_first' => array( "logger.js", "inheritance.js", "Utils.js", 
+                              "Preloader.js", "SaboteurOptions.js", "Map$cls",
                               "Card$cls", "ActionCard$cls", "PathCard$cls" ),
     'require_last'  => array( "Saboteur$cls", "SaboteurClient$cls" ),
     'exclude'       => array( "Map$cls" )
