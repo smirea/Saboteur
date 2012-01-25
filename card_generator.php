@@ -30,24 +30,23 @@
       if( obj.sides ){
         for( var j in obj.sides ){
           if( obj.sides[j].hasPath ){
+            var context = obj._structure._context;
+            context.lineWidth   = opt.lineWidth;
+            context.strokeStyle = opt.strokeStyle;
             var ok = false;
             for( var k in obj.sides[j].links ){
               ok = true;
-              var context = obj._structure._context;
-              context.lineWidth   = opt.lineWidth;
-              context.strokeStyle = opt.strokeStyle;
               draw_path( context, j, k );
             }
             if( !ok ){
-              var a = getPoint( i );
+              var a = getPoint( j );
               context.moveTo( a.x, a.y );
               switch( j ){
-                case 0: context.lineTo( opt.width/2, opt.height/4 ); break;
-                case 1: context.lineTo( opt.width*3/4, opt.height/2 ); break;
-                case 2: context.lineTo( opt.width/2, opt.height*3/4 ); break;
-                case 3: context.lineTo( opt.width/4, opt.height/2 ); break;
+                case '0': context.lineTo( opt.width/2, opt.height/4 ); break;
+                case '1': context.lineTo( opt.width*3/4, opt.height/2 ); break;
+                case '2': context.lineTo( opt.width/2, opt.height*3/4 ); break;
+                case '3': context.lineTo( opt.width/4, opt.height/2 ); break;
               }
-              console.log( j, a.x, a.y );
               context.stroke();
             }
             elem.data( 'obj', obj );
