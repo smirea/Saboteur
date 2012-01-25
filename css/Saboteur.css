@@ -1,0 +1,18 @@
+html{
+  background  : #ccc;
+}
+.Saboteur-card{
+  display : inline-block;
+}
+.Saboteur-card .card-canvas{
+  border        : 1px solid #999;
+  background    : #fff;
+  padding       : 5px;
+  
+  border-radius         : 10px;
+  -moz-border-radius    : 10px;
+  -webkit-border-radius : 10px;
+}
+.Saboteur-card .card-name, .Saboteur-card .card-description{
+  display : none;
+}
