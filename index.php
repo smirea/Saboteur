@@ -3,13 +3,14 @@
 
 <script src="js/jquery.js"></script>
 <script src="js/jquery.mouseToken.js"></script>
-<script src="lib/inheritance.js"></script>
-<script src="lib/Utils.js"></script>
-<script src="lib/SaboteurOptions.js"></script>
-<script src="lib/Card.class.js"></script>
+<?php 
+  $_GET['view'] = 'script'; 
+  require_once('include_lib.php'); 
+?>
+
 <script>
   $(function(){
-    $('#Saboteur').append( new S.Card().toElement() );
+    var client = new SaboteurClient({});
   });
 </script>
 
