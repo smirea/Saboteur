@@ -1,4 +1,4 @@
-global.include = require('../lib/includer.js').include;
+var include = require('include').include;
 include('../lib/inheritance.js');
 include('../lib/Saboteur.class.js');
 include('./Server.class.js');
