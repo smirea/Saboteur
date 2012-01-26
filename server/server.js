@@ -1,4 +1,7 @@
-require('./Server.class.js')
+global.include = require('../lib/includer.js').include;
+include('../lib/inheritance.js');
+include('../lib/Saboteur.class.js');
+include('./Server.class.js');
 
 var http = require('http')
 , url = require('url')
@@ -36,7 +39,7 @@ send404 = function(res){
 app.listen(8080);
 
 var io = require('socket.io').listen(app);
-var server = new Server();
+var sab = new SaboteurServer();
 
 io.sockets.on('connection', function(socket){
     console.log("Connection " + socket.id + " accepted.");
@@ -64,6 +67,7 @@ io.sockets.on('connection', function(socket){
     
     this.discard = function(data) {
       console.log(data);
+      
     };
     
     this.targetPerson = function(data) {

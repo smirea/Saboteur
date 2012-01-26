@@ -24,6 +24,7 @@
           + nextRetry + " seconds"); });
         socket.on('reconnect_failed', function(){ message("Reconnect Failed"); });
         socket.on('chat', function(message) { echo(message); });
+        socket.on('discard', function(cards) { discard(cards); });
           
         firstconnect = false;
       }
@@ -43,10 +44,6 @@
     function status_update(txt){
       document.getElementById('status').innerHTML = txt;
     };
-      
-    function esc(msg){
-      return msg.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    };
     
     function send() {
       //socket.send("Hello Server!");    
@@ -65,11 +62,17 @@
       document.getElementById('status').innerHTML += message.message;
     };
 
+    function discard(cards) {
+      console.log('discarding..');
+      socket.json.emit('discarding', [1,2,4]);
+    };
+
     </script>
     
     <h1>Socket.io Test</h1>
     <div><p id="status">Waiting for input</p></div>
     <div><p id="message"></p></div>  
+    <button id="chat" onClick='discard()'/>Discard</button>
     <button id="chat" onClick='chat()'/>Chat</button>
     <button id="connect" onClick='connect()'/>Connect</button>
     <button id="disconnect" onClick='disconnect()'>Disconnect</button>
