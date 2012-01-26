@@ -1,9 +1,6 @@
 global.include = require('include').include;
 include('./serverUtils.js');
 
-include('../lib/Saboteur.class.js');
-include('./Server.class.js');
-
 var http = require('http')
 , url = require('url')
 , fs = require('fs')
@@ -67,20 +64,23 @@ io.sockets.on('connection', function(socket){
     };
     
     this.discard = function(data) {
-      console.log(data);
-      
+      console.log('Got a discard event...' + data);
+      sab.handleDiscard(data);
     };
     
     this.targetPerson = function(data) {
-      console.log(data);
+      console.log('Got a targetPerson event...' + data);
+      sab.handleTargetPerson(data);
     };
     
     this.targetMap = function(data) {
-      console.log(data);
+      console.log('Got a targetMap event...' + data);
+      sab.handleTargetMap(data);
     };
     
     this.heal = function(data) {
-      console.log(data);
+      console.log('Got a heal event...' + data);
+      sab.handleHeal(data);
     };
     
     // REGISTERING EVENTS

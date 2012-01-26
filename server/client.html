@@ -24,7 +24,6 @@
           + nextRetry + " seconds"); });
         socket.on('reconnect_failed', function(){ message("Reconnect Failed"); });
         socket.on('chat', function(message) { echo(message); });
-        socket.on('discard', function(cards) { discard(cards); });
           
         firstconnect = false;
       }
@@ -48,12 +47,12 @@
     function send() {
       //socket.send("Hello Server!");    
       console.log('wtf??');
-      socket.json.emit('crap', '{aaa: "bbb"}');
+      socket.emit('crap', '{aaa: "bbb"}');
     };        
       
-    function chat(message) {
+    function chat() {
       console.log('chatting...');
-      socket.json.emit('chat', { message : 'testing...' });
+      socket.emit('chat', { message : 'testing...' });
     };
 
     function echo(message) {
@@ -62,9 +61,9 @@
       document.getElementById('status').innerHTML += message.message;
     };
 
-    function discard(cards) {
+    function discard() {
       console.log('discarding..');
-      socket.json.emit('discarding', [1,2,4]);
+      socket.emit('discard', [1,2,4]);
     };
 
     </script>
@@ -72,7 +71,7 @@
     <h1>Socket.io Test</h1>
     <div><p id="status">Waiting for input</p></div>
     <div><p id="message"></p></div>  
-    <button id="chat" onClick='discard()'/>Discard</button>
+    <button id="discard" onClick='discard()'/>Discard</button>
     <button id="chat" onClick='chat()'/>Chat</button>
     <button id="connect" onClick='connect()'/>Connect</button>
     <button id="disconnect" onClick='disconnect()'>Disconnect</button>
