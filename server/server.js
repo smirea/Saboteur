@@ -1,18 +1,20 @@
+require('./Server.class.js')
+
 var http = require('http')
 , url = require('url')
 , fs = require('fs')
-, server;
+, app;
 
-server = http.createServer(function(req, res){
-  // your normal server code
+app = http.createServer(function(req, res){
+  // your normal app code
   var path = url.parse(req.url).pathname;
   switch (path){
   case '/':
     res.writeHead(200, {'Content-Type': 'text/html'});
-    res.write('<h1>Hello! Try the <a href="/socketio-test.html">Socket.io Test</a></h1>');
+    res.write('<h1>Hello! Try the <a href="/client.html">Socket.io Test</a></h1>');
     res.end();
   break;
-  case '/socketio-test.html':
+  case '/client.html':
     fs.readFile(__dirname + path, function(err, data){
       if (err) return send404(res);
       res.writeHead(200, {'Content-Type': path == 'json.js' ? 'text/javascript' : 'text/html'})
@@ -31,24 +33,58 @@ send404 = function(res){
   res.end();
 };
 
-server.listen(8080);
+app.listen(8080);
 
-// socket.io, I choose you
-var io = require('socket.io').listen(server);
+var io = require('socket.io').listen(app);
+var server = new Server();
 
-// on a 'connection' event
 io.sockets.on('connection', function(socket){
-
-  console.log("Connection " + socket.id + " accepted.");
+    console.log("Connection " + socket.id + " accepted.");
+    //s.connection(socket);
     
-  // now that we have our connected 'socket' object, we can 
-  // define its event handlers
-  socket.on('message', function(message){
-        console.log("Received message: " + message + " - from client " + socket.id);
-  });
+    // EVENTS
+    this.allowedEvents = [
+                          'disconnect',
+                          'chat',
+                          'discard',
+                          'targetPerson',
+                          'targetMap',
+                          'heal'
+                         ];
     
-  socket.on('disconnect', function(){
-    console.log("Connection " + socket.id + " terminated.");
-  });
+    this.disconnect = function(data) {
+      console.log("Connection " + socket.id + " terminated.");
+    };
     
+    this.chat = function(data) {
+      console.log('Chat message from: ' + socket.id);
+      console.log(data);
+      io.sockets.json.emit('chat', data);
+    };
+    
+    this.discard = function(data) {
+      console.log(data);
+    };
+    
+    this.targetPerson = function(data) {
+      console.log(data);
+    };
+    
+    this.targetMap = function(data) {
+      console.log(data);
+    };
+    
+    this.heal = function(data) {
+      console.log(data);
+    };
+    
+    // REGISTERING EVENTS
+    for (var i in this.allowedEvents) {
+      var event = this.allowedEvents[i];
+      var self = this;
+      
+      socket.on(event, self[event]);
+      console.log('For event', event, 'Using function', self[event]);
+    };
 });
+
