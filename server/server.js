@@ -1,5 +1,6 @@
-var include = require('include').include;
-include('../lib/inheritance.js');
+global.include = require('include').include;
+include('./serverUtils.js');
+
 include('../lib/Saboteur.class.js');
 include('./Server.class.js');
 
