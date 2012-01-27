@@ -49,7 +49,7 @@ io.sockets.on('connection', function(socket){
     
     // EVENTS
     this.allowedEvents = protocol.events.server.custom;
-    console.log(this.allowedEvents);
+    
     this.disconnect = function(data) {
       console.log("Connection " + socket.id + " terminated.");
     };

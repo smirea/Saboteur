@@ -7,25 +7,35 @@ var SaboteurServer = Saboteur.extend({
   
   handleDiscard : function(playerID, cards) {
     console.log(playerID);
-    if (this.doDiscard(0, cards)) {
-      // TODO: report correct
+    if (this.doDiscard(playerID, cards)) {
       this.resolveCorrect(playerID);
     } else {
-      // TODO: error convention
       this.resolveError(playerID);
     }
   },
   
   handleTargetPerson : function(playerID, cardID, personID) {
-    
+    if (this.doTargetPerson(playerID, cardID, personID)) {
+      this.resolveCorrect(playerID);
+    } else {
+      this.resolveError(playerID);
+    }
   },
   
   handleTargetMap : function(playerID, cardID, posx, posy) {
-  
+    if (this.doTargetMap(playerID, cardID, posx, posy)) {
+      this.resolveCorrect(playerID);
+    } else {
+      this.resolveError(playerID);
+    }
   },
   
   handleHeal : function(playerID, cards, target) {
-  
+    if (this.doHeal(playerID, cards, target)) {
+      this.resolveCorrect(playerID);
+    } else {
+      this.resolveError(playerID);
+    }
   },
   
   resolveError : function(playerID) {
