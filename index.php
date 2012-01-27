@@ -11,8 +11,9 @@
 ?>
 
 <script>
+  var client;
   $(function(){
-    var client = new SaboteurClient( $('#Saboteur'), {});
+    client = new SaboteurClient( $('#Saboteur'), {});
   });
 </script>
 
