@@ -9,21 +9,54 @@
     
     <script>
         
+    
     var socket;
     var firstconnect = true;
+    var socketid = null;
+    window.onLoad = connect();
         
     function connect() {
       if(firstconnect) {
         socket = io.connect(null);
           
-        socket.on('message', function(data){ message(data); });
-        socket.on('connect', function(){ status_update("Connected to Server"); });
-        socket.on('disconnect', function(){ status_update("Disconnected from Server"); });
-        socket.on('reconnect', function(){ status_update("Reconnected to Server"); });
-        socket.on('reconnecting', function( nextRetry ){ status_update("Reconnecting in " 
-          + nextRetry + " seconds"); });
-        socket.on('reconnect_failed', function(){ message("Reconnect Failed"); });
-        socket.on('chat', function(message) { echo(message); });
+        socket.on('message', function(data){ 
+          message(data); 
+        });
+        
+        socket.on('connect', function() { 
+          status_update("Connected to Server"); 
+        });
+        
+        socket.on('disconnect', function() { 
+          status_update("Disconnected from Server"); 
+        });
+        
+        socket.on('reconnect', function(){ 
+          status_update("Reconnected to Server"); 
+        });
+        
+        socket.on('reconnecting', function( nextRetry ) { 
+          status_update("Reconnecting in " + nextRetry + " seconds"); 
+        });
+        
+        socket.on('reconnect_failed', function() { 
+          message("Reconnect Failed"); 
+        });
+        
+        socket.on('chat', function(message) { 
+          handleChat(message); 
+        });
+        
+        socket.on('discard', function(data) { 
+          handleDiscard(data); 
+        });
+        
+        socket.on('setup', function(info) {
+          handleSetup(info);
+          discard(); //TODO: testing phase...
+        });
+        
+        socket.on('result', function(result) { handleResult(result); });
           
         firstconnect = false;
       }
@@ -47,7 +80,7 @@
     function send() {
       //socket.send("Hello Server!");    
       console.log('wtf??');
-      socket.emit('crap', '{aaa: "bbb"}');
+      socket.emit('message', '{aaa: "bbb"}');
     };        
       
     function chat() {
@@ -55,7 +88,7 @@
       socket.emit('chat', { message : 'testing...' });
     };
 
-    function echo(message) {
+    function handleChat(message) {
       console.log('getting from server: ');
       console.log(message);
       document.getElementById('status').innerHTML += message.message;
@@ -63,7 +96,23 @@
 
     function discard() {
       console.log('discarding..');
-      socket.emit('discard', [1,2,4]);
+      socket.json.emit('discard', {id : this.socketid, cards: [1,2,4]} );
+    };
+    
+    function handleDiscard(data) {
+      console.log('got discard message back....');
+      console.log(data);
+    };
+
+    function handleSetup(info) {
+      console.log('got setup information');
+      console.log(info);
+      this.socketid = info.id;
+    }
+    
+    function handleResult(result) {
+      console.log('got result');
+      console.log(result);
     };
 
     </script>

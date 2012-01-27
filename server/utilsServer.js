@@ -4,6 +4,7 @@
     '../lib/inheritance.js',
     '../lib/logger.js',
     '../lib/Utils.js',
+    '../lib/Protocol.js',
     '../lib/Player.class.js',
     '../lib/SaboteurOptions.js',
     '../lib/Card.class.js',
@@ -16,10 +17,11 @@
     '../lib/GoalCard.class.js',
     '../lib/Map.class.js',
     '../lib/Saboteur.class.js',
-    './Server.class.js'
+    './SaboteurServer.class.js'
   ];
   
   for( var i in includes ){
+    console.log('*** INCLUDING :', includes[i]);
     include( includes[i] );
   }
   

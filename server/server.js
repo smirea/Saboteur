@@ -1,5 +1,5 @@
 global.include = require('include').include;
-include('./serverUtils.js');
+include('./utilsServer.js');
 
 var http = require('http')
 , url = require('url')
@@ -37,22 +37,19 @@ send404 = function(res){
 app.listen(8080);
 
 var io = require('socket.io').listen(app);
-var sab = new SaboteurServer();
+var protocol = new S.Protocol();
+var sab = new SaboteurServer(io, protocol);
 
 io.sockets.on('connection', function(socket){
     console.log("Connection " + socket.id + " accepted.");
+    socket.emit('setup', {id : socket.id});
+    //TODO: more hacks for testing...
+    sab.com.players[0].socket = socket;
     //s.connection(socket);
     
     // EVENTS
-    this.allowedEvents = [
-                          'disconnect',
-                          'chat',
-                          'discard',
-                          'targetPerson',
-                          'targetMap',
-                          'heal'
-                         ];
-    
+    this.allowedEvents = protocol.events.server.custom;
+    console.log(this.allowedEvents);
     this.disconnect = function(data) {
       console.log("Connection " + socket.id + " terminated.");
     };
@@ -64,8 +61,10 @@ io.sockets.on('connection', function(socket){
     };
     
     this.discard = function(data) {
-      console.log('Got a discard event...' + data);
-      sab.handleDiscard(data);
+      console.log('Got a discard event...');
+      console.log(data);
+      // var data = sab.handleDiscard(data.id, data.cards)
+      sab.handleDiscard(0, data.cards)
     };
     
     this.targetPerson = function(data) {
@@ -92,4 +91,3 @@ io.sockets.on('connection', function(socket){
       console.log('For event', event, 'Using function', self[event]);
     };
 });
-
