@@ -39,16 +39,28 @@ app.listen(8080);
 var io = require('socket.io').listen(app);
 var protocol = new S.Protocol();
 var sab = new SaboteurServer(io, protocol);
+//sab.setupGame();
 
 io.sockets.on('connection', function(socket){
     console.log("Connection " + socket.id + " accepted.");
     socket.emit('setup', {id : socket.id});
-    //TODO: more hacks for testing...
-    sab.com.players[0].socket = socket;
-    //s.connection(socket);
     
     // EVENTS
     this.allowedEvents = protocol.events.server.custom;
+
+    // TODO: hacks for testing    
+    this.startGame = function(data) {
+      sab.setupGame();
+      console.log('Starting game!');
+    };
+    
+    // TODO: hacks for testing
+    this.setup = function(data) {
+      // TODO: might use a class, mb?
+      sab.com.playerList[data.id] = {};
+      sab.com.playerList[data.id].name = data.name;
+      sab.com.playerList[data.id].socket = socket;
+    };
     
     this.disconnect = function(data) {
       console.log("Connection " + socket.id + " terminated.");
@@ -63,8 +75,7 @@ io.sockets.on('connection', function(socket){
     this.discard = function(data) {
       console.log('Got a discard event...');
       console.log(data);
-      // var data = sab.handleDiscard(data.id, data.cards)
-      sab.handleDiscard(0, data.cards)
+      sab.handleDiscard(data.id, data.cards)
     };
     
     this.targetPerson = function(data) {
@@ -88,6 +99,6 @@ io.sockets.on('connection', function(socket){
       var self = this;
       
       socket.on(event, self[event]);
-      console.log('For event', event, 'Using function', self[event]);
+      //console.log('For event', event, 'Using function', self[event]);
     };
 });

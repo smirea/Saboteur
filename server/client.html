@@ -12,7 +12,7 @@
     
     var socket;
     var firstconnect = true;
-    var socketid = null;
+    var socketid = null; // the other end!!
     window.onLoad = connect();
         
     function connect() {
@@ -53,7 +53,6 @@
         
         socket.on('setup', function(info) {
           handleSetup(info);
-          discard(); //TODO: testing phase...
         });
         
         socket.on('result', function(result) { handleResult(result); });
@@ -83,9 +82,56 @@
       socket.emit('message', '{aaa: "bbb"}');
     };        
       
+    // EVENTS
     function chat() {
       console.log('chatting...');
       socket.emit('chat', { message : 'testing...' });
+    };
+
+    function discard() {
+      console.log('discarding..');
+      var data = {
+        id    : this.socketid, 
+        cards : [1,2,4, 7]
+      }
+      socket.json.emit('discard',  data);
+    };
+    
+    function targetMap() {
+      var data = {
+        id      : this.socketid,
+        cardID  : 3,
+        posx    : 1,
+        posy    : 2
+      };
+    };
+    
+    function targetPerson() {
+      var data = {
+        id        : this.socketid,
+        cardID    : 4,
+        personID  : 2
+      };
+      
+      
+    };
+    
+    function heal() {
+      var data = {
+        
+      };
+    };
+    
+    function startGame(data) {
+      //TODO: think about this shit...
+      socket.emit('startGame');
+      discard(); //TODO: testing phase...
+    };
+    
+    // HANDLERS
+    function handleDiscard(data) {
+      console.log('got discard message back....');
+      console.log(data);
     };
 
     function handleChat(message) {
@@ -94,20 +140,15 @@
       document.getElementById('status').innerHTML += message.message;
     };
 
-    function discard() {
-      console.log('discarding..');
-      socket.json.emit('discard', {id : this.socketid, cards: [1,2,4]} );
-    };
-    
-    function handleDiscard(data) {
-      console.log('got discard message back....');
-      console.log(data);
-    };
-
     function handleSetup(info) {
       console.log('got setup information');
       console.log(info);
       this.socketid = info.id;
+      var data = {
+        id    : socketid,
+        name  : 'Mati'
+      };
+      this.socket.emit('setup', data);
     }
     
     function handleResult(result) {
@@ -119,11 +160,14 @@
     
     <h1>Socket.io Test</h1>
     <div><p id="status">Waiting for input</p></div>
-    <div><p id="message"></p></div>  
-    <button id="discard" onClick='discard()'/>Discard</button>
-    <button id="chat" onClick='chat()'/>Chat</button>
-    <button id="connect" onClick='connect()'/>Connect</button>
-    <button id="disconnect" onClick='disconnect()'>Disconnect</button>
-    <button id="send" onClick='send()'/>Send Message</button>
+    <button id="discard" onClick='discard()'/>discard</button>
+    <button id="targetMap" onClick='targetMap()'/>targetMap</button>
+    <button id="targetPerson" onClick='targetPerson()'/>targetPerson</button>
+    <button id="heal" onClick='heal()'/>heal</button>
+    <button id="chat" onClick='chat()'/>chat</button>
+    <button id="connect" onClick='connect()'/>connect</button>
+    <button id="disconnect" onClick='disconnect()'>disconnect</button>
+    <button id="send" onClick='send()'/>message</button>
+    <button id="startGame" onClick='startGame()'/>START GAME</button>
   </body>
 </html>
