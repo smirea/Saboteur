@@ -44,7 +44,7 @@ var SaboteurServer = Saboteur.extend({
    */
   assignRoles : function( players){
     for( var i in players ){
-      players[i].roleCard = this.drawCard( this.roleDeck, this.roleList );
+      players[i].private.roleCard = this.drawCard( this.com.roleDeck, this.com.roleList );
     };
   },
   
@@ -56,7 +56,7 @@ var SaboteurServer = Saboteur.extend({
   assignCards : function( players, cards ){
     for( var i in players ){
       for( var j = 1; j<=cards; ++j ){
-        players[i].cards.push( this.drawCard( this.gameDeck, this.gameList ) );
+        players[i].private.cards.push( this.drawCard( this.com.gameDeck, this.com.gameList ) );
       };
     };
   },
@@ -106,6 +106,7 @@ var SaboteurServer = Saboteur.extend({
     return deck.length;
   },
   
+  // HANDLERS
   handleDiscard : function(playerID, cards) {
     if (this.doDiscard(playerID, cards)) {
       var newcards = this.refillCards(playerID, cards);
@@ -139,6 +140,7 @@ var SaboteurServer = Saboteur.extend({
     }
   },
   
+  // HELPERS
   // TODO: decide on protocol
   resolveError : function(playerID) {
     var player = this.players[playerID];
@@ -163,8 +165,8 @@ var SaboteurServer = Saboteur.extend({
     // broadcast
     // TODO: decide on protocol ... mb just broadcast changes?
     var state = {
-      map     : this.map,
-      players : this.players
+      map     : this.com.map,
+      players : this.com.players.public
     };
     this.io.sockets.json.emit('update', state);
   },
@@ -185,8 +187,8 @@ var SaboteurServer = Saboteur.extend({
   replenishCards : function(playerID, cards) {
     var ret = {};
     for (var i in cards) {
-      this.com.players[playerID].cards[i] = this.drawCard(this.com.gameDeck, this.com.gameList);
-      ret[cards[i]] = this.com.players[playerID].cards[i];
+      this.com.players[playerID].private.cards[i] = this.drawCard(this.com.gameDeck, this.com.gameList);
+      ret[cards[i]] = this.com.players[playerID].private.cards[i];
     };
     return ret;
   },
@@ -195,12 +197,12 @@ var SaboteurServer = Saboteur.extend({
     var newcards = [];
     var player = this.com.players[playerID];
     for (var i in player.cards) {
-      var card = player.cards[i];
+      var card = player.private.cards[i];
       if (card) {
         newcards.push(card);
       };
     };
     
-    player.cards = newcards;
+    player.private.cards = newcards;
   }
 });

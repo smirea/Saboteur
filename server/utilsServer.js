@@ -15,6 +15,8 @@
     '../lib/GatePathCard.class.js',
     '../lib/LadderPathCard.class.js',
     '../lib/GoalCard.class.js',
+    '../lib/GoldCard.class.js',
+    '../lib/Factory.class.js',
     '../lib/Map.class.js',
     '../lib/Saboteur.class.js',
     './SaboteurServer.class.js'
