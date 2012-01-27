@@ -3,39 +3,39 @@ var SaboteurServer = Saboteur.extend({
     this._super();
     this.io           = io;
     this.protocol     = protocol;
-    this.com.roleDeck = [];
-    this.com.gameDeck = [];
-    this.com.playerList   = {};
+    this.roleDeck = [];
+    this.gameDeck = [];
+    this.playerList   = {};
   },
   
   setupGame : function() {
     var i = -1;
-    while (++i < this.com.roleList.length) {
-      this.com.roleDeck[i] = i;
+    while (++i < this.roleList.length) {
+      this.roleDeck[i] = i;
     };
     
     i = -1;
-    while (++i < this.com.gameList.length) {
-      this.com.gameDeck[i] = i;
+    while (++i < this.gameList.length) {
+      this.gameDeck[i] = i;
     };
     
-    this.com.roleDeck = this.shuffle(this.com.roleDeck);
-    this.com.gameDeck = this.shuffle(this.com.gameDeck);
+    this.roleDeck = this.shuffle(this.roleDeck);
+    this.gameDeck = this.shuffle(this.gameDeck);
 
     var names = [];
-    for (var n in this.com.playerList) {
-      names[n] = this.com.playerList[n].name;
+    for (var n in this.playerList) {
+      names[n] = this.playerList[n].name;
     };
-    this.com.players = this.createPlayers( names);
+    this.players = this.createPlayers( names);
     
     // give out roles
-    this.assignRoles( this.com.players );
+    this.assignRoles( this.players );
     
     // give out cards
     this.assignCards( this.com.players, this.com.opt.initialCards );
     
     // pre-discard the set amout of cards
-    this.discardFromGameDeck( this.com.gameDeck, this.com.opt.discardCards );
+    this.discardFromGameDeck( this.gameDeck, this.opt.discardCards );
   },
   
    /**
@@ -44,7 +44,7 @@ var SaboteurServer = Saboteur.extend({
    */
   assignRoles : function( players){
     for( var i in players ){
-      players[i].roleCard = this.drawCard( this.com.roleDeck, this.com.roleList );
+      players[i].roleCard = this.drawCard( this.roleDeck, this.roleList );
     };
   },
   
@@ -56,13 +56,13 @@ var SaboteurServer = Saboteur.extend({
   assignCards : function( players, cards ){
     for( var i in players ){
       for( var j = 1; j<=cards; ++j ){
-        players[i].cards.push( this.drawCard( this.com.gameDeck, this.com.gameList ) );
+        players[i].cards.push( this.drawCard( this.gameDeck, this.gameList ) );
       };
     };
   },
   
   /**
-   * Generates the list of player objects from com.opt.players into com.players
+   * Generates the list of player objects from opt.players into players
    * @param {Array} players  Array of player names
    * @return {Array}  A list of S.Player classes
    */
@@ -140,12 +140,12 @@ var SaboteurServer = Saboteur.extend({
   },
   
   // TODO: decide on protocol
-  resolveError : function(playerID, data) {
-    var player = this.com.playerList[playerID];
+  resolveError : function(playerID) {
+    var player = this.players[playerID];
     var state = {
       state : this.protocol.state.ERROR,
-      map     : this.com.map,
-      players : this.com.players
+      map     : this.map,
+      players : this.players
     };
     player.socket.emit('result', U.extend(state, data));
   },
@@ -163,8 +163,8 @@ var SaboteurServer = Saboteur.extend({
     // broadcast
     // TODO: decide on protocol ... mb just broadcast changes?
     var state = {
-      map     : this.com.map,
-      players : this.com.players
+      map     : this.map,
+      players : this.players
     };
     this.io.sockets.json.emit('update', state);
   },

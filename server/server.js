@@ -57,9 +57,9 @@ io.sockets.on('connection', function(socket){
     // TODO: hacks for testing
     this.setup = function(data) {
       // TODO: might use a class, mb?
-      sab.com.playerList[data.id] = {};
-      sab.com.playerList[data.id].name = data.name;
-      sab.com.playerList[data.id].socket = socket;
+      sab.playerList[data.id] = {};
+      sab.playerList[data.id].name = data.name;
+      sab.playerList[data.id].socket = socket;
     };
     
     this.disconnect = function(data) {
