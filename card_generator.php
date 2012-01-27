@@ -1,6 +1,6 @@
 <script src="js/jquery.js"></script>
 <script src="lib/inheritance.js"></script>
-<script src="lib/Utils.js"></script>
+<script src="lib/U.js"></script>
 <script src="lib/SaboteurOptions.js"></script>
 <?php
   $scripts = array( 'Card', 'PathCard', 'CrystalPathCard', 'GatePathCard', 'GoalCard',
