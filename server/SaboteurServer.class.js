@@ -32,7 +32,7 @@ var SaboteurServer = Saboteur.extend({
     this.assignRoles( this.com.players );
     
     // give out cards
-    this.assignCards( this.com.players, this.com.opt.startingCards ); // TODO: soon to be initial cards
+    this.assignCards( this.com.players, this.com.opt.initialCards );
     
     // pre-discard the set amout of cards
     this.discardFromGameDeck( this.com.gameDeck, this.com.opt.discardCards );
@@ -107,13 +107,12 @@ var SaboteurServer = Saboteur.extend({
   },
   
   handleDiscard : function(playerID, cards) {
-    console.log(playerID);
     if (this.doDiscard(playerID, cards)) {
-      this.resolveCorrect(playerID);
+      var newcards = this.refillCards(playerID, cards);
+      this.resolveCorrect(playerID, {newcards : newcards} );
     } else {
       this.resolveError(playerID);
     }
-    console.log(this.com.gameDeck.length);
   },
   
   handleTargetPerson : function(playerID, cardID, personID) {
@@ -141,25 +140,23 @@ var SaboteurServer = Saboteur.extend({
   },
   
   // TODO: decide on protocol
-  resolveError : function(playerID) {
-    var player = this.com.players[playerID];
+  resolveError : function(playerID, data) {
+    var player = this.com.playerList[playerID];
     var state = {
       state : this.protocol.state.ERROR,
       map     : this.com.map,
       players : this.com.players
     };
-    console.log(state);
-    console.log(this.com.playerList);
-    this.com.playerList[playerID].socket.emit('result', state);
+    player.socket.emit('result', U.extend(state, data));
   },
   
   // TODO: decide on protocol...
-  resolveCorrect : function(playerID) {
-    var player = this.com.players[playerID];
+  resolveCorrect : function(playerID, data) {
+    var player = this.com.playerList[playerID];
     var state = {
       state : this.protocol.state.CORRECT
     };
-    player.socket.emit('result', state);
+    player.socket.emit('result', U.extend(state, data));
   },
   
   updateGame : function() {
@@ -170,5 +167,40 @@ var SaboteurServer = Saboteur.extend({
       players : this.com.players
     };
     this.io.sockets.json.emit('update', state);
+  },
+  
+  refillCards : function(playerID, cards) {
+    var ret = {};
+    if ((this.com.gameList.length == 0) && 
+      (this.com.players[playerID].cards.length - cards.length < 0)) 
+    {
+      this.compactCards(playerID);
+    } else {
+      ret = this.replenishCards(playerID, cards);
+    };
+    
+    return ret;    
+  },
+  
+  replenishCards : function(playerID, cards) {
+    var ret = {};
+    for (var i in cards) {
+      this.com.players[playerID].cards[i] = this.drawCard(this.com.gameDeck, this.com.gameList);
+      ret[cards[i]] = this.com.players[playerID].cards[i];
+    };
+    return ret;
+  },
+  
+  compactCards : function(playerID) {
+    var newcards = [];
+    var player = this.com.players[playerID];
+    for (var i in player.cards) {
+      var card = player.cards[i];
+      if (card) {
+        newcards.push(card);
+      };
+    };
+    
+    player.cards = newcards;
   }
 });
