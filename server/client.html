@@ -4,6 +4,31 @@
         
     <script src="/json.js"></script> <!-- for ie -->
     <script src="/socket.io/socket.io.js"></script>
+    <script src="http://localhost/Saboteur/js/jquery.js"></script>
+    <script src="http://localhost/Saboteur/js/jquery.mouseToken.js"></script>
+    <script src="http://localhost/Saboteur/js/jquery.progressBar.js"></script>
+    <script type="text/javascript" src="http://localhost/Saboteur/lib/logger.js"></script>
+    <script type="text/javascript" src="http://localhost/Saboteur/lib/inheritance.js"></script>
+    <script type="text/javascript" src="http://localhost/Saboteur/lib/Utils.js"></script>
+    <script type="text/javascript" src="http://localhost/Saboteur/lib/Preloader.js"></script>
+    <script type="text/javascript" src="http://localhost/Saboteur/lib/SaboteurOptions.js"></script>
+    <script type="text/javascript" src="http://localhost/Saboteur/lib/Map.class.js"></script>
+    <script type="text/javascript" src="http://localhost/Saboteur/lib/Card.class.js"></script>
+    <script type="text/javascript" src="http://localhost/Saboteur/lib/ActionCard.class.js"></script>
+    <script type="text/javascript" src="http://localhost/Saboteur/lib/PathCard.class.js"></script>
+    <script type="text/javascript" src="http://localhost/Saboteur/lib/GoalCard.class.js"></script>
+    <script type="text/javascript" src="http://localhost/Saboteur/lib/LadderPathCard.class.js"></script>
+    <script type="text/javascript" src="http://localhost/Saboteur/lib/CharacterCard.class.js"></script>
+    <script type="text/javascript" src="http://localhost/Saboteur/lib/CrystalPathCard.class.js"></script>
+    <script type="text/javascript" src="http://localhost/Saboteur/lib/Factory.class.js"></script>
+    <script type="text/javascript" src="http://localhost/Saboteur/lib/GatePathCard.class.js"></script>
+    <script type="text/javascript" src="http://localhost/Saboteur/lib/GoldCard.class.js"></script>
+    <script type="text/javascript" src="http://localhost/Saboteur/lib/MapClient.class.js"></script>
+    <script type="text/javascript" src="http://localhost/Saboteur/lib/Player.class.js"></script>
+    <script type="text/javascript" src="http://localhost/Saboteur/lib/Protocol.js"></script>
+    <script type="text/javascript" src="http://localhost/Saboteur/lib/StartCard.class.js"></script>
+    <script type="text/javascript" src="http://localhost/Saboteur/lib/Saboteur.class.js"></script>
+    <script type="text/javascript" src="http://localhost/Saboteur/lib/SaboteurClient.class.js"></script>
   </head>
   <body>
     
@@ -13,49 +38,163 @@
     var socket;
     var firstconnect = true;
     var socketid = null; // the other end!!
+    // var P = new Protocol();
+    // TODO: HACK AWAY until I figure out how I should import everything :)
+    var Protocol;
+
+var Event = Class.extend({
+//Event = Class.extend({
+  init : function(name, data) {
+    this.name = name;
+    this.data = data;
+  }
+});
+
+var Protocol;
+( function() {
+Protocol = {
+//Protocol = Class.extend({
+  state   : {
+    CORRECT : 0,
+    ERROR   : 1
+  },
+  events  : {
+    server : {
+      admin : {
+        connect     : 'connect',
+        disconnect  : 'disconnect',
+        message     : 'message'
+      },
+      custom  : {
+        chat                  : new Event('chat', {
+          message : ''
+        }),
+        setup                 : new Event('setup', {
+          playerID : 0,
+          name     : ''
+        }),
+        doStartGame             : new Event('doStartGame', {
+          // nothing so far..
+        }),
+        discard               : new Event('discard', {
+          playerID  : '',
+          cards     : []
+        }), 
+        targetPublicPerson    : new Event('targetPublicPerson', {
+          playerID      : 0, // player
+          cardID        : 0, // card
+          targetID      : 0, // player
+          targetCardID  : 0 // card
+        }), 
+        targetPrivatePerson   : new Event('targetPrivatePerson', {
+          playerID      : 0, // player
+          cardID        : 0, // card
+          targetID      : 0 // player
+        }),
+        targetMap             : new Event('targetMap', {
+          playerID      : 0, // player
+          cardID        : 0, // card
+          posx          : 0, // mapX
+          posy          : 0 // mapY
+        }), 
+        heal                  : new Event('heal', {
+          playerID      : 0, // player
+          cards         : [], // card
+          targetID      : 0 // card
+        })
+      }
+    },
+    client : {
+      admin : {
+        connect           : 'connect',
+        disconnect        : 'disconnect',
+        reconnect         : 'reconnect',
+        reconnecting      : 'reconnecting',
+        reconnect_failed  : 'reconnect_failed',
+        message           : 'message'
+      },
+      custom : {
+        chat      : new Event('chat', {
+          playerID : 0, // player
+          message  : ''
+        }),
+        setup     : new Event('setup', {
+          playerID  : 0, // player
+          name      : ''
+        }),
+        result    : {
+          correct : new Event('result', {
+            state : 0, // STATE
+          }),
+          error   : new Event('result', {
+            state   : 0, // STATE
+            map     : {}, // MAP
+            players : [] // public player
+          })
+        },
+        reset     : new Event('reset', {
+          map     : {}, // MAP
+          hand    : {}, // private player
+          players : [] // public players
+        })
+      }
+    }
+  },
+  createEvent : function(what, where, type, subtype) {
+    var event = this.events[where][type];
+    if (subtype) {
+      event = event[subtype];
+    };
+    return U.extend({}, event);
+  }
+};
+//});
+
+})();
+
+// TODO: END THE HAAAAACK!!!
+    
     window.onLoad = connect();
         
     function connect() {
       if(firstconnect) {
         socket = io.connect(null);
           
-        socket.on('message', function(data){ 
+        socket.on(Protocol.events.client.admin.message.name, function(data){ 
           message(data); 
         });
         
-        socket.on('connect', function() { 
+        socket.on(Protocol.events.client.admin.connect.name, function() { 
           status_update("Connected to Server"); 
         });
         
-        socket.on('disconnect', function() { 
+        socket.on(Protocol.events.client.admin.disconnect.name, function() { 
           status_update("Disconnected from Server"); 
         });
         
-        socket.on('reconnect', function(){ 
+        socket.on(Protocol.events.client.admin.reconnect.name, function(){ 
           status_update("Reconnected to Server"); 
         });
         
-        socket.on('reconnecting', function( nextRetry ) { 
+        socket.on(Protocol.events.client.admin.reconnecting.name, function( nextRetry ) { 
           status_update("Reconnecting in " + nextRetry + " seconds"); 
         });
         
-        socket.on('reconnect_failed', function() { 
+        socket.on(Protocol.events.client.admin.reconnect_failed.name, function() { 
           message("Reconnect Failed"); 
         });
         
-        socket.on('chat', function(message) { 
+        socket.on(Protocol.events.client.custom.chat.name, function(message) { 
           handleChat(message); 
         });
         
-        socket.on('discard', function(data) { 
-          handleDiscard(data); 
-        });
-        
-        socket.on('setup', function(info) {
+        socket.on(Protocol.events.client.custom.setup.name, function(info) {
           handleSetup(info);
         });
         
-        socket.on('result', function(result) { handleResult(result); });
+        socket.on(Protocol.events.client.custom.result.correct.name, function(result) { handleResult(result); });
+        
+        socket.on(Protocol.events.client.custom.reset.name, function(data) { handleReset(data); });
           
         firstconnect = false;
       }
@@ -90,49 +229,60 @@
 
     function discard() {
       console.log('discarding..');
+      //TODO: var data = Protocol.getEvent('discard', 'server', 'custom').data;
       var data = {
-        id    : this.socketid, 
-        cards : [1,2,4]
+        playerID  : this.playerID, 
+        cards     : [1,2,4]
       }
       socket.json.emit('discard',  data);
     };
     
-    function targetMap() {
+    function doTargetMap() {
+      //TODO: var data = Protocol.getEvent('targetMap', 'server', 'custom').data;
       var data = {
-        id      : this.socketid,
-        cardID  : 3,
-        posx    : 1,
-        posy    : 2
+        playerID  : this.playerID,
+        cardID    : 3,
+        posx      : 1,
+        posy      : 2
       };
+      socket.json.emit('targetMap',  data);
     };
     
-    function targetPerson() {
+    function doTargetPublicPerson() {
+      //TODO: var data = Protocol.getEvent('targetPublicPerson', 'server', 'custom').data;
       var data = {
-        id        : this.socketid,
-        cardID    : 4,
-        personID  : 2
+        playerID      : this.playerID,
+        cardID        : 4,
+        targetID      : 2,
+        targetCardID  : 100
       };
       
+      socket.json.emit('targetPublicPerson',  data);
+    };
+    
+    function doTargetPrivatePerson() {
+      //TODO: var data = Protocol.getEvent('targetPrivatePerson', 'server', 'custom').data;
       
     };
     
-    function heal() {
+    function doHeal() {
+      //TODO: var data = Protocol.getEvent('heal', 'server', 'custom').data;
       var data = {
-        
+        playerID      : this.playerID,
+        cards         : [1,2],
+        targetCardID  : 100
       };
+      socket.json.emit('discard',  data);
     };
     
-    function startGame(data) {
+    function doStartGame(data) {
       //TODO: think about this shit...
       socket.emit('startGame');
-      discard(); //TODO: testing phase...
+      console.log('starting game');
+      setTimeout(discard, 1000); //TODO: testing phase...
     };
     
     // HANDLERS
-    function handleDiscard(data) {
-      console.log('got discard message back....');
-      console.log(data);
-    };
 
     function handleChat(message) {
       console.log('getting from server: ');
@@ -143,17 +293,25 @@
     function handleSetup(info) {
       console.log('got setup information');
       console.log(info);
-      this.socketid = info.id;
+      this.playerID = info.playerID;
+      //TODO: var data = Protocol.getEvent('setup', 'server', 'custom').data;
       var data = {
-        id    : socketid,
-        name  : 'Mati'
+        playerID  : this.playerID,
+        name      : 'Mati'
       };
       this.socket.emit('setup', data);
+      //TODO: major hack, need a handshake
+      setTimeout(doStartGame, 100);
     }
     
     function handleResult(result) {
       console.log('got result');
       console.log(result);
+    };
+    
+    function handleReset(data) {
+      console.log('got a reset request');
+      console.log(data);
     };
 
     </script>
@@ -161,13 +319,13 @@
     <h1>Socket.io Test</h1>
     <div><p id="status">Waiting for input</p></div>
     <button id="discard" onClick='discard()'/>discard</button>
-    <button id="targetMap" onClick='targetMap()'/>targetMap</button>
-    <button id="targetPerson" onClick='targetPerson()'/>targetPerson</button>
-    <button id="heal" onClick='heal()'/>heal</button>
+    <button id="doTargetMap" onClick='doTargetMap()'/>doTargetMap</button>
+    <button id="targetPerson" onClick='doTargetPublicPerson()'/>doTargetPublicPerson</button>
+    <button id="doHeal" onClick='doHeal()'/>doHeal</button>
     <button id="chat" onClick='chat()'/>chat</button>
     <button id="connect" onClick='connect()'/>connect</button>
     <button id="disconnect" onClick='disconnect()'>disconnect</button>
     <button id="send" onClick='send()'/>message</button>
-    <button id="startGame" onClick='startGame()'/>START GAME</button>
+    <button id="doStartGame" onClick='doStartGame()'/>START GAME</button>
   </body>
 </html>

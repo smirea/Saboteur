@@ -3,6 +3,7 @@ var SaboteurServer = Saboteur.extend({
     this._super();
     this.io           = io;
     this.protocol     = protocol;
+    this.map = {};
     this.roleDeck = [];
     this.gameDeck = [];
     this.playerList   = {};
@@ -10,12 +11,12 @@ var SaboteurServer = Saboteur.extend({
   
   setupGame : function() {
     var i = -1;
-    while (++i < this.roleList.length) {
+    while (++i < this.factory.size('role')) {
       this.roleDeck[i] = i;
     };
     
     i = -1;
-    while (++i < this.gameList.length) {
+    while (++i < this.factory.size('game')) {
       this.gameDeck[i] = i;
     };
     
@@ -26,16 +27,19 @@ var SaboteurServer = Saboteur.extend({
     for (var n in this.playerList) {
       names[n] = this.playerList[n].name;
     };
+    console.log(this.playerList);
+    console.log(this.players);
     this.players = this.createPlayers( names);
-    
+    console.log(this.players);
     // give out roles
     this.assignRoles( this.players );
     
     // give out cards
-    this.assignCards( this.com.players, this.com.opt.initialCards );
+    this.assignCards( this.players, this.opt.initialCards );
     
     // pre-discard the set amout of cards
     this.discardFromGameDeck( this.gameDeck, this.opt.discardCards );
+    console.log(this.players);
   },
   
    /**
@@ -44,7 +48,7 @@ var SaboteurServer = Saboteur.extend({
    */
   assignRoles : function( players){
     for( var i in players ){
-      players[i].private.roleCard = this.drawCard( this.com.roleDeck, this.com.roleList );
+      players[i].private.roleCard = this.drawCard( this.roleDeck);
     };
   },
   
@@ -56,7 +60,7 @@ var SaboteurServer = Saboteur.extend({
   assignCards : function( players, cards ){
     for( var i in players ){
       for( var j = 1; j<=cards; ++j ){
-        players[i].private.cards.push( this.drawCard( this.com.gameDeck, this.com.gameList ) );
+        players[i].private.cards.push( this.drawCard( this.gameDeck ) );
       };
     };
   },
@@ -87,9 +91,9 @@ var SaboteurServer = Saboteur.extend({
   
   /**
    * Given a deck a card, returns the top card and removes it from the deck;
-   * @param {Array} deck  the deck of cards
+   * @param {Array} deck  an array for the indexess of the deck of cards
    */
-  drawCard : function( indexes, deck ){
+  drawCard : function( indexes ){
     return indexes.pop();
   },
   
@@ -107,18 +111,68 @@ var SaboteurServer = Saboteur.extend({
   },
   
   // HANDLERS
-  handleDiscard : function(playerID, cards) {
-    if (this.doDiscard(playerID, cards)) {
-      var newcards = this.refillCards(playerID, cards);
-      this.resolveCorrect(playerID, {newcards : newcards} );
+  handleDiscard : function(data) {
+    console.log('got a discard request');
+    console.log(data);
+    if (this.doDiscard(data.playerID, data.cards)) {
+      var newcards = this.refillCards(data.playerID, data.cards);
+      var extra = { newcards : newcards };
+      this.resolveCorrect(data.playerID, extra);
     } else {
-      this.resolveError(playerID);
+      this.resolveError(data.playerID);
     }
   },
   
-  handleTargetPerson : function(playerID, cardID, personID) {
-    if (this.doTargetPerson(playerID, cardID, personID)) {
-      this.resolveCorrect(playerID);
+  handleTargetPublicPerson : function(data) {
+    if (this.doTargetPublicPerson(true, data.playerID, data.cardID, data.targetID, data.targetCardID)) {
+      this.doTargetPublicPerson(false, data.playerID, data.cardID, data.targetID, data.targetCardID)
+      this.resolveCorrect(data.playerID);
+    } else {
+      this.resolveError(data.playerID);
+    }
+  },
+  
+  handleTargetPrivatePerson : function(data) {
+    if (this.doTargetPrivatePerson(true, data.playerID, data.cardID, data.targetID)) {
+      if (null == this.doTargetPrivatePerson(false, data.playerID, data.cardID, data.targetID)) {
+        var player = this.players[data.playerID];
+        var card = player.private.cards[data.cardID];
+        var target = this.players[data.targetID];
+        switch(card._className) {
+        case 'Inspection':
+          var extra = {
+            roleCard : target.private.roleCard.id
+          };
+          this.resolveCorrect(data.playerID, extra);
+          break;
+        case 'SwapHand':
+          var pos = player.private.getCardPosition(data.cardID);
+          player.private.cards.splice(pos, 1);
+          var temp = player.private.cards;
+          player.private.cards = target.private.cards;
+          target.private.cards = temp;
+          var newcards = this.refillCards(data.playerID, [pos]);
+          var extra = { newcards : newcards };
+          this.resolveCorrect(data.playerID, extra);
+          break;
+        case 'SwapHats':
+          // TODO: what if no more roles left...
+          var newRole = this.drawCard(this.roleDeck);
+          target.private.roleCard = newRole;
+          var extra = {
+            roleCard : newRole
+          };
+          this.resolveCorrect(data.targetID);
+          this.updateClientState(data.targetID, extra);
+          break;
+        default:
+          throw new Error('Unexpected card played', card._className, card.id);
+          break;
+        }
+        this.resolveCorrect(playerID);
+      } else {
+        this.resolveError(playerID);
+      }
     } else {
       this.resolveError(playerID);
     }
@@ -141,62 +195,83 @@ var SaboteurServer = Saboteur.extend({
   },
   
   // HELPERS
-  // TODO: decide on protocol
-  resolveError : function(playerID) {
-    var player = this.players[playerID];
+  
+  each : function(object, callback) {
+    object = U.extend(true, {}, object);
+    for (var i in object) {
+      object[i] = callback(i, object[i]);
+    }
+    
+    return object;
+  },
+  
+  // -- STATE
+  resolveError : function(playerID, data) {
+    var players = this.each(this.players, function(k, v) { return { public : v.public}});
+    console.log('here');
+    console.log(players);
     var state = {
       state : this.protocol.state.ERROR,
       map     : this.map,
-      players : this.players
+      players : players
     };
-    player.socket.emit('result', U.extend(state, data));
+    console.log('sending correct message');
+    console.log(this.playerList);
+    console.log(this.playerList[playerID]);
+    this.playerList[playerID].socket.emit('result', U.extend(state, data));
   },
   
-  // TODO: decide on protocol...
   resolveCorrect : function(playerID, data) {
-    var player = this.com.playerList[playerID];
     var state = {
       state : this.protocol.state.CORRECT
     };
-    player.socket.emit('result', U.extend(state, data));
+    this.playerList[playerID].socket.emit('result', U.extend(state, data));
   },
   
-  updateGame : function() {
+  updateClientState : function(playerID) {
+    
+  },
+  
+  resetClientState : function(playerID) {
     // broadcast
     // TODO: decide on protocol ... mb just broadcast changes?
     var state = {
-      map     : this.com.map,
-      players : this.com.players.public
+      map     : this.map,
+      players : this.players.public
     };
-    this.io.sockets.json.emit('update', state);
+    this.playerList[playerID].socket.json.emit('reset', state);
   },
   
-  refillCards : function(playerID, cards) {
+  // --CARDS
+  refillCards : function(playerID, cardPositions) {
     var ret = {};
-    if ((this.com.gameList.length == 0) && 
-      (this.com.players[playerID].cards.length - cards.length < 0)) 
+    if ((this.factory.size('game') == 0) && 
+      (this.players[playerID].private.cards.length - cardPositions.length < 0)) 
     {
       this.compactCards(playerID);
     } else {
-      ret = this.replenishCards(playerID, cards);
+      ret = this.replenishCards(playerID, cardPositions);
     };
     
     return ret;    
   },
   
-  replenishCards : function(playerID, cards) {
+  replenishCards : function(playerID, cardPositions) {
     var ret = {};
-    for (var i in cards) {
-      this.com.players[playerID].private.cards[i] = this.drawCard(this.com.gameDeck, this.com.gameList);
-      ret[cards[i]] = this.com.players[playerID].private.cards[i];
+    for (var i in cardPositions) {
+      this.players[playerID].private.cards[i] = this.drawCard(this.gameDeck);
+      ret[cardPositions[i]] = this.players[playerID].private.cards[i];
     };
+    
+    // in case you couldn't draw enough
+    this.compactCards(playerID);
     return ret;
   },
   
   compactCards : function(playerID) {
     var newcards = [];
-    var player = this.com.players[playerID];
-    for (var i in player.cards) {
+    var player = this.players[playerID];
+    for (var i in player.private.cards) {
       var card = player.private.cards[i];
       if (card) {
         newcards.push(card);

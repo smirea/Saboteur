@@ -37,17 +37,22 @@ send404 = function(res){
 app.listen(8080);
 
 var io = require('socket.io').listen(app);
-var protocol = new S.Protocol();
-var sab = new SaboteurServer(io, protocol);
+// using var Protocol
+//var Protocol = new Protocol();
+var sab = new SaboteurServer(io, Protocol);
 //sab.setupGame();
 
 io.sockets.on('connection', function(socket){
     console.log("Connection " + socket.id + " accepted.");
-    socket.emit('setup', {id : socket.id});
+    socket.emit('setup', {playerID : socket.id});
     
-    // EVENTS
-    this.allowedEvents = protocol.events.server.custom;
-
+    this.disconnect = function(data) {
+      console.log("Connection " + socket.id + " terminated.");
+    };
+    
+    // CUSTOM EVENTS
+    this.allowedEvents = Protocol.events.server.custom;
+    
     // TODO: hacks for testing    
     this.startGame = function(data) {
       sab.setupGame();
@@ -57,13 +62,10 @@ io.sockets.on('connection', function(socket){
     // TODO: hacks for testing
     this.setup = function(data) {
       // TODO: might use a class, mb?
-      sab.playerList[data.id] = {};
-      sab.playerList[data.id].name = data.name;
-      sab.playerList[data.id].socket = socket;
-    };
-    
-    this.disconnect = function(data) {
-      console.log("Connection " + socket.id + " terminated.");
+      var playerID = data.playerID
+      sab.playerList[playerID] = {};
+      sab.playerList[playerID].name = data.name;
+      sab.playerList[playerID].socket = socket;
     };
     
     this.chat = function(data) {
@@ -74,13 +76,17 @@ io.sockets.on('connection', function(socket){
     
     this.discard = function(data) {
       console.log('Got a discard event...');
-      console.log(data);
-      sab.handleDiscard(data.id, data.cards)
+      sab.handleDiscard(data)
     };
     
-    this.targetPerson = function(data) {
-      console.log('Got a targetPerson event...' + data);
-      sab.handleTargetPerson(data);
+    this.targetPublicPerson = function(data) {
+      console.log('Got a targetPublicPerson event...' + data);
+      sab.handleTargetPublicPerson(data);
+    };
+    
+    this.targetPrivatePerson = function(data) {
+      console.log('Got a targetPrivatePerson event...' + data);
+      sab.handleTargetPrivatePerson(data);
     };
     
     this.targetMap = function(data) {
@@ -95,7 +101,7 @@ io.sockets.on('connection', function(socket){
     
     // REGISTERING EVENTS
     for (var i in this.allowedEvents) {
-      var event = this.allowedEvents[i];
+      var event = this.allowedEvents[i].name;
       var self = this;
       
       socket.on(event, self[event]);
