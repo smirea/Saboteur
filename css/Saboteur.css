@@ -1,6 +1,37 @@
 html{
   background  : #ccc;
 }
+.Saboteur{
+  border      : 1px solid #666;
+  background  : #fff;
+}
+.Saboteur-map-table{
+  background  : #aaa;
+}
+.Saboteur-map-td{
+  position              : relative;
+  border-radius         : 10px;
+  -moz-border-radius    : 10px;
+  -webkit-border-radius : 10px;  
+  border                : 1px solid #999;
+  background            : #fff;
+  padding               : 5px;
+  width                 : 190px;
+  height                : 120px;
+}
+.Saboteur-map-cardHolder{
+  display       : block;
+  position      : absolute;
+  top           : 0;
+  right         : 0;
+  bottom        : 0;
+  left          : 0;
+  border-radius : inherit;
+  background    : white;
+}
+.Saboteur-map-cardHolder:hover{
+  background  : orange;
+}
 .Saboteur-card{
   display : inline-block;
 }

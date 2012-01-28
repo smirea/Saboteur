@@ -2,58 +2,49 @@
   
   define( 'DIR_LIB', 'lib/' );
   
-  $cls = '.class.js';
-  $includes = array(
-    'require_first' => array( "logger.js", "inheritance.js", "Utils.js", 
-                              "Preloader.js", "SaboteurOptions.js", "Map$cls", "Card$cls", 
-                              "ActionCard$cls", "PathCard$cls", "GoalCard$cls", "LadderPathCard$cls" ),
-    'require_last'  => array( "Saboteur$cls", "SaboteurClient$cls" ),
-    'exclude'       => array( "Map$cls" )
+  $scripts = array(
+    'client/jquery.js',
+    'client/jquery.mouseToken.js',
+    'client/jquery.progressBar.js',
+    'lib/logger.js',
+    'lib/inheritance.js',
+    'lib/Utils.js',
+    'client/UtilsClient.js',
+    'lib/Factory.class.js',
+    'lib/Preloader.js',
+    'lib/SaboteurOptions.js',
+    'lib/Map.class.js',
+    'lib/MapClient.class.js',
+    'lib/Card.class.js',
+    'lib/ActionCard.class.js',
+    'lib/PathCard.class.js',
+    'lib/GoalCard.class.js',
+    'lib/LadderPathCard.class.js',
+    'lib/RoleCard.class.js',
+    'lib/CrystalPathCard.class.js',
+    'lib/GatePathCard.class.js',
+    'lib/GoldCard.class.js',
+    'lib/Player.class.js',
+    'lib/Protocol.js',
+    'lib/StartCard.class.js',
+    'lib/Saboteur.class.js',
+    'lib/SaboteurClient.class.js'
   );
-  $first    = array_flip( $includes['require_first'] );
-  $last     = array_flip( $includes['require_last'] );
-  $exclude  = array_flip( $includes['exclude'] );
-  
-  $view = $_GET['view'] ? $_GET['view'] : 'list';
-  
-  $list = array();
-  foreach( $includes['require_first'] as $v ){
-    if( !file_exists( DIR_LIB.$v ) ){
-      exit( ' [FILE NOT FOUND] '.DIR_LIB.$v );
-    } else {
-      $list[] = DIR_LIB.$v;
-    }
-  }
 
-  $files = scandir( DIR_LIB );
-  foreach( $files as $v ){
-    if( $v == '.' || $v == '..' ) continue;
-    if( !isset($first[$v]) && !isset($last[$v]) && !isset($exclude[$v]) && substr( $v, -3 ) == '.js' ){
-      $list[] = DIR_LIB.$v;
-    }
-  }
-  
-  foreach( $includes['require_last'] as $v ){
-    if( !file_exists( DIR_LIB.$v ) ){
-      exit( ' [FILE NOT FOUND] '.DIR_LIB.$v );
-    } else {
-      $list[] = DIR_LIB.$v;
-    }
-  }
-  
+  $view = isset( $_GET['view'] ) ? $_GET['view'] : 'list';
   switch( $view ){
-    case 'script': echo print_script( $list ); break;
-    case 'json': echo json_encode( $list ); break;
-    case 'export': var_export( $list ); break;
-    default: case 'list': echo implode(', ', $list); break;
+    case 'script': echo print_script( $scripts ); break;
+    case 'json': echo json_encode( $scripts ); break;
+    case 'export': var_export( $scripts ); break;
+    default: case 'list': echo implode(', ', $scripts); break;
   }
   
   function print_script( $list ){
-    $h = '';
+    $arr = array();
     foreach( $list as $k => $v ){
-      $h .= '<script type="text/javascript" src="'.$v.'"></script>'."\n";
+      $arr[] = '<script src="'.$v.'" type="text/javascript" language="javascript"></script>';
     }
-    return $h;
+    return implode("\n", $arr)."\n";
   }
   
 ?>

@@ -10,7 +10,7 @@
     '../lib/Card.class.js',
     '../lib/PathCard.class.js',
     '../lib/ActionCard.class.js',
-    '../lib/CharacterCard.class.js',
+    '../lib/RoleCard.class.js',
     '../lib/CrystalPathCard.class.js',
     '../lib/GatePathCard.class.js',
     '../lib/LadderPathCard.class.js',
