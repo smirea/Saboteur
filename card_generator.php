@@ -1,13 +1,6 @@
-<script src="js/jquery.js"></script>
-<script src="lib/inheritance.js"></script>
-<script src="lib/U.js"></script>
-<script src="lib/SaboteurOptions.js"></script>
-<?php
-  $scripts = array( 'Card', 'PathCard', 'CrystalPathCard', 'GatePathCard', 'GoalCard',
-                    'LadderPathCard', 'PathCard' );
-  foreach( $scripts as $v ){
-    echo '<script src="lib/'.$v.'.class.js"></script>';
-  }
+<?php 
+  $_GET['view'] = 'script'; 
+  require_once('include_lib.php'); 
 ?>
 
 <link rel="stylesheet" href="css/Saboteur.css" />
@@ -23,17 +16,23 @@
     strokeStyle : '#000000'
   };
   $(function(){
-    for( var i in S ){
-      var obj = new S[i];
-      if( !obj.toElement ) continue;
-      var container = obj.toElement();
-      container.data( 'obj', obj );
-      container.data( 'name', i );
-      $('#main').append( container );
-      container.bind( 'click.debug', function(){
-        console.log( $(this).data('name'), $(this).data('obj') );
-      });
-    }
+    var sab = new SaboteurClient( $('#saboteur'), {} );
+    
+    var namespaces = ['start', 'dummyGoal', 'goal', 'role', 'game'];
+    for( var k in namespaces ){
+      $('#main').append('<h3>'+namespaces[k]+'</h3>');
+      var arr = sab.factory.getNamespaces( namespaces[k] );
+      var bitmask = {};
+      for( var i in arr ){
+        if( !arr[i].toElement || bitmask[arr[i]._className] ) continue;
+        bitmask[arr[i]._className] = true;
+        var container = arr[i].toElement();
+        container.data( 'obj', arr[i] );
+        container.data( 'name', arr[i]._className );
+        $('#main').append( container );
+      };
+    };
+    $('#saboteur').remove();
   });
   
 
@@ -43,4 +42,5 @@
   <div id="main">
     
   </div>
+  <div id="saboteur"></div>
 </body>

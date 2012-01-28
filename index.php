@@ -14,4 +14,6 @@
   });
 </script>
 
+<div id="progressBar"></div>
+<hr />
 <div id="Saboteur"></div>

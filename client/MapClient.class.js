@@ -19,16 +19,20 @@ S.MapClient = S.Map.extend({
         var td = $();
         for( var x=this.boundaries.min_X; x<=this.boundaries.max_X; ++x ){
           var id = 'field_'+x+'_'+y;
-          var card = this.cardAt( x, y );
+          var card = this.getCardAt( x, y );
           var element;
-          if( card ) element = card.toElement();
-            else element = (new CU.CardHolder( id )).toElement();
+          if( !U.isUndefined(card) ) element = card;
+            else {
+              element = new S.Card();
+              element.name = 'Empty Slot';
+            }
           td = td.add(
             $(document.createElement('td')).attr({
               'id'    : id,
               'class' : SO.classes.mapTD
-            }).html( element )
+            }).html( element.toElement() )
           );
+          element.rotate( 90 );
         };
         tr = tr.add( $(document.createElement('tr')).append(td) );
       };
@@ -46,6 +50,14 @@ S.MapClient = S.Map.extend({
     this.structure.table.find( '#field_'+x+'_'+y ).html( aPathCard.toElement() );
     aPathCard.rotate( aPathCard.isFlipped ? 270 : 90 );
     return this;
+  },
+  removeCardAt: function( x, y ){
+    var card = this._super( x, y );
+    if( card === false ){
+      card.detach();
+    } else {
+      logger.warn( '[MapClient.removeCardAt] Unable to remove card', arguments );
+    }
   },
   toElement : function(){
     return this.structure.main;

@@ -15,15 +15,14 @@ var SaboteurClient = Saboteur.extend({
         goalCards   : this.opt.goalCards.map(function(v,i){ v.unshift(self.factory.get('dummyGoal',i)); return v; }),
         factory     : this.factory
       };
-      
       U.extend( this, {
         target  : target,
         map     : new S.MapClient( mapOptions )
       });
       U.extend( true, this.cls, SO.classes, classes );
       
+      preload_images.apply( this );
       create_structure.apply( this );
-      //preload_images.apply( this );
     };
     
     function create_structure(){
@@ -50,7 +49,7 @@ var SaboteurClient = Saboteur.extend({
         delete tmp;
       }
       
-      var s = $('#Saboteur').progressBar({
+      var s = $('#progressBar').progressBar({
         title : 'loading...',
         max   : images.length
       });

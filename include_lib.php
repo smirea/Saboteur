@@ -3,19 +3,20 @@
   define( 'DIR_LIB', 'lib/' );
   
   $scripts = array(
-    'client/jquery.js',
-    'client/jquery.mouseToken.js',
-    'client/jquery.progressBar.js',
+    'client/jquery/jquery.js',
+    'client/jquery/jquery.mouseToken.js',
+    'client/jquery/jquery.progressBar.js',
     'lib/logger.js',
     'lib/inheritance.js',
     'lib/Utils.js',
-    'client/UtilsClient.js',
+    'client/ClientUtils.js',
     'lib/Factory.class.js',
-    'lib/Preloader.js',
+    'client/Preloader.js',
     'lib/SaboteurOptions.js',
     'lib/Map.class.js',
-    'lib/MapClient.class.js',
+    'client/MapClient.class.js',
     'lib/Card.class.js',
+    'client/Card.class.js',
     'lib/ActionCard.class.js',
     'lib/PathCard.class.js',
     'lib/GoalCard.class.js',
@@ -28,7 +29,7 @@
     'lib/Protocol.js',
     'lib/StartCard.class.js',
     'lib/Saboteur.class.js',
-    'lib/SaboteurClient.class.js'
+    'client/SaboteurClient.class.js'
   );
 
   $view = isset( $_GET['view'] ) ? $_GET['view'] : 'list';

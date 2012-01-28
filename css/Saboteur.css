@@ -15,9 +15,8 @@ html{
   -webkit-border-radius : 10px;  
   border                : 1px solid #999;
   background            : #fff;
-  padding               : 5px;
-  width                 : 190px;
-  height                : 120px;
+  width                 : 150px;
+  height                : 95px;
 }
 .Saboteur-map-cardHolder{
   display       : block;
@@ -33,7 +32,11 @@ html{
   background  : orange;
 }
 .Saboteur-card{
-  display : inline-block;
+  position    : relative;
+  display     : inline-block;
+  font-family : verdana;
+  font-size   : 9pt;
+  overflow    : hidden;
 }
 .Saboteur-card .card-canvas{
   border        : 1px solid #999;
@@ -44,6 +47,30 @@ html{
   -moz-border-radius    : 10px;
   -webkit-border-radius : 10px;
 }
-.Saboteur-card .card-name, .Saboteur-card .card-description{
+.Saboteur-card .card-overlay{
+  display       : block;
+  position      : absolute;
+  z-index       : 1000;
+  top           : 0;
+  right         : 0;
+  bottom        : 0;
+  left          : 0;
+  border-radius : 10px;
+}
+.Saboteur-card .card-overlay:hover{
+  background  : rgba( 125, 200, 0, 0.5 );
+}
+.Saboteur-card .card-name{
+  display       : none;
+  position      : absolute;
+  left          : 0px;
+  right         : 0px;
+  z-index       : 100000;
+  background    : rgba( 0,0,0, 0.8 );
+  border-radius : 10px 10px 0 0;
+  padding       : 5px;
+  color         : #fff;
+}
+.Saboteur-card .card-description{
   display : none;
 }
