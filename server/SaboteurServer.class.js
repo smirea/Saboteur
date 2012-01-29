@@ -38,6 +38,14 @@ var SaboteurServer = Saboteur.extend({
     this.discardFromGameDeck( this.gameDeck, this.opt.discardCards );
   },
   
+  broadcastStartGame : function() {
+    console.log(this.playerList);
+    for (var i in this.playerList) {
+      console.log(i, this.playerList[i]);
+      this.resetClientState(i);
+    };
+  },
+  
    /**
    * Assigns a role to each player
    * @param {Array} players  Array of S.Player objects to assign them roles
@@ -108,6 +116,7 @@ var SaboteurServer = Saboteur.extend({
   
   // HANDLERS
   handleDiscard : function(data) {
+    console.log(data);
     if (this.doDiscard(data.playerID, data.cards)) {
       var newcards = this.refillCards(data.playerID, data.cards);
       var extra = { newcards : newcards };
@@ -163,7 +172,6 @@ var SaboteurServer = Saboteur.extend({
           throw new Error('Unexpected card played', card._className, card.id);
           break;
         }
-        this.resolveCorrect(playerID);
       } else {
         this.resolveError(playerID);
       }
@@ -200,13 +208,21 @@ var SaboteurServer = Saboteur.extend({
   },
   
   // -- STATE
-  resolveError : function(playerID, data) {
+  getGameState : function(playerID) {
+    // public info on all people
     var players = this.each(this.players, function(k, v) { return { public : v.public}});
+    // private info on you
+    players[playerID].private = this.players[playerID].private; 
     var state = {
-      state : this.protocol.state.ERROR,
       map     : this.map,
       players : players
     };
+    
+    return state;
+  },
+  
+  resolveError : function(playerID, data) {
+    var state = U.extend(this.getGameState(playerID), {state : this.protocol.state.ERROR } );
     this.playerList[playerID].socket.emit('result', U.extend(state, data));
   },
   
@@ -218,55 +234,10 @@ var SaboteurServer = Saboteur.extend({
   },
   
   updateClientState : function(playerID) {
-    
+    // TODO: think about it...
   },
   
   resetClientState : function(playerID) {
-    // broadcast
-    // TODO: decide on protocol ... mb just broadcast changes?
-    var state = {
-      map     : this.map,
-      players : this.players.public
-    };
-    this.playerList[playerID].socket.json.emit('reset', state);
-  },
-  
-  // --CARDS
-  refillCards : function(playerID, cardPositions) {
-    var ret = {};
-    if ((this.factory.size('game') == 0) && 
-      (this.players[playerID].private.cards.length - cardPositions.length < 0)) 
-    {
-      this.compactCards(playerID);
-    } else {
-      ret = this.replenishCards(playerID, cardPositions);
-    };
-    
-    return ret;    
-  },
-  
-  replenishCards : function(playerID, cardPositions) {
-    var ret = {};
-    for (var i in cardPositions) {
-      this.players[playerID].private.cards[i] = this.drawCard(this.gameDeck);
-      ret[cardPositions[i]] = this.players[playerID].private.cards[i];
-    };
-    
-    // in case you couldn't draw enough
-    this.compactCards(playerID);
-    return ret;
-  },
-  
-  compactCards : function(playerID) {
-    var newcards = [];
-    var player = this.players[playerID];
-    for (var i in player.private.cards) {
-      var card = player.private.cards[i];
-      if (card) {
-        newcards.push(card);
-      };
-    };
-    
-    player.private.cards = newcards;
+    this.playerList[playerID].socket.json.emit('reset', this.getGameState(playerID));
   }
 });

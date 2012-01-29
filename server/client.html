@@ -30,183 +30,6 @@
     
     <script>
         
-    
-    var socket;
-    var firstconnect = true;
-    var socketid = null; // the other end!!
-    // var P = new Protocol();
-    // TODO: HACK AWAY until I figure out how I should import everything :)
-    var Protocol;
-
-var Event = Class.extend({
-//Event = Class.extend({
-  init : function(name, data) {
-    this.name = name;
-    this.data = data;
-  }
-});
-
-var Protocol;
-( function() {
-Protocol = {
-//Protocol = Class.extend({
-  state   : {
-    CORRECT : 0,
-    ERROR   : 1
-  },
-  events  : {
-    server : {
-      admin : {
-        connect     : 'connect',
-        disconnect  : 'disconnect',
-        message     : 'message'
-      },
-      custom  : {
-        chat                  : new Event('chat', {
-          message : ''
-        }),
-        setup                 : new Event('setup', {
-          playerID : 0,
-          name     : ''
-        }),
-        doStartGame             : new Event('doStartGame', {
-          // nothing so far..
-        }),
-        discard               : new Event('discard', {
-          playerID  : '',
-          cards     : []
-        }), 
-        targetPublicPerson    : new Event('targetPublicPerson', {
-          playerID      : 0, // player
-          cardID        : 0, // card
-          targetID      : 0, // player
-          targetCardID  : 0 // card
-        }), 
-        targetPrivatePerson   : new Event('targetPrivatePerson', {
-          playerID      : 0, // player
-          cardID        : 0, // card
-          targetID      : 0 // player
-        }),
-        targetMap             : new Event('targetMap', {
-          playerID      : 0, // player
-          cardID        : 0, // card
-          posx          : 0, // mapX
-          posy          : 0 // mapY
-        }), 
-        heal                  : new Event('heal', {
-          playerID      : 0, // player
-          cards         : [], // card
-          targetID      : 0 // card
-        })
-      }
-    },
-    client : {
-      admin : {
-        connect           : 'connect',
-        disconnect        : 'disconnect',
-        reconnect         : 'reconnect',
-        reconnecting      : 'reconnecting',
-        reconnect_failed  : 'reconnect_failed',
-        message           : 'message'
-      },
-      custom : {
-        chat      : new Event('chat', {
-          playerID : 0, // player
-          message  : ''
-        }),
-        setup     : new Event('setup', {
-          playerID  : 0, // player
-          name      : ''
-        }),
-        result    : {
-          correct : new Event('result', {
-            state : 0, // STATE
-          }),
-          error   : new Event('result', {
-            state   : 0, // STATE
-            map     : {}, // MAP
-            players : [] // public player
-          })
-        },
-        reset     : new Event('reset', {
-          map     : {}, // MAP
-          hand    : {}, // private player
-          players : [] // public players
-        })
-      }
-    }
-  },
-  createEvent : function(what, where, type, subtype) {
-    var event = this.events[where][type];
-    if (subtype) {
-      event = event[subtype];
-    };
-    return U.extend({}, event);
-  }
-};
-//});
-
-})();
-
-// TODO: END THE HAAAAACK!!!
-    
-    window.onLoad = connect();
-        
-    function connect() {
-      if(firstconnect) {
-        socket = io.connect(null);
-          
-        socket.on(Protocol.events.client.admin.message.name, function(data){ 
-          message(data); 
-        });
-        
-        socket.on(Protocol.events.client.admin.connect.name, function() { 
-          status_update("Connected to Server"); 
-        });
-        
-        socket.on(Protocol.events.client.admin.disconnect.name, function() { 
-          status_update("Disconnected from Server"); 
-        });
-        
-        socket.on(Protocol.events.client.admin.reconnect.name, function(){ 
-          status_update("Reconnected to Server"); 
-        });
-        
-        socket.on(Protocol.events.client.admin.reconnecting.name, function( nextRetry ) { 
-          status_update("Reconnecting in " + nextRetry + " seconds"); 
-        });
-        
-        socket.on(Protocol.events.client.admin.reconnect_failed.name, function() { 
-          message("Reconnect Failed"); 
-        });
-        
-        socket.on(Protocol.events.client.custom.chat.name, function(message) { 
-          handleChat(message); 
-        });
-        
-        socket.on(Protocol.events.client.custom.setup.name, function(info) {
-          handleSetup(info);
-        });
-        
-        socket.on(Protocol.events.client.custom.result.correct.name, function(result) { handleResult(result); });
-        
-        socket.on(Protocol.events.client.custom.reset.name, function(data) { handleReset(data); });
-          
-        firstconnect = false;
-      }
-      else {
-        socket.socket.reconnect();
-      }
-    }
-        
-    function disconnect() {
-      socket.disconnect();
-    };
-        
-    function message(data) {
-      document.getElementById('message').innerHTML = "Server says: " + data;
-    };
-        
     function status_update(txt){
       document.getElementById('status').innerHTML = txt;
     };
@@ -216,100 +39,190 @@ Protocol = {
       console.log('wtf??');
       socket.emit('message', '{aaa: "bbb"}');
     };        
-      
-    // EVENTS
-    function chat() {
-      console.log('chatting...');
-      socket.emit('chat', { message : 'testing...' });
+    
+    var socket;
+    var playerID;
+    var firstconnect = true;
+    var adminHandlers = U.extend({}, Protocol.events.client.admin);
+    var handlers = U.extend({}, Protocol.events.client.custom);
+    var actions = U.extend({}, Protocol.events.server.custom);
+    
+    // HANDLERS
+    
+    // ADMIN
+    adminHandlers.disconnect.callback = function() {
+      socket.disconnect();
     };
-
-    function discard() {
-      console.log('discarding..');
-      //TODO: var data = Protocol.getEvent('discard', 'server', 'custom').data;
-      var data = {
-        playerID  : this.playerID, 
-        cards     : [1,2,4]
-      }
-      socket.json.emit('discard',  data);
+        
+    adminHandlers.message.callback = function(data) {
+      document.getElementById('message').innerHTML = "Server says: " + data;
     };
     
-    function doTargetMap() {
-      //TODO: var data = Protocol.getEvent('targetMap', 'server', 'custom').data;
-      var data = {
-        playerID  : this.playerID,
-        cardID    : 3,
-        posx      : 1,
-        posy      : 2
-      };
+    adminHandlers.connect.callback =  function() { 
+      status_update("Connected to Server"); 
+    };
+        
+    adminHandlers.disconnect.callback = function() { 
+      status_update("Disconnected from Server"); 
+    };
+        
+    adminHandlers.reconnect.callback = function(){ 
+      status_update("Reconnected to Server"); 
+    };
+        
+    adminHandlers.reconnecting.callback = function( nextRetry ) { 
+      status_update("Reconnecting in " + nextRetry + " seconds"); 
+    };
+    
+    // CUSTOM
+
+    handlers.chat.callback = function(data) {
+      // TODO: this is bullshit, please do a chat system :))
+      console.log('getting from server: ', data);
+      document.getElementById('status').innerHTML += data.message;
+    };
+
+    handlers.setup.callback = function(data) {
+      console.log('got setup information');
+      console.log(data);
+      playerID = data.playerID;
+      // TODO: name should be gotten from an interface somehow..preset! 
+      // You should not call doSetup here, but rather when ready..
+      actions.setup.callback({}); //TODO: even if call from here, instantiate
+    };
+    
+    handlers.result.callback = function(data) {
+      //TODO: handle results?
+    };
+    
+    handlers.reset.callback = function(data) {
+      console.log('got a reset request');
+      console.log(data);
+      player = data.players[playerID];
+      //TODO: reset all state...in the SaboteurClient maybe?
+    };
+      
+    // ACTIONS
+    
+    // CUSTOM
+    // TODO: when we actually use this and not just test it, like now
+    // basically you just pass the Protocol.event that the function needs, and you send it
+    actions.chat.callback = function(data) {
+      var data = Protocol.createEvent('chat', 'server', 'custom').data;
+      // data.message = message;
+      data.message = 'testing...';
+      socket.emit('chat', data);
+    };
+
+    actions.discard.callback = function (data) {
+      var data = Protocol.createEvent('discard', 'server', 'custom').data;
+      data.playerID = playerID
+      data.cards = [ player.private.cards[0] ];
+      
+      socket.json.emit('discard', data);
+    };
+    
+    actions.targetMap.callback = function (data) {
+      var data = Protocol.createEvent('targetMap', 'server', 'custom').data;
+      data.playerID = playerID;
+      data.cardID   = 3;
+      data.posx     = 1;
+      data.posy     = 2;
+      
       socket.json.emit('targetMap',  data);
     };
     
-    function doTargetPublicPerson() {
-      //TODO: var data = Protocol.getEvent('targetPublicPerson', 'server', 'custom').data;
-      var data = {
-        playerID      : this.playerID,
-        cardID        : 4,
-        targetID      : 2,
-        targetCardID  : 100
-      };
+    actions.targetPublicPerson.callback = function(data) {
+      var data = Protocol.createEvent('targetPublicPerson', 'server', 'custom').data;
+      data.playerID = playerID;
+      data.targetID = playerID;
+      data.targetCardID = 100;
       
       socket.json.emit('targetPublicPerson',  data);
     };
     
-    function doTargetPrivatePerson() {
-      //TODO: var data = Protocol.getEvent('targetPrivatePerson', 'server', 'custom').data;
+    actions.targetPrivatePerson.callback = function(data) {
+      var data = Protocol.createEvent('targetPrivatePerson', 'server', 'custom').data;
+      // data.cardID = cardID;
+      // data.targetID = targetID;
+      data.playerID = playerID;
+      // TODO: hack...fix later :p
+      data.cardID = player.private.cards[0];
+      data.targetID = playerID;
       
+      socket.json.emit('targetPrivatePerson', data);
     };
     
-    function doHeal() {
-      //TODO: var data = Protocol.getEvent('heal', 'server', 'custom').data;
-      var data = {
-        playerID      : this.playerID,
-        cards         : [1,2],
-        targetCardID  : 100
-      };
+    actions.heal.callback = function(data) {
+      var data = Protocol.createEvent('heal', 'server', 'custom').data;
+      // data.cards = cards;
+      // data.targetCardID = targetCardID;
+      data.playerID = playerID;
+      // TODO: hack...fix later :p
+      data.cardID = player.private.cards[0];
+      data.targetCardID = 100;
+      
       socket.json.emit('discard',  data);
     };
     
-    function doStartGame(data) {
-      //TODO: think about this shit...
-      socket.emit('startGame');
-      console.log('starting game');
-      setTimeout(discard, 1000); //TODO: testing phase...
+    actions.setup.callback = function(data) {
+      var data = Protocol.createEvent('setup', 'server', 'custom').data;
+      data.playerID = playerID;
+      data.name = 'Mati';
+      
+      socket.emit('setup', data);
+      //TODO: major hack, need a handshake until you start game, 
+      // or some form of ACK mechanism, mb even call start separately...
+      setTimeout(actions.startGame.callback, 100);
     };
     
-    // HANDLERS
-
-    function handleChat(message) {
-      console.log('getting from server: ');
-      console.log(message);
-      document.getElementById('status').innerHTML += message.message;
+    actions.startGame.callback = function(data) {
+      //TODO: think about this shit...
+      console.log('starting game');
+      socket.emit('startGame', data);
+      //TODO: testing phase...
+      setTimeout(actions.discard.callback, 1000); 
     };
+      
+    window.onLoad = connect();
+        
+    function connect() {
+      if(firstconnect) {
+        socket = io.connect(null);
+          
+        for (var a in adminHandlers) {
+          socket.on(adminHandlers[a].name, adminHandlers[a].callback);
+        };  
+        
+        for (var h in handlers) {
+          socket.on(handlers[h].name , handlers[h].callback);
+        };
+        
+        /*
+        for (var h in handlers) {
+          var name = handlers[h].name
+          console.log(name);
+          socket.on(name, function(data) {
+            if (name != data._name) {
+              throw new Error('Invalid datatype ' + data._name + ' for event ' + name);
+            } else {
+              console.log('handling event:',handlers[h].name);
+              console.log(data);
+              return handlers[h].callback.call(this, data);
+            };
+          });
+        }
+        */
+        
+        //setTimeout(actions.setup.callback, 100 );
 
-    function handleSetup(info) {
-      console.log('got setup information');
-      console.log(info);
-      this.playerID = info.playerID;
-      //TODO: var data = Protocol.getEvent('setup', 'server', 'custom').data;
-      var data = {
-        playerID  : this.playerID,
-        name      : 'Mati'
-      };
-      this.socket.emit('setup', data);
-      //TODO: major hack, need a handshake
-      setTimeout(doStartGame, 100);
+        firstconnect = false;
+      }
+      else {
+        socket.socket.reconnect();
+      }
     }
     
-    function handleResult(result) {
-      console.log('got result');
-      console.log(result);
-    };
-    
-    function handleReset(data) {
-      console.log('got a reset request');
-      console.log(data);
-    };
-
     </script>
     
     <h1>Socket.io Test</h1>

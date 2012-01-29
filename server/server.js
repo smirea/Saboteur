@@ -50,17 +50,18 @@ io.sockets.on('connection', function(socket){
       console.log("Connection " + socket.id + " terminated.");
     };
     
-    // CUSTOM EVENTS
-    this.allowedEvents = Protocol.events.server.custom;
+    // CUSTOM HANDLERS
+    this.handlers = U.extend({}, Protocol.events.server.custom);
     
     // TODO: hacks for testing    
-    this.startGame = function(data) {
+    this.handlers.startGame.callback = function(data) {
       sab.setupGame();
       console.log('Starting game!');
+      sab.broadcastStartGame();
     };
     
     // TODO: hacks for testing
-    this.setup = function(data) {
+    this.handlers.setup.callback = function(data) {
       // TODO: might use a class, mb?
       var playerID = data.playerID
       sab.playerList[playerID] = {};
@@ -68,37 +69,57 @@ io.sockets.on('connection', function(socket){
       sab.playerList[playerID].socket = socket;
     };
     
-    this.chat = function(data) {
+    this.handlers.chat.callback = function(data) {
       console.log('Chat message from: ' + socket.id);
       console.log(data);
       io.sockets.json.emit('chat', data);
     };
     
-    this.discard = function(data) {
+    this.handlers.discard.callback = function(data) {
       console.log('Got a discard event...');
       sab.handleDiscard(data)
     };
     
-    this.targetPublicPerson = function(data) {
+    this.handlers.targetPublicPerson.callback = function(data) {
       console.log('Got a targetPublicPerson event...' + data);
       sab.handleTargetPublicPerson(data);
     };
     
-    this.targetPrivatePerson = function(data) {
+    this.handlers.targetPrivatePerson.callback = function(data) {
       console.log('Got a targetPrivatePerson event...' + data);
       sab.handleTargetPrivatePerson(data);
     };
     
-    this.targetMap = function(data) {
+    this.handlers.targetMap.callback = function(data) {
       console.log('Got a targetMap event...' + data);
       sab.handleTargetMap(data);
     };
     
-    this.heal = function(data) {
+    this.handlers.heal.callback = function(data) {
       console.log('Got a heal event...' + data);
       sab.handleHeal(data);
     };
     
+    //TODO: hack...
+    for (var h in this.handlers) {
+      socket.on(this.handlers[h].name , this.handlers[h].callback);
+    }
+    
+    /*
+    for (var h in this.handlers) {
+      var name = this.handlers[h].name;
+      socket.on(name, function(data) {
+        if (name != data._name) {
+          throw new Error('Invalid datatype ' + data._name + ' for event ' + name);
+        } else {
+          console.log('handling event:',name);
+          console.log(data);
+          return self.handlers[h].callback.call(self, data);
+        };
+      });
+    }
+    */
+    /*
     // REGISTERING EVENTS
     for (var i in this.allowedEvents) {
       var event = this.allowedEvents[i].name;
@@ -107,4 +128,5 @@ io.sockets.on('connection', function(socket){
       socket.on(event, self[event]);
       //console.log('For event', event, 'Using function', self[event]);
     };
+    */
 });
