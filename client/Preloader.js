@@ -16,13 +16,20 @@ var Preloader = {
       img.onload  = function(){
         self.img[ path ] = this;
         ++self._finished;
-        callback.apply( self, [this] );
+        callback.call( self, this );
       };
       img.src     = path;
     } else {
-      callback.apply( self, [self.img[img]] );
+      callback.call( self, self.img[img] );
     }
     return this;
+  },
+  get : function( name ){
+    if( this.img[ name ] ){
+      return this.img[ name ];
+    } else {
+      logger.warn('[Preloader.get] Unknown image name', arguments);
+    };
   }
 }; 
 

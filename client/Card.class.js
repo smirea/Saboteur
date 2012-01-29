@@ -47,7 +47,8 @@ S.Card = S.Card.extend({
     return this;
   },
   toElement : (function(){
-    function auto_generate_paths( obj ){
+    function auto_generate_paths(){
+      var obj = this;
       if( !obj.toElement ) return false;
       var container = obj.toElement();
       if( obj.sides ){
@@ -75,8 +76,30 @@ S.Card = S.Card.extend({
           };
         };
       };
-      if( obj.hasDiamond ){
-        
+      if( obj.hasCrystal ){
+        var w = 30;
+        var h = 40;
+        var x = (obj.width-w) / 2;
+        var y = (obj.height-h) / 2;
+        addImageAt.call( this, 'images/icon-diamond.png', x, y, w, h );
+      };
+      if( obj.hasLadder ){
+        var w = 40;
+        var h = 50;
+        var x = (obj.width-w) / 2;
+        var y = (obj.height-h) / 2;
+        addImageAt.call( this, 'images/icon-ladder.gif', x, y, w, h );
+      };
+      if( obj instanceof S.GateCard ){
+        console.log('trololoo');
+        var w = 60;
+        var h = 60;
+        var x = (obj.width-w) / 2;
+        var y = (obj.height-h) / 2;
+        if( obj instanceof S.BlueGateCard )
+          addImageAt.call( this, 'images/icon-gate-blue.png', x, y, w, h );
+        else
+          addImageAt.call( this, 'images/icon-gate-green.png', x, y, w, h );
       };
       obj.structure.main.bind('mouseenter.toggleName', function(){
         obj.structure.name.slideDown( 'fast' );
@@ -86,6 +109,18 @@ S.Card = S.Card.extend({
       container.data( 'obj', obj );
       return true;
     };
+    
+    function addImageAt( path, x, y, w, h ){
+      var self = this;
+      P.load( path, function( img ){
+        x = x || 0;
+        y = y || 0;
+        w = w || img.width;
+        h = h || img.height;
+        self.structure._context.drawImage( img, x, y, w, h );
+        self.saveState();
+      });
+    }
     
     function getPoint( point ){
       point = parseInt(point) % 4;
@@ -116,10 +151,10 @@ S.Card = S.Card.extend({
         [ Math.PI*3/2, -elem.width, 0, elem.height, elem.width ] 
       ];
       var struct = elem.structure;
-      if( auto_generate_paths.call( this, elem ) ){
+      if( auto_generate_paths.call( this ) ){
         elem.saveState();
       } else {
-        var img = P.img[elem.front_cover];
+        var img = P.get(elem.front_cover);
         struct._front_cover = img;
         struct._context.drawImage( img, 0, 0, elem.width, elem.height );
         elem.saveState();
