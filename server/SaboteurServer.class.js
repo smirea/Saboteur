@@ -27,10 +27,7 @@ var SaboteurServer = Saboteur.extend({
     for (var n in this.playerList) {
       names[n] = this.playerList[n].name;
     };
-    console.log(this.playerList);
-    console.log(this.players);
     this.players = this.createPlayers( names);
-    console.log(this.players);
     // give out roles
     this.assignRoles( this.players );
     
@@ -39,7 +36,6 @@ var SaboteurServer = Saboteur.extend({
     
     // pre-discard the set amout of cards
     this.discardFromGameDeck( this.gameDeck, this.opt.discardCards );
-    console.log(this.players);
   },
   
    /**
@@ -112,8 +108,6 @@ var SaboteurServer = Saboteur.extend({
   
   // HANDLERS
   handleDiscard : function(data) {
-    console.log('got a discard request');
-    console.log(data);
     if (this.doDiscard(data.playerID, data.cards)) {
       var newcards = this.refillCards(data.playerID, data.cards);
       var extra = { newcards : newcards };
@@ -208,16 +202,11 @@ var SaboteurServer = Saboteur.extend({
   // -- STATE
   resolveError : function(playerID, data) {
     var players = this.each(this.players, function(k, v) { return { public : v.public}});
-    console.log('here');
-    console.log(players);
     var state = {
       state : this.protocol.state.ERROR,
       map     : this.map,
       players : players
     };
-    console.log('sending correct message');
-    console.log(this.playerList);
-    console.log(this.playerList[playerID]);
     this.playerList[playerID].socket.emit('result', U.extend(state, data));
   },
   

@@ -16,6 +16,7 @@
     '../lib/LadderPathCard.class.js',
     '../lib/GoalCard.class.js',
     '../lib/GoldCard.class.js',
+    '../lib/StartCard.class.js',
     '../lib/Factory.class.js',
     '../lib/Map.class.js',
     '../lib/Saboteur.class.js',

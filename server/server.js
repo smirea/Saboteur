@@ -40,8 +40,8 @@ var io = require('socket.io').listen(app);
 // using var Protocol
 //var Protocol = new Protocol();
 var sab = new SaboteurServer(io, Protocol);
-//sab.setupGame();
 
+//sab.setupGame();
 io.sockets.on('connection', function(socket){
     console.log("Connection " + socket.id + " accepted.");
     socket.emit('setup', {playerID : socket.id});
