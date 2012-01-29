@@ -1,8 +1,8 @@
 <?php
 
-  define( 'FILE_CLASSES', 'classes.dump' );
-  define( 'FILE_DUMMY', 'dummy-card.png' );
-  define( 'FOLDER_IMAGES', '../images/cards/' );
+  define( 'FILE_CLASSES', 'scripts/classes.dump' );
+  define( 'FILE_DUMMY', 'scripts/dummy-card.png' );
+  define( 'FOLDER_IMAGES', 'cards/' );
   
   $arr = explode("\n", file_get_contents( FILE_CLASSES ) );
   

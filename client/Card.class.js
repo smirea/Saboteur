@@ -81,7 +81,7 @@ S.Card = S.Card.extend({
       obj.structure.main.bind('mouseenter.toggleName', function(){
         obj.structure.name.slideDown( 'fast' );
       }).bind('mouseleave.toggleName', function(){
-        obj.structure.name.slideUp( 'fast' );
+        obj.structure.name.hide();
       }).trigger('mouseleave.toggleName');
       container.data( 'obj', obj );
       return true;

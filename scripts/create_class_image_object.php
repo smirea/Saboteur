@@ -1,6 +1,6 @@
 <?php
 
-  define( 'FILE_CLASSES', 'classes.dump' );
+  define( 'FILE_CLASSES', 'scripts/classes.dump' );
   
   $arr = explode("\n", file_get_contents( FILE_CLASSES ) );
   
