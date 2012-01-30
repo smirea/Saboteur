@@ -48,7 +48,7 @@ S.MapClient = S.Map.extend({
   insertCardAt: function( aPathCard, x, y ){
     this._super( aPathCard, x, y );
     this.structure.table.find( '#field_'+x+'_'+y ).html( aPathCard.toElement() );
-    aPathCard.rotate( aPathCard.isFlipped ? 270 : 90 );
+    aPathCard.rotate( aPathCard.isFlipped ? 90 : 270 );
     return this;
   },
   removeCardAt: function( x, y ){

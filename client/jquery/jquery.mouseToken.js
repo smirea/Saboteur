@@ -26,7 +26,6 @@
         opt   : opt,
         cls   : cls
       };
-      
       com.token
         .addClass( cls.token )
         .append( opt.object )
@@ -40,8 +39,8 @@
         .data('mouseToken', com)
         .bind('mousemove.mouseToken', function(e){
           com.token.offset({
-            left  : e.offsetX + opt.offsetX,
-            top   : e.offsetY + opt.offsetY
+            left  : e.pageX + opt.offsetX,
+            top   : e.pageY + opt.offsetY
           });
         });
     }

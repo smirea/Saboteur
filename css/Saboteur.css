@@ -2,6 +2,7 @@ html{
   background  : #ccc;
 }
 .Saboteur{
+  position    : relative;
   border      : 1px solid #666;
   background  : #fff;
 }
@@ -15,8 +16,8 @@ html{
   -webkit-border-radius : 10px;  
   border                : 1px solid #999;
   background            : #fff;
-  width                 : 150px;
-  height                : 95px;
+  width                 : 110px;
+  height                : 65px;
 }
 .Saboteur-map-cardHolder{
   display       : block;
@@ -37,6 +38,9 @@ html{
   font-family : verdana;
   font-size   : 9pt;
   overflow    : hidden;
+}
+.Saboteur-card.selected .card-overlay{
+  background  : rgba(255,125,0,0.5)!important;
 }
 .Saboteur-card .card-canvas{
   border        : 1px solid #999;

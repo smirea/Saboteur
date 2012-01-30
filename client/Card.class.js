@@ -21,7 +21,6 @@ S.Card = S.Card.extend({
       val = (val % 360) / 90;
       var canvas  = this.structure.canvas[0];
       var context = this.structure._context;
-      context.clearRect( -1, -1, this.width + 2, this.height + 2 );
       canvas.width  = pos[val][3];
       canvas.height = pos[val][4];
       context.rotate( pos[val][0] );
@@ -29,6 +28,7 @@ S.Card = S.Card.extend({
       this.restoreState();
       context.translate( -pos[val][1], -pos[val][2] );
       context.rotate( -pos[val][0] );
+      this.angle = val * 90;
       return this;
     };
   })(),
@@ -50,17 +50,19 @@ S.Card = S.Card.extend({
     function auto_generate_paths(){
       var obj = this;
       if( !obj.toElement ) return false;
-      var container = obj.toElement();
+      var container = obj.structure.main;
       if( obj.sides ){
         for( var j in obj.sides ){
           if( obj.sides[j].hasPath ){
+            j = parseInt( j );
             var context = obj.structure._context;
-            context.lineWidth   = 32;
+            context.lineWidth   = Math.floor(obj.width / 3.5);
             context.strokeStyle = 'rgb(100,100,100)';
             var ok = false;
             for( var k in obj.sides[j].links ){
-              ok = true;
-              draw_path.call( this, context, j, k );
+              ok  = true;
+              k   = parseInt( k );
+              draw_path.call( this, context, (j+1)%4, (k+1)%4 );
             };
             if( !ok ){
               var a = getPoint.call( this, j );
@@ -91,7 +93,6 @@ S.Card = S.Card.extend({
         addImageAt.call( this, 'images/icon-ladder.gif', x, y, w, h );
       };
       if( obj instanceof S.GateCard ){
-        console.log('trololoo');
         var w = 60;
         var h = 60;
         var x = (obj.width-w) / 2;
@@ -101,12 +102,7 @@ S.Card = S.Card.extend({
         else
           addImageAt.call( this, 'images/icon-gate-green.png', x, y, w, h );
       };
-      obj.structure.main.bind('mouseenter.toggleName', function(){
-        obj.structure.name.slideDown( 'fast' );
-      }).bind('mouseleave.toggleName', function(){
-        obj.structure.name.hide();
-      }).trigger('mouseleave.toggleName');
-      container.data( 'obj', obj );
+      this.saveState();
       return true;
     };
     
@@ -123,7 +119,7 @@ S.Card = S.Card.extend({
     }
     
     function getPoint( point ){
-      point = parseInt(point) % 4;
+      point = point % 4;
       var obj = { x:0, y:0 };
       switch( point ){
         case 0: obj.x = this.width/2; break;
@@ -143,23 +139,35 @@ S.Card = S.Card.extend({
     };
     
     function setup(){
-      var elem = this;
-      elem._positioning = [ // [angle, x offset, y offset, translate-x, translate-y]
-        [ 0, 0, 0, elem.width, elem.height ],  
-        [ Math.PI/2, 0, -elem.height, elem.height, elem.width ],
-        [ Math.PI, -elem.width, -elem.height, elem.width, elem.height ],
-        [ Math.PI*3/2, -elem.width, 0, elem.height, elem.width ] 
+      this._positioning = [ // [angle, x offset, y offset, translate-x, translate-y]
+        [ 0, 0, 0, this.width, this.height ],  
+        [ Math.PI/2, 0, -this.height, this.height, this.width ],
+        [ Math.PI, -this.width, -this.height, this.width, this.height ],
+        [ Math.PI*3/2, -this.width, 0, this.height, this.width ] 
       ];
-      var struct = elem.structure;
-      if( auto_generate_paths.call( this ) ){
-        elem.saveState();
+      var struct = this.structure;
+      
+      if( this.tapped ){
+        addImageAt.call( this, 
+                         SO.images[this._className].back_cover, 
+                         0, 
+                         0, 
+                         this.width,
+                         this.height
+                       );
+      } else if( this instanceof S.PathCard ){
+        auto_generate_paths.call( this );
       } else {
-        var img = P.get(elem.front_cover);
-        struct._front_cover = img;
-        struct._context.drawImage( img, 0, 0, elem.width, elem.height );
-        elem.saveState();
+        addImageAt.call( this, 
+                         SO.images[this._className].front_cover, 
+                         0, 
+                         0, 
+                         this.width,
+                         this.height
+                       );
       };
-    }
+      this.saveState();
+    };
     return function(){
       if( !this.structure ){
         this.structure = {
@@ -187,11 +195,17 @@ S.Card = S.Card.extend({
             'class' : 'card-overlay',
             'href'  : 'javascript:void(0)'
           });
+        var self = this;
         this.structure.main
           .data( 'card', this )
           .attr( 'class', SO.classes.card )
           .append( this.structure.name, this.structure.canvas, 
-                   this.structure.description, this.structure.overlay );
+                   this.structure.description, this.structure.overlay )
+          .bind('mouseenter.toggleName', function(){
+            self.structure.name.slideDown( 'fast' );
+          }).bind('mouseleave.toggleName', function(){
+            self.structure.name.hide();
+          }).trigger('mouseleave.toggleName');
         setup.call( this );
       };
       return this.structure.main;

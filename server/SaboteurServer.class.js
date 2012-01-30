@@ -198,15 +198,6 @@ var SaboteurServer = Saboteur.extend({
   
   // HELPERS
   
-  each : function(object, callback) {
-    object = U.extend(true, {}, object);
-    for (var i in object) {
-      object[i] = callback(i, object[i]);
-    }
-    
-    return object;
-  },
-  
   // -- STATE
   getGameState : function(playerID) {
     // public info on all people

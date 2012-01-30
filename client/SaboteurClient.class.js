@@ -8,6 +8,14 @@ var SaboteurClient = Saboteur.extend({
       };
       
       this._super( options, cards );
+      this.target = target;
+      U.extend( true, this.cls, SO.classes, classes );
+      
+      var self = this;
+      preload_images.call( self, function(){ create_structure.apply( self ); } );
+    };
+    
+    function create_structure(){
       var self = this;
       var mapOptions = {
         maxCards    : this.factory.size(),
@@ -15,18 +23,9 @@ var SaboteurClient = Saboteur.extend({
         goalCards   : this.opt.goalCards.map(function(v,i){ v.unshift(self.factory.get('dummyGoal',i)); return v; }),
         factory     : this.factory
       };
-      U.extend( this, {
-        target  : target,
-        map     : new S.MapClient( mapOptions )
-      });
-      U.extend( true, this.cls, SO.classes, classes );
       
-      preload_images.apply( this );
-      create_structure.apply( this );
-    };
-    
-    function create_structure(){
-      this.structure = {
+      this.map        = new S.MapClient( mapOptions );
+      this.structure  = {
         wrapper : $(document.createElement('div')),
         map     : this.map.toElement(),
         players : $(),
@@ -36,28 +35,83 @@ var SaboteurClient = Saboteur.extend({
         .addClass( SO.classes.main )
         .append( this.structure.map, this.structure.players, this.structure.hand );
       this.target.html( this.structure.wrapper );
-    }
-    
-    function preload_images(){
-      var all_cards = {};
-      U.extend( all_cards, this.gameDeckList, this.roleDeckList );
-      var images = [];
-      for( var i in all_cards ){
-        var tmp = new S[i];
-        if( tmp.front_cover ) images.push( tmp.front_cover );
-        if( tmp.back_cover ) images.push( tmp.front_cover );
-        delete tmp;
-      }
       
+      // JUST FOR TESTING
+      var test = $(document.createElement('div'));
+      test.css({
+        'position'    : 'absolute',
+        'top'         : 0,
+        'right'       : 0,
+        'width'       : 600,
+        'background'  : 'red'
+      });
+      var factory   = this.factory.getNamespaces('game');
+      var bitmask   = {};
+      var selected  = $();
+      for( var i in factory ){
+        if( S[factory[i]._className] && !bitmask[factory[i]._className]){
+          var card = new S[factory[i]._className];
+          card.name = card._className.replace(/([A-Z])/g, " $1");
+          test.append( card.toElement() );
+          card
+            .toElement()
+            .data('object', card)
+            .bind('click', function(){
+            if( !$(this).hasClass('selected') ){
+              $(this).addClass('selected');
+              selected.removeClass('selected');
+              selected = $(this);
+              $(this).data('object').rotate( 270 );
+            } else {
+              $(this).removeClass('selected');
+              selected = $();
+              $(this).data('object').rotate( 0 );
+            };
+          });
+          bitmask[factory[i]._className] = true;
+        };
+      };
+      var self = this;
+      self.structure.map
+        .find('.'+SO.classes.card)
+        .each(function(){
+          $(this).bind('click', function(){
+            if( selected ){
+              var obj = selected.data('card');
+              var id  = $(this).parent().attr('id').split('_');
+              var x   = parseInt( id[1] );
+              var y   = parseInt( id[2] );
+              if( self.map.checkInsertCardAt( obj, x, y ) ){
+                self.map.insertCardAt( obj, x, y );
+              } else {
+                logger.info(' [] You can\'t insert a card at that position', obj, x, y, arguments );
+              }
+            } else {
+              logger.info( '[] You must select a card first', arguments );
+            }
+          });
+        });
+      this.structure.wrapper.append( test );
+      // END TESTING
+    };
+    
+    function preload_images( callback ){
+      var images = [];
+      U.each( SO.images, function( k, v ){
+        images.push( v.front_cover, v.back_cover );
+      });
       var s = $('#progressBar').progressBar({
         title : 'loading...',
         max   : images.length
       });
+      var self = this;
       P.multiLoad(images, function( image ){
         s.progressBar('increment');
         if( this._total == this._finished ){
           s.progressBar('setMessage', ['---- Image loading done ----']);
           s.progressBar('setTitle', ['now what?!']);
+          callback.call( self );
+          console.log( self );
         } else {
           s.progressBar('setMessage', [image.src]);
         }
