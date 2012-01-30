@@ -4,8 +4,19 @@
   
   $arr = explode("\n", file_get_contents( FILE_CLASSES ) );
   
-  $roles = array( 'RoleCard', 'BlueGoldDigger', 'GreenGoldDigger', 'Boss',
-                  'Geologist', 'Profiteer', 'Saboteur'
+  $exceptions = array(
+    'RoleCard'            => 'Role',
+    'BlueGoldDigger'      => 'Role', 
+    'GreenGoldDigger'     => 'Role', 
+    'Boss'                => 'Role',
+    'Geologist'           => 'Role',
+    'Profiteer'           => 'Role',
+    'Saboteur'            => 'Role',
+    'GoalCard'            => 'Goal',
+    'CurvedLeftGoalCard'  => 'Goal',
+    'CurvedRightGoalCard' => 'Goal',
+    'GoldCard'            => 'Goal',
+    'FullCrossGoldCard'   => 'Goal'
   );
 
   $final = array();
@@ -13,7 +24,7 @@
   foreach( $arr as $v ){
     if( strlen($v) > 0 && !isset($bitmask[$v]) ){
       $bitmask[$v] = true;
-      $back = array_search( $v, $roles, true ) === false ? 'Card' : 'Role';
+      $back = isset( $exceptions[$v] ) ? $exceptions[$v] : 'Card';
       $final[] = <<<OBJECT
     $v : {
       front_cover : 'images/cards/$v-cover-front.png',

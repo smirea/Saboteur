@@ -29,7 +29,7 @@ S.MapClient = S.Map.extend({
           td = td.add(
             $(document.createElement('td')).attr({
               'id'    : id,
-              'class' : SO.classes.mapTD
+              'class' : SO.classes.map.td
             }).html( element.toElement() )
           );
           element.rotate( 90 );
@@ -38,7 +38,7 @@ S.MapClient = S.Map.extend({
       };
       this.structure.table
         .attr({
-          'class'       : SO.classes.table,
+          'class'       : SO.classes.map.table,
           'cellspacing' : 0,
           'cellpadding' : 0
         })

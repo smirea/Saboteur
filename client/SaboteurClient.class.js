@@ -1,7 +1,7 @@
 
 var SaboteurClient = Saboteur.extend({
   init    : (function(){
-    return function( target, options, cards, classes ){
+    return function( target, options, cards ){
       if( !target || target.length == 0 ){
         logger.warn( '[SaboteurClient.init] Invalid target', arguments );
         return null;
@@ -9,7 +9,6 @@ var SaboteurClient = Saboteur.extend({
       
       this._super( options, cards );
       this.target = target;
-      U.extend( true, this.cls, SO.classes, classes );
       
       var self = this;
       preload_images.call( self, function(){ create_structure.apply( self ); } );
@@ -31,12 +30,16 @@ var SaboteurClient = Saboteur.extend({
         players : $(),
         hand    : $(document.createElement('div'))
       };
+      this.structure.map
+        .addClass( SO.classes.map.main );
+      this.structure.hand
+        .addClass( SO.classes.hand );
       this.structure.wrapper
         .addClass( SO.classes.main )
         .append( this.structure.map, this.structure.players, this.structure.hand );
       this.target.html( this.structure.wrapper );
       
-      // JUST FOR TESTING
+      /*// JUST FOR TESTING
       var test = $(document.createElement('div'));
       test.css({
         'position'    : 'absolute',
@@ -93,6 +96,7 @@ var SaboteurClient = Saboteur.extend({
         });
       this.structure.wrapper.append( test );
       // END TESTING
+      */
     };
     
     function preload_images( callback ){
@@ -111,7 +115,6 @@ var SaboteurClient = Saboteur.extend({
           s.progressBar('setMessage', ['---- Image loading done ----']);
           s.progressBar('setTitle', ['now what?!']);
           callback.call( self );
-          console.log( self );
         } else {
           s.progressBar('setMessage', [image.src]);
         }

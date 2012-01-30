@@ -223,7 +223,7 @@
         
     function connect() {
       if(gameState.firstconnect) {
-        gameState.socket = io.connect(null);
+        gameState.socket = io.connect( SO.server.address );
           
         // ADMIN HANDLERS
         for (var a in adminHandlers) {

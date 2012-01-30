@@ -56,6 +56,7 @@ S.Card = S.Card.extend({
           if( obj.sides[j].hasPath ){
             j = parseInt( j );
             var context = obj.structure._context;
+            context.beginPath();
             context.lineWidth   = Math.floor(obj.width / 3.5);
             context.strokeStyle = 'rgb(100,100,100)';
             var ok = false;
@@ -65,13 +66,13 @@ S.Card = S.Card.extend({
               draw_path.call( this, context, (j+1)%4, (k+1)%4 );
             };
             if( !ok ){
-              var a = getPoint.call( this, j );
+              var a = getPoint.call( this, (j+1)%4 );
               context.moveTo( a.x, a.y );
-              switch( j ){
-                case '0': context.lineTo( this.width/2, this.height/4 ); break;
-                case '1': context.lineTo( this.width*3/4, this.height/2 ); break;
-                case '2': context.lineTo( this.width/2, this.height*3/4 ); break;
-                case '3': context.lineTo( this.width/4, this.height/2 ); break;
+              switch( (j+1)%4 ){
+                case 0: context.lineTo( this.width/2, this.height/4 ); break;
+                case 1: context.lineTo( this.width*3/4, this.height/2 ); break;
+                case 2: context.lineTo( this.width/2, this.height*3/4 ); break;
+                case 3: context.lineTo( this.width/4, this.height/2 ); break;
               };
               context.stroke();
             };
