@@ -169,14 +169,18 @@
       socket.emit('setup', data);
       //TODO: major hack, need a handshake until you start game, 
       // or some form of ACK mechanism, mb even call start separately...
-      setTimeout(actions.startGame.callback, 100);
+      setTimeout(function() {
+        actions.startGame.callback(Protocol.createEvent('startGame','server','custom').data)
+      }, 1000);
     };
     
     actions.startGame.callback = function(data) {
       //TODO: think about this shit...
       socket.emit('startGame', data);
       //TODO: testing phase...
-      setTimeout(actions.discard.callback, 1000); 
+      setTimeout(function() {
+        actions.discard.callback(Protocol.createEvent('discard','server','custom').data)
+      }, 1000);
     };
     
     for (var i in actions) {
@@ -208,7 +212,7 @@
               console.log(data);
               return handler.callback.call(this, data);
             };
-          }
+          };
         };
           
         for (var h in handlers) {

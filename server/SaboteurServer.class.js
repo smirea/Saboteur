@@ -200,7 +200,7 @@ var SaboteurServer = Saboteur.extend({
   // -- STATE
   getGameState : function(playerID) {
     // public info on all people
-    var players = this.each(this.players, function(k, v) { return { public : v.public}});
+    var players = U.each(this.players, function(k, v) { return { public : v.public}});
     // private info on you
     players[playerID].private = this.players[playerID].private; 
     var state = {
@@ -216,8 +216,7 @@ var SaboteurServer = Saboteur.extend({
       state : Protocol.state.ERROR
     });
     
-    var event = U.extend(event.data[Protocol.state.ERROR], this.getGameState(playerID));
-    U.extend(event.data[Protocol.state.ERROR], data);
+    U.extend(event.data[Protocol.state.ERROR], this.getGameState(playerID), data);
     this.playerList[playerID].socket.emit('result', event.data);
   },
   
@@ -225,6 +224,7 @@ var SaboteurServer = Saboteur.extend({
     var event = Protocol.createEvent('result', 'client', 'custom', {
       state : Protocol.state.CORRECT
     });
+    
     U.extend(event.data[Protocol.state.CORRECT], data);
     this.playerList[playerID].socket.emit('result', event.data);
   },

@@ -66,6 +66,7 @@ io.sockets.on('connection', function(socket){
     // TODO: hacks for testing
     this.handlers.setup.callback = function(data) {
       console.log('Got a setup event');
+      console.log('*** IN SETUP',data);
       // TODO: might use a class, mb?
       var playerID = data.playerID
       sab.playerList[playerID] = {};
@@ -105,32 +106,21 @@ io.sockets.on('connection', function(socket){
     };
     
     //TODO: hack...
-    for (var h in this.handlers) {
-      socket.on(this.handlers[h].name , this.handlers[h].callback);
-    }
-    
-    /*
-    for (var h in this.handlers) {
-      var name = this.handlers[h].name;
-      socket.on(name, function(data) {
-        if (name != data._name) {
-          throw new Error('Invalid datatype ' + data._name + ' for event ' + name);
+    var fun = function(handler) {
+      return function(data) {
+        console.log('WTF!!!', handler, data);
+        if (handler.name != data._name) {
+          throw new Error('Invalid datatype ' + data._name + ' for event ' + handler.name);
         } else {
-          console.log('handling event:',name);
+          console.log('handling event:',handler.name);
           console.log(data);
-          return self.handlers[h].callback.call(self, data);
+          return handler.callback.call(this, data);
         };
-      });
-    }
-    */
-    /*
-    // REGISTERING EVENTS
-    for (var i in this.allowedEvents) {
-      var event = this.allowedEvents[i].name;
-      var self = this;
-      
-      socket.on(event, self[event]);
-      //console.log('For event', event, 'Using function', self[event]);
+      };
     };
-    */
+      
+    for (var h in this.handlers) {
+      var handler = this.handlers[h]
+      socket.on(handler.name, fun(handler));
+    }
 });
