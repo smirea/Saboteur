@@ -39,12 +39,15 @@ app.listen(8080);
 var io = require('socket.io').listen(app);
 // using var Protocol
 //var Protocol = new Protocol();
-var sab = new SaboteurServer(io, Protocol);
+var sab = new SaboteurServer(io);
 
 //sab.setupGame();
 io.sockets.on('connection', function(socket){
     console.log("Connection " + socket.id + " accepted.");
-    socket.emit('setup', {playerID : socket.id});
+    var event = Protocol.createEvent('setup', 'client', 'custom', {
+      playerID : socket.id
+    });
+    socket.emit('setup', event.data);
     
     this.disconnect = function(data) {
       console.log("Connection " + socket.id + " terminated.");
@@ -62,6 +65,7 @@ io.sockets.on('connection', function(socket){
     
     // TODO: hacks for testing
     this.handlers.setup.callback = function(data) {
+      console.log('Got a setup event');
       // TODO: might use a class, mb?
       var playerID = data.playerID
       sab.playerList[playerID] = {};

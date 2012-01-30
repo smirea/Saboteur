@@ -43,9 +43,9 @@
     var socket;
     var playerID;
     var firstconnect = true;
-    var adminHandlers = U.extend({}, Protocol.events.client.admin);
-    var handlers = U.extend({}, Protocol.events.client.custom);
-    var actions = U.extend({}, Protocol.events.server.custom);
+    var adminHandlers = U.extend(true, {}, Protocol.events.client.admin);
+    var handlers = U.extend(true, {}, Protocol.events.client.custom);
+    var actions = U.extend(true, {}, Protocol.events.server.custom);
     
     // HANDLERS
     
@@ -78,13 +78,10 @@
 
     handlers.chat.callback = function(data) {
       // TODO: this is bullshit, please do a chat system :))
-      console.log('getting from server: ', data);
       document.getElementById('status').innerHTML += data.message;
     };
 
     handlers.setup.callback = function(data) {
-      console.log('got setup information');
-      console.log(data);
       playerID = data.playerID;
       // TODO: name should be gotten from an interface somehow..preset! 
       // You should not call doSetup here, but rather when ready..
@@ -92,12 +89,11 @@
     };
     
     handlers.result.callback = function(data) {
-      //TODO: handle results?
+      console.log('Interpreting results');
+      console.log(data[data.state]);
     };
     
     handlers.reset.callback = function(data) {
-      console.log('got a reset request');
-      console.log(data);
       player = data.players[playerID];
       //TODO: reset all state...in the SaboteurClient maybe?
     };
@@ -178,12 +174,21 @@
     
     actions.startGame.callback = function(data) {
       //TODO: think about this shit...
-      console.log('starting game');
       socket.emit('startGame', data);
       //TODO: testing phase...
       setTimeout(actions.discard.callback, 1000); 
     };
-      
+    
+    for (var i in actions) {
+      actions[i]._callback = actions[i].callback;
+      actions[i].callback = (function(action) {
+        return function(data) {
+          console.log('***ACTION',action.name);
+          return action._callback(data);
+        };
+      })(actions[i]);
+    };
+    
     window.onLoad = connect();
         
     function connect() {
@@ -194,25 +199,22 @@
           socket.on(adminHandlers[a].name, adminHandlers[a].callback);
         };  
         
-        for (var h in handlers) {
-          socket.on(handlers[h].name , handlers[h].callback);
-        };
-        
-        /*
-        for (var h in handlers) {
-          var name = handlers[h].name
-          console.log(name);
-          socket.on(name, function(data) {
-            if (name != data._name) {
-              throw new Error('Invalid datatype ' + data._name + ' for event ' + name);
+        var fun = function(handler) {
+          return function(data) {
+            if (handler.name != data._name) {
+              throw new Error('Invalid datatype ' + data._name + ' for event ' + handler.name);
             } else {
-              console.log('handling event:',handlers[h].name);
+              console.log('handling event:',handler.name);
               console.log(data);
-              return handlers[h].callback.call(this, data);
+              return handler.callback.call(this, data);
             };
-          });
+          }
+        };
+          
+        for (var h in handlers) {
+          var handler = handlers[h]
+          socket.on(handler.name, fun(handler));
         }
-        */
         
         //setTimeout(actions.setup.callback, 100 );
 
@@ -227,14 +229,15 @@
     
     <h1>Socket.io Test</h1>
     <div><p id="status">Waiting for input</p></div>
-    <button id="discard" onClick='discard()'/>discard</button>
-    <button id="doTargetMap" onClick='doTargetMap()'/>doTargetMap</button>
-    <button id="targetPerson" onClick='doTargetPublicPerson()'/>doTargetPublicPerson</button>
-    <button id="doHeal" onClick='doHeal()'/>doHeal</button>
-    <button id="chat" onClick='chat()'/>chat</button>
+    <button id="discard" onClick='actions.discard.callback()'/>discard</button>
+    <button id="doTargetMap" onClick='actions.targetMap.callback()'/>doTargetMap</button>
+    <button id="targetPerson" onClick='actions.targetPublicPerson.callback()'/>targetPublicPerson</button>
+    <button id="targetPerson" onClick='actions.targetPrivatePerson.callback()'/>targetPrivatePerson</button>
+    <button id="doHeal" onClick='actions.heal.callback()'/>doHeal</button>
+    <button id="chat" onClick='actions.chat.callback()'/>chat</button>
     <button id="connect" onClick='connect()'/>connect</button>
     <button id="disconnect" onClick='disconnect()'>disconnect</button>
     <button id="send" onClick='send()'/>message</button>
-    <button id="doStartGame" onClick='doStartGame()'/>START GAME</button>
+    <button id="doStartGame" onClick='actions.startGame.callback()'/>START GAME</button>
   </body>
 </html>
