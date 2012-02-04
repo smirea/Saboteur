@@ -21,7 +21,7 @@
     var namespaces = ['start', 'dummyGoal', 'goal', 'role', 'game'];
     for( var k in namespaces ){
       $('#main').append('<h3>'+namespaces[k]+'</h3>');
-      var arr = sab.factory.getNamespaces( namespaces[k] );
+      var arr = F.getNamespaces( namespaces[k] );
       var bitmask = {};
       for( var i in arr ){
         if( !arr[i].toElement || bitmask[arr[i]._className] ) continue;

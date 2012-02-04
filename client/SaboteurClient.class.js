@@ -17,18 +17,20 @@ var SaboteurClient = Saboteur.extend({
     function create_structure(){
       var self = this;
       var mapOptions = {
-        maxCards    : this.factory.size(),
-        startCards  : this.opt.startCards.map(function(v,i){ v.unshift(self.factory.get('start',i)); return v; }),
-        goalCards   : this.opt.goalCards.map(function(v,i){ v.unshift(self.factory.get('dummyGoal',i)); return v; }),
-        factory     : this.factory
+        maxCards    : F.size(),
+        startCards  : this.opt.startCards.map(function(v,i){ v.unshift(F.get('start',i)); return v; }),
+        goalCards   : this.opt.goalCards.map(function(v,i){ v.unshift(F.get('dummyGoal',i)); return v; }),
+        factory     : F
       };
       
+      var self = this;
       this.map        = new S.MapClient( mapOptions );
       this.structure  = {
         wrapper : $(document.createElement('div')),
         map     : this.map.toElement(),
         players : $(),
-        hand    : $(document.createElement('div'))
+        // TODO: SET THIS TO: this.players[ owning_player ].hand.toElement() !!!!
+        hand    : new Hand( [5,18,21,32,45,23] ).toElement()
       };
       this.structure.map
         .addClass( SO.classes.map.main );
@@ -48,7 +50,7 @@ var SaboteurClient = Saboteur.extend({
         'width'       : 600,
         'background'  : 'red'
       });
-      var factory   = this.factory.getNamespaces('game');
+      var factory   = F.getNamespaces('game');
       var bitmask   = {};
       var selected  = $();
       for( var i in factory ){
