@@ -5,6 +5,7 @@
     '../lib/logger.js',
     '../lib/Utils.js',
     '../lib/Protocol.js',
+    '../lib/Hand.class.js',
     '../lib/Player.class.js',
     '../lib/SaboteurOptions.js',
     '../lib/Card.class.js',

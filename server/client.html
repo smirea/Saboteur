@@ -131,6 +131,7 @@
     actions.chat.callback = function(event) {
       var event = Protocol.createEvent('chat', 'server', 'custom');
       // data.message = message;
+      event.data.playerID = gameState.playerID;
       event.data.message = 'testing...';
       gameState.socket.emit('chat', event);
     };
@@ -138,7 +139,7 @@
     actions.discard.callback = function (event) {
       var event = Protocol.createEvent('discard', 'server', 'custom');
       event.data.playerID = gameState.playerID
-      event.data.cards = [ gameState.player.private.cards[0] ]; // [ 1000 ] ; //
+      event.data.cards = [ gameState.player.private.hand.cards[0] ]; // [ 1000 ] ; //
       
       gameState.socket.json.emit('discard', event);
     };
@@ -153,25 +154,25 @@
       gameState.socket.json.emit('targetMap',  event);
     };
     
-    actions.targetPublicPerson.callback = function(event) {
-      var event = Protocol.createEvent('targetPublicPerson', 'server', 'custom');
+    actions.targetPublicPlayer.callback = function(event) {
+      var event = Protocol.createEvent('targetPublicPlayer', 'server', 'custom');
       event.data.playerID = playerID;
       event.data.targetID = playerID;
       event.data.targetCardID = 100;
       
-      gameState.socket.json.emit('targetPublicPerson',  event);
+      gameState.socket.json.emit('targetPublicPlayer',  event);
     };
     
-    actions.targetPrivatePerson.callback = function(event) {
-      var event = Protocol.createEvent('targetPrivatePerson', 'server', 'custom');
+    actions.targetPrivatePlayer.callback = function(event) {
+      var event = Protocol.createEvent('targetPrivatePlayer', 'server', 'custom');
       // data.cardID = cardID;
       // data.targetID = targetID;
       event.data.playerID = playerID;
       // TODO: hack...fix later :p
-      event.data.cardID = player.private.cards[0];
+      event.data.cardID = player.private.hand.cards[0];
       event.data.targetID = playerID;
       
-      gameState.socket.json.emit('targetPrivatePerson', event);
+      gameState.socket.json.emit('targetPrivatePlayer', event);
     };
     
     actions.heal.callback = function(event) {
@@ -180,7 +181,7 @@
       // data.targetCardID = targetCardID;
       event.data.playerID = playerID;
       // TODO: hack...fix later :p
-      event.data.cardID = player.private.cards[0];
+      event.data.cards = [ player.private.hand.cards[0], player.private.hand.cards[1]];
       event.data.targetCardID = 100;
       
       gameState.socket.json.emit('discard',  event);
@@ -223,7 +224,7 @@
         
     function connect() {
       if(gameState.firstconnect) {
-        gameState.socket = io.connect( SO.server.address );
+        gameState.socket = io.connect( null ); // TODO: need to stop modifying each other :))
           
         // ADMIN HANDLERS
         for (var a in adminHandlers) {
@@ -260,8 +261,8 @@
     <div><p id="status">Waiting for input</p></div>
     <button id="discard" onClick='actions.discard.callback()'/>discard</button>
     <button id="doTargetMap" onClick='actions.targetMap.callback()'/>doTargetMap</button>
-    <button id="targetPerson" onClick='actions.targetPublicPerson.callback()'/>targetPublicPerson</button>
-    <button id="targetPerson" onClick='actions.targetPrivatePerson.callback()'/>targetPrivatePerson</button>
+    <button id="targetPerson" onClick='actions.targetPublicPlayer.callback()'/>targetPublicPlayer</button>
+    <button id="targetPerson" onClick='actions.targetPrivatePlayer.callback()'/>targetPrivatePlayer</button>
     <button id="doHeal" onClick='actions.heal.callback()'/>doHeal</button>
     <button id="chat" onClick='actions.chat.callback()'/>chat</button>
     <button id="connect" onClick='connect()'/>connect</button>

@@ -44,56 +44,31 @@ var sab = new SaboteurServer(io);
 //sab.setupGame();
 io.sockets.on('connection', function(socket){
     console.log("Connection " + socket.id + " accepted.");
-    var event = Protocol.createEvent('setup', 'client', 'custom', {
-      playerID : socket.id
-    });
-    socket.emit('setup', event);
-    
+
     this.disconnect = function(data) {
       console.log("Connection " + socket.id + " terminated.");
     };
-    
+
     // CUSTOM HANDLERS
-    this.handlers = U.extend({}, Protocol.events.server.custom);
-    
-    // TODO: hacks for testing    
-    this.handlers.startGame.callback = function(event) {
-      sab.setupGame();
-      sab.broadcastStartGame();
+    var def = function(name) {
+      return function(event) {
+        return sab.events[name].handle.call(sab, event);
+      };
     };
     
-    // TODO: hacks for testing
+    this.handlers = U.extend({}, Protocol.events.server.custom);
+    for (var h in this.handlers) {
+      this.handlers[h].callback = def(h);
+    };
+    
+    // TODO: unhack this?
     this.handlers.setup.callback = function(event) {
       // TODO: might use a class, mb?
       var playerID = event.data.playerID
       sab.playerList[playerID] = {};
       sab.playerList[playerID].name = event.data.name;
       sab.playerList[playerID].socket = socket;
-    };
-    
-    // TODO: mb make a real chat system
-    this.handlers.chat.callback = function(event) {
-      io.sockets.json.emit('chat', event);
-    };
-    
-    this.handlers.discard.callback = function(event) {
-      sab.handleDiscard(event.data)
-    };
-    
-    this.handlers.targetPublicPerson.callback = function(event) {
-      sab.handleTargetPublicPerson(event.data);
-    };
-    
-    this.handlers.targetPrivatePerson.callback = function(event) {
-      sab.handleTargetPrivatePerson(event.data);
-    };
-    
-    this.handlers.targetMap.callback = function(event) {
-      sab.handleTargetMap(event.data);
-    };
-    
-    this.handlers.heal.callback = function(event) {
-      sab.handleHeal(event.data);
+      return sab.events.setup.handle.call(sab, event);
     };
     
     var fun = function(handler) {
@@ -112,4 +87,11 @@ io.sockets.on('connection', function(socket){
       var handler = this.handlers[h];
       socket.on(handler.name, fun(handler));
     }
+    
+    // DO STUFF...
+    
+    var event = Protocol.createEvent('setup', 'client', 'custom', {
+      playerID : socket.id
+    });
+    socket.emit('setup', event);
 });
