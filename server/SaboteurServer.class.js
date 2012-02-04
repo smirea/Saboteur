@@ -38,9 +38,8 @@ var SaboteurServer = Saboteur.extend({
   },
   
   broadcastStartGame : function() {
-    console.log(this.playerList);
+    console.log('Broadcasting starting game', this.playerList);
     for (var i in this.playerList) {
-      console.log(i, this.playerList[i]);
       this.resetClientState(i);
     };
   },
@@ -212,12 +211,17 @@ var SaboteurServer = Saboteur.extend({
   },
   
   resolveError : function(playerID, data) {
-    var event = Protocol.createEvent('result', 'client', 'custom', {
+    console.log('handling error');
+    var eventResult = Protocol.createEvent('result', 'client', 'custom', {
       state : Protocol.state.ERROR
     });
+    var eventReset = Protocol.createEvent('reset', 'client', 'custom', this.getGameState(playerID));
     
-    U.extend(event.data[Protocol.state.ERROR], this.getGameState(playerID), data);
-    this.playerList[playerID].socket.emit('result', event.data);
+    var event = Protocol.createEvent('multiple', 'client', 'custom', {
+      events : [ eventResult, eventReset ]
+    });
+    // U.extend(event.data[Protocol.state.ERROR], this.getGameState(playerID), data);
+    this.playerList[playerID].socket.emit('multiple', event);
   },
   
   resolveCorrect : function(playerID, data) {
@@ -225,8 +229,8 @@ var SaboteurServer = Saboteur.extend({
       state : Protocol.state.CORRECT
     });
     
-    U.extend(event.data[Protocol.state.CORRECT], data);
-    this.playerList[playerID].socket.emit('result', event.data);
+    U.extend(event.data, data);
+    this.playerList[playerID].socket.emit('result', event);
   },
   
   updateClientState : function(playerID) {
@@ -235,6 +239,6 @@ var SaboteurServer = Saboteur.extend({
   
   resetClientState : function(playerID) {
     var event = Protocol.createEvent('reset', 'client', 'custom', this.getGameState(playerID));
-    this.playerList[playerID].socket.emit('reset', event.data);
+    this.playerList[playerID].socket.emit('reset', event);
   }
 });
