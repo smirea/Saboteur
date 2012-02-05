@@ -32,6 +32,11 @@ html{
 .Saboteur-map-cardHolder:hover{
   background  : orange;
 }
+.Saboteur-hand-cards{
+  position  : absolute;
+  right     : 10px;
+  top       : 10;
+}
 .Saboteur-card{
   position    : relative;
   display     : inline-block;
@@ -79,4 +84,15 @@ html{
 }
 .Saboteur-card .card-description{
   display : none;
+}
+.Saboteur-card .card-rotate{
+  position      : absolute;
+  z-index       : 10000;
+  right         : 5px;
+  bottom        : 5px;
+  border-radius : 7px;
+  background    : rgba( 90, 160, 220, 0.2 );
+}
+.Saboteur-card .card-rotate:hover{
+  background  : rgba( 90, 160, 220, 0.7 );
 }

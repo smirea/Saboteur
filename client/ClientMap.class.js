@@ -47,7 +47,10 @@ ClientMap = Map.extend({
   })(),
   insertCardAt: function( aPathCard, x, y ){
     this._super( aPathCard, x, y );
-    this.structure.table.find( '#field_'+x+'_'+y ).html( aPathCard.toElement() );
+    var elem    = aPathCard.toElement();
+    var elemPos = this.structure.table.find( '#field_'+x+'_'+y );
+    elem.data( 'swap-card', elemPos );
+    elemPos.html( elem );
     aPathCard.rotate( aPathCard.isFlipped ? 90 : 270 );
     return this;
   },

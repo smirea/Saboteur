@@ -25,8 +25,10 @@ var ClientHand = Hand.extend({
   add : function( ids ){
     if( this._super( ids ) ){
       for( var i in ids ){
-        this.structure.cards.append( F.get( 'game', ids[i]).toElement() );
-      }
+        F.get( 'game', ids[i])
+          .toElement()
+          .appendTo( this.structure.cards );
+      };
       return this;
     };
     return null;

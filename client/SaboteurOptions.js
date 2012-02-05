@@ -1,7 +1,7 @@
 U.extend(true, SaboteurOptions, {
   webRoot : 'http://localhost:8080',
   server : {
-    address : 'http://192.168.1.101:6969'
+    address : 'http://192.168.1.101:8080'
   },
   options : {
     card_width    : 65,
@@ -9,7 +9,6 @@ U.extend(true, SaboteurOptions, {
   },
   classes : {
     main  : 'Saboteur',
-    hand  : 'Saboteur-hand',
     card  : 'Saboteur-card',
     map : {
       main  : 'Saboteur-map',
