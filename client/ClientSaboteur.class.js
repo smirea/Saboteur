@@ -138,13 +138,7 @@ var ClientSaboteur = Saboteur.extend({
   
   createMap : function(){
     var self = this;
-    var mapOptions = {
-      maxCards    : F.size(),
-      startCards  : this.opt.startCards.map(function(v,i){ v.unshift(F.get('start',i)); return v; }),
-      goalCards   : this.opt.goalCards.map(function(v,i){ v.unshift(F.get('dummyGoal',i)); return v; }),
-      factory     : F
-    };
-    this.map = new ClientMap( mapOptions );
+    this.map = new ClientMap( this.createMapOptions(false) );
     this.structure.map
       .append( this.map.toElement() )
       .addClass( SO.classes.map.main );

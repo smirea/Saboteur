@@ -5,7 +5,7 @@ var connect = require('connect');
 
 var app = connect.createServer(
   connect.static( __dirname + '/' )
-).listen(6969)
+).listen(8080)
 
 var io = require('socket.io').listen(app);
 var sab = new ServerSaboteur(io);

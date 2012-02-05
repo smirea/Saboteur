@@ -85,6 +85,9 @@ var ServerSaboteur = Saboteur.extend({
     this.assignCards( this.players, this.opt.initialCards );
     // pre-discard the set amout of cards
     this.discardFromGameDeck( this.gameDeck, this.opt.discardCards );
+    // setup map 
+    //TODO: ...fuck!!
+    //this.map = new Map( this.createMapOptions(false));
   },
   
   /**
