@@ -44,12 +44,12 @@ var SaboteurServer = Saboteur.extend({
   
   setupGame : function() {
     var i = -1;
-    while (++i < this.factory.size('role')) {
+    while (++i < F.size('role')) {
       this.roleDeck[i] = i;
     };
     
     i = -1;
-    while (++i < this.factory.size('game')) {
+    while (++i < F.size('game')) {
       this.gameDeck[i] = i;
     };
     
@@ -214,7 +214,7 @@ var SaboteurServer = Saboteur.extend({
           return this.resolveError(data.playerID);
         };
         
-        card = this.factory.get('game', data.cardID);
+        card = F.get('game', data.cardID);
         var target = this.players[data.targetID];
         
         switch(card._className) {

@@ -1,5 +1,5 @@
 global.include = require('include').include;
-include('./utilsServer.js');
+include('server/utilsServer.js');
 
 var http = require('http')
 , url = require('url')
@@ -16,7 +16,7 @@ app = http.createServer(function(req, res){
     res.end();
   break;
   case '/client.html':
-    fs.readFile(__dirname + path, function(err, data){
+    fs.readFile( root( __dirname ) + path, function(err, data){
       if (err) return send404(res);
       res.writeHead(200, {'Content-Type': path == 'json.js' ? 'text/javascript' : 'text/html'})
       res.write(data, 'utf8');

@@ -4,7 +4,7 @@
 
 <?php 
   $_GET['view'] = 'script'; 
-  require_once('include_lib.php'); 
+  require_once('include_client.php'); 
 ?>
 
 <script>

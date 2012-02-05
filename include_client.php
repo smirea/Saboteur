@@ -1,6 +1,14 @@
 <?php
   
-  define( 'DIR_LIB', 'lib/' );
+  define( 'IS_CLI', PHP_SAPI === 'cli' );
+  
+  if( IS_CLI ){
+    define( 'VIEW', $argv && $argv[1] ? $argv[1] : 'list' );
+    define( 'ROOT', '' );
+  } else {
+    define( 'VIEW', isset( $_REQUEST['view'] ) ? $_REQUEST['view'] : 'script' );
+    define( 'ROOT', 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['REQUEST_URI']) . '/' );
+  }
   
   $scripts = array(
     'client/jquery/jquery.js',
@@ -12,10 +20,13 @@
     'lib/Factory.class.js',
     'client/Preloader.js',
     'lib/SaboteurOptions.js',
+    'lib/Card.abstract.js',
+    'client/Card.abstract.js',
+    'lib/DummyCard.abstract.js',
+    'lib/GameCard.abstract.js',
+    'lib/MapCard.abstract.js',
     'lib/Map.class.js',
     'client/MapClient.class.js',
-    'lib/Card.class.js',
-    'client/Card.class.js',
     'lib/ActionCard.class.js',
     'lib/PathCard.class.js',
     'lib/GoalCard.class.js',
@@ -32,19 +43,19 @@
     'lib/Saboteur.class.js',
     'client/SaboteurClient.class.js'
   );
-
-  $view = isset( $_GET['view'] ) ? $_GET['view'] : 'list';
-  switch( $view ){
+  
+  switch( VIEW ){
     case 'script': echo print_script( $scripts ); break;
     case 'json': echo json_encode( $scripts ); break;
     case 'export': var_export( $scripts ); break;
-    default: case 'list': echo implode(', ', $scripts); break;
+    case 'string': echo implode(', ', $scripts); break;
+    default: case 'list': echo implode( "\n", $scripts)."\n"; break;
   }
   
   function print_script( $list ){
     $arr = array();
     foreach( $list as $k => $v ){
-      $arr[] = '<script src="'.$v.'" type="text/javascript" language="javascript"></script>';
+      $arr[] = '<script src="'.ROOT.$v.'" type="text/javascript" language="javascript"></script>';
     }
     return implode("\n", $arr)."\n";
   }
