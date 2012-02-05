@@ -1,6 +1,11 @@
 <?php
 
-  define( 'FILE_CLASSES', 'classes.dump' );
+  define( 'FILE_CLASSES', 'scripts/classes.dump' );
+  
+  if( !isset($argv[1]) ){
+    exit( " [ERROR] You must specify a valid root path\n" );
+  }
+  $root = $argv[1];
   
   $arr = explode("\n", file_get_contents( FILE_CLASSES ) );
   
@@ -25,11 +30,16 @@
     if( strlen($v) > 0 && !isset($bitmask[$v]) ){
       $bitmask[$v] = true;
       $back = isset( $exceptions[$v] ) ? $exceptions[$v] : 'Card';
+      $paths = array(
+        'front' => $root."images/cards/$v-cover-front.png",
+        'back'  => $root."images/$back-cover-back.png",
+        'icon'  => $root."images/cards/$v-icon.png"
+      );
       $final[] = <<<OBJECT
     $v : {
-      front_cover : 'images/cards/$v-cover-front.png',
-      back_cover  : 'images/$back-cover-back.png',
-      icon        : 'images/cards/$v-icon.png'
+      front_cover : '$paths[front]',
+      back_cover  : '$paths[back]',
+      icon        : '$paths[icon]'
     }
 OBJECT;
 

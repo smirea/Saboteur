@@ -84,14 +84,14 @@ S.Card = S.Card.extend({
         var h = 40;
         var x = (obj.width-w) / 2;
         var y = (obj.height-h) / 2;
-        addImageAt.call( this, 'images/icon-diamond.png', x, y, w, h );
+        addImageAt.call( this, SO.webRoot + 'images/icon-diamond.png', x, y, w, h );
       };
       if( obj.hasLadder ){
         var w = 40;
         var h = 50;
         var x = (obj.width-w) / 2;
         var y = (obj.height-h) / 2;
-        addImageAt.call( this, 'images/icon-ladder.gif', x, y, w, h );
+        addImageAt.call( this, SO.webRoot + 'images/icon-ladder.gif', x, y, w, h );
       };
       if( obj instanceof S.GateCard ){
         var w = 60;
@@ -99,9 +99,9 @@ S.Card = S.Card.extend({
         var x = (obj.width-w) / 2;
         var y = (obj.height-h) / 2;
         if( obj instanceof S.BlueGateCard )
-          addImageAt.call( this, 'images/icon-gate-blue.png', x, y, w, h );
+          addImageAt.call( this, SO.webRoot + 'images/icon-gate-blue.png', x, y, w, h );
         else
-          addImageAt.call( this, 'images/icon-gate-green.png', x, y, w, h );
+          addImageAt.call( this, SO.webRoot + 'images/icon-gate-green.png', x, y, w, h );
       };
       this.saveState();
       return true;

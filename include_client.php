@@ -7,7 +7,7 @@
     define( 'ROOT', '' );
   } else {
     define( 'VIEW', isset( $_REQUEST['view'] ) ? $_REQUEST['view'] : 'script' );
-    define( 'ROOT', 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['REQUEST_URI']) . '/' );
+    define( 'ROOT', 'http://' . $_SERVER['HTTP_HOST'] . '/' . basename($_SERVER['REQUEST_URI']) . '/' );
   }
   
   $scripts = array(
@@ -20,13 +20,14 @@
     'lib/Factory.class.js',
     'client/Preloader.js',
     'lib/SaboteurOptions.js',
+    'client/SaboteurOptions.js',
     'lib/Card.abstract.js',
     'client/Card.abstract.js',
     'lib/DummyCard.abstract.js',
     'lib/GameCard.abstract.js',
     'lib/MapCard.abstract.js',
     'lib/Map.class.js',
-    'client/MapClient.class.js',
+    'client/ClientMap.class.js',
     'lib/ActionCard.class.js',
     'lib/PathCard.class.js',
     'lib/GoalCard.class.js',
@@ -36,12 +37,15 @@
     'lib/GatePathCard.class.js',
     'lib/GoldCard.class.js',
     'lib/Hand.class.js',
-    'client/Hand.class.js',
+    'client/ClientHand.class.js',
+    'client/HiddenHand.class.js',
     'lib/Player.class.js',
+    'client/ClientPlayer.class.js',
+    'client/HiddenPlayer.class.js',
     'lib/Protocol.js',
     'lib/StartCard.class.js',
     'lib/Saboteur.class.js',
-    'client/SaboteurClient.class.js'
+    'client/ClientSaboteur.class.js'
   );
   
   switch( VIEW ){

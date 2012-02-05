@@ -34,7 +34,8 @@
   
   with( global ){
     var root = function( dir ){
-      return dir.slice( 0, dir.lastIndexOf('/') );
+      //return dir.slice( 0, dir.lastIndexOf('/') );
+      return dir;
     };
   };
   

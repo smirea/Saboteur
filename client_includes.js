@@ -396,7 +396,7 @@ var D = {
       if( arguments[0] === true ){
         for( var i=2; i<arguments.length; ++i ){
           for( var j in arguments[i] ){
-            if( typeof arguments[i][j] === "object" && arguments[1][j] !== null ){
+            if( typeof arguments[i][j] === "object" && !U.isUndefined(arguments[1][j]) ){
               arguments[1][j] = arguments[1][j] || (U.isArray(arguments[1][j]) ? [] : {});
               U.extend( true, arguments[1][j], arguments[i][j] );
             } else {
@@ -668,9 +668,6 @@ if( typeof P == 'undefined' )
  * @FILE: lib/SaboteurOptions.js
  */
 var SaboteurOptions = SO = {
-  server : {
-    address : 'http://192.168.1.101:6969'
-  },
   options : {
     players       : [  ],
     initialCards  : 6,
@@ -678,26 +675,10 @@ var SaboteurOptions = SO = {
     healDiscard   : 2,
     healDraw      : 1,
     goldCards     : 1,
-    card_width    : 65,
-    card_height   : 110,
     // position of every start card. NOTE: the first one must be [0,0]
     startCards    : [ [0,0] ],
     //position of every goal card relative to the start card [0,0]
     goalCards     : [ [2,8], [0,8], [-2,8] ]
-  },
-  classes : {
-    main  : 'Saboteur',
-    hand  : 'Saboteur-hand',
-    card  : 'Saboteur-card',
-    map : {
-      main  : 'Saboteur-map',
-      table : 'Saboteur-map-table',
-      td    : 'Saboteur-map-td'
-    },
-    hand : {
-      main  : 'Saboteur-hand',
-      cards : 'Saboteur-hand-cards'
-    }
   },
   cards : {
     start : {
@@ -774,415 +755,458 @@ var SaboteurOptions = SO = {
       Trapped       : 3,
       FreeAtLast    : 4
     }
-  },
-  images : {
-    Card : {
-      front_cover : 'images/cards/Card-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/Card-icon.png'
-    },
-    MapClient : {
-      front_cover : 'images/cards/MapClient-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/MapClient-icon.png'
-    },
-    ActionCard : {
-      front_cover : 'images/cards/ActionCard-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/ActionCard-icon.png'
-    },
-    MapActionCard : {
-      front_cover : 'images/cards/MapActionCard-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/MapActionCard-icon.png'
-    },
-    PersonActionCard : {
-      front_cover : 'images/cards/PersonActionCard-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/PersonActionCard-icon.png'
-    },
-    PublicPersonActionCard : {
-      front_cover : 'images/cards/PublicPersonActionCard-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/PublicPersonActionCard-icon.png'
-    },
-    PrivatePersonActionCard : {
-      front_cover : 'images/cards/PrivatePersonActionCard-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/PrivatePersonActionCard-icon.png'
-    },
-    BrokenLamp : {
-      front_cover : 'images/cards/BrokenLamp-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/BrokenLamp-icon.png'
-    },
-    BrokenCart : {
-      front_cover : 'images/cards/BrokenCart-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/BrokenCart-icon.png'
-    },
-    BrokenPickaxe : {
-      front_cover : 'images/cards/BrokenPickaxe-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/BrokenPickaxe-icon.png'
-    },
-    Lamp : {
-      front_cover : 'images/cards/Lamp-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/Lamp-icon.png'
-    },
-    Cart : {
-      front_cover : 'images/cards/Cart-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/Cart-icon.png'
-    },
-    Pickaxe : {
-      front_cover : 'images/cards/Pickaxe-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/Pickaxe-icon.png'
-    },
-    LampPickaxe : {
-      front_cover : 'images/cards/LampPickaxe-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/LampPickaxe-icon.png'
-    },
-    PickaxeCart : {
-      front_cover : 'images/cards/PickaxeCart-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/PickaxeCart-icon.png'
-    },
-    CartLamp : {
-      front_cover : 'images/cards/CartLamp-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/CartLamp-icon.png'
-    },
-    Theft : {
-      front_cover : 'images/cards/Theft-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/Theft-icon.png'
-    },
-    HandsOff : {
-      front_cover : 'images/cards/HandsOff-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/HandsOff-icon.png'
-    },
-    Trapped : {
-      front_cover : 'images/cards/Trapped-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/Trapped-icon.png'
-    },
-    FreeAtLast : {
-      front_cover : 'images/cards/FreeAtLast-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/FreeAtLast-icon.png'
-    },
-    SwapHand : {
-      front_cover : 'images/cards/SwapHand-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/SwapHand-icon.png'
-    },
-    Inspection : {
-      front_cover : 'images/cards/Inspection-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/Inspection-icon.png'
-    },
-    SwapHats : {
-      front_cover : 'images/cards/SwapHats-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/SwapHats-icon.png'
-    },
-    Rockfall : {
-      front_cover : 'images/cards/Rockfall-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/Rockfall-icon.png'
-    },
-    ViewGoalCard : {
-      front_cover : 'images/cards/ViewGoalCard-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/ViewGoalCard-icon.png'
-    },
-    CrystalCard : {
-      front_cover : 'images/cards/CrystalCard-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/CrystalCard-icon.png'
-    },
-    RightCrystalCard : {
-      front_cover : 'images/cards/RightCrystalCard-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/RightCrystalCard-icon.png'
-    },
-    TopCrystalCard : {
-      front_cover : 'images/cards/TopCrystalCard-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/TopCrystalCard-icon.png'
-    },
-    FullCrossCrystalCard : {
-      front_cover : 'images/cards/FullCrossCrystalCard-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/FullCrossCrystalCard-icon.png'
-    },
-    HorizontalCrossCrystalCard : {
-      front_cover : 'images/cards/HorizontalCrossCrystalCard-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/HorizontalCrossCrystalCard-icon.png'
-    },
-    BlockHorizontalCrossCrystalCard : {
-      front_cover : 'images/cards/BlockHorizontalCrossCrystalCard-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/BlockHorizontalCrossCrystalCard-icon.png'
-    },
-    VerticalCrossCrystalCard : {
-      front_cover : 'images/cards/VerticalCrossCrystalCard-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/VerticalCrossCrystalCard-icon.png'
-    },
-    BlockVerticalCrossCrystalCard : {
-      front_cover : 'images/cards/BlockVerticalCrossCrystalCard-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/BlockVerticalCrossCrystalCard-icon.png'
-    },
-    BlockVerticalLineCrystalCard : {
-      front_cover : 'images/cards/BlockVerticalLineCrystalCard-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/BlockVerticalLineCrystalCard-icon.png'
-    },
-    GateCard : {
-      front_cover : 'images/cards/GateCard-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/GateCard-icon.png'
-    },
-    BlueGateCard : {
-      front_cover : 'images/cards/BlueGateCard-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/BlueGateCard-icon.png'
-    },
-    GreenGateCard : {
-      front_cover : 'images/cards/GreenGateCard-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/GreenGateCard-icon.png'
-    },
-    HorizontalBlueGateCard : {
-      front_cover : 'images/cards/HorizontalBlueGateCard-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/HorizontalBlueGateCard-icon.png'
-    },
-    VerticalBlueGateCard : {
-      front_cover : 'images/cards/VerticalBlueGateCard-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/VerticalBlueGateCard-icon.png'
-    },
-    LeftCurvedBlueGatePath : {
-      front_cover : 'images/cards/LeftCurvedBlueGatePath-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/LeftCurvedBlueGatePath-icon.png'
-    },
-    BlockHorizontalGreenGateCard : {
-      front_cover : 'images/cards/BlockHorizontalGreenGateCard-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/BlockHorizontalGreenGateCard-icon.png'
-    },
-    VerticalGreenGateCard : {
-      front_cover : 'images/cards/VerticalGreenGateCard-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/VerticalGreenGateCard-icon.png'
-    },
-    RightCurvedGreenGateCard : {
-      front_cover : 'images/cards/RightCurvedGreenGateCard-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/RightCurvedGreenGateCard-icon.png'
-    },
-    GoalCard : {
-      front_cover : 'images/cards/GoalCard-cover-front.png',
-      back_cover  : 'images/Goal-cover-back.png',
-      icon        : 'images/cards/GoalCard-icon.png'
-    },
-    CurvedLeftGoalCard : {
-      front_cover : 'images/cards/CurvedLeftGoalCard-cover-front.png',
-      back_cover  : 'images/Goal-cover-back.png',
-      icon        : 'images/cards/CurvedLeftGoalCard-icon.png'
-    },
-    CurvedRightGoalCard : {
-      front_cover : 'images/cards/CurvedRightGoalCard-cover-front.png',
-      back_cover  : 'images/Goal-cover-back.png',
-      icon        : 'images/cards/CurvedRightGoalCard-icon.png'
-    },
-    GoldCard : {
-      front_cover : 'images/cards/GoldCard-cover-front.png',
-      back_cover  : 'images/Goal-cover-back.png',
-      icon        : 'images/cards/GoldCard-icon.png'
-    },
-    FullCrossGoldCard : {
-      front_cover : 'images/cards/FullCrossGoldCard-cover-front.png',
-      back_cover  : 'images/Goal-cover-back.png',
-      icon        : 'images/cards/FullCrossGoldCard-icon.png'
-    },
-    LadderPathCard : {
-      front_cover : 'images/cards/LadderPathCard-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/LadderPathCard-icon.png'
-    },
-    RightLadderPath : {
-      front_cover : 'images/cards/RightLadderPath-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/RightLadderPath-icon.png'
-    },
-    TopLadderPath : {
-      front_cover : 'images/cards/TopLadderPath-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/TopLadderPath-icon.png'
-    },
-    CurvedRightLadderPath : {
-      front_cover : 'images/cards/CurvedRightLadderPath-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/CurvedRightLadderPath-icon.png'
-    },
-    CurvedLeftLadderPath : {
-      front_cover : 'images/cards/CurvedLeftLadderPath-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/CurvedLeftLadderPath-icon.png'
-    },
-    PathCard : {
-      front_cover : 'images/cards/PathCard-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/PathCard-icon.png'
-    },
-    HorizontalPathCard : {
-      front_cover : 'images/cards/HorizontalPathCard-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/HorizontalPathCard-icon.png'
-    },
-    VerticalPathCard : {
-      front_cover : 'images/cards/VerticalPathCard-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/VerticalPathCard-icon.png'
-    },
-    FullCrossPathCard : {
-      front_cover : 'images/cards/FullCrossPathCard-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/FullCrossPathCard-icon.png'
-    },
-    HorizontalCrossPathCard : {
-      front_cover : 'images/cards/HorizontalCrossPathCard-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/HorizontalCrossPathCard-icon.png'
-    },
-    VerticalCrossPathCard : {
-      front_cover : 'images/cards/VerticalCrossPathCard-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/VerticalCrossPathCard-icon.png'
-    },
-    CurvedRightPathCard : {
-      front_cover : 'images/cards/CurvedRightPathCard-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/CurvedRightPathCard-icon.png'
-    },
-    CurvedLeftPathCard : {
-      front_cover : 'images/cards/CurvedLeftPathCard-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/CurvedLeftPathCard-icon.png'
-    },
-    DoubleCurvePathCard : {
-      front_cover : 'images/cards/DoubleCurvePathCard-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/DoubleCurvePathCard-icon.png'
-    },
-    BridgePathCard : {
-      front_cover : 'images/cards/BridgePathCard-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/BridgePathCard-icon.png'
-    },
-    BlockFullCrossPathCard : {
-      front_cover : 'images/cards/BlockFullCrossPathCard-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/BlockFullCrossPathCard-icon.png'
-    },
-    BlockVerticalCrossPathCard : {
-      front_cover : 'images/cards/BlockVerticalCrossPathCard-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/BlockVerticalCrossPathCard-icon.png'
-    },
-    BlockHorizontalCrossPathCard : {
-      front_cover : 'images/cards/BlockHorizontalCrossPathCard-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/BlockHorizontalCrossPathCard-icon.png'
-    },
-    BlockVerticalPathCard : {
-      front_cover : 'images/cards/BlockVerticalPathCard-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/BlockVerticalPathCard-icon.png'
-    },
-    BlockHorizontalPathCard : {
-      front_cover : 'images/cards/BlockHorizontalPathCard-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/BlockHorizontalPathCard-icon.png'
-    },
-    BlockTopPathCard : {
-      front_cover : 'images/cards/BlockTopPathCard-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/BlockTopPathCard-icon.png'
-    },
-    BlockRightPathCard : {
-      front_cover : 'images/cards/BlockRightPathCard-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/BlockRightPathCard-icon.png'
-    },
-    BlockTopRightPathCard : {
-      front_cover : 'images/cards/BlockTopRightPathCard-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/BlockTopRightPathCard-icon.png'
-    },
-    BlockTopLeftPathCard : {
-      front_cover : 'images/cards/BlockTopLeftPathCard-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/BlockTopLeftPathCard-icon.png'
-    },
-    RoleCard : {
-      front_cover : 'images/cards/RoleCard-cover-front.png',
-      back_cover  : 'images/Role-cover-back.png',
-      icon        : 'images/cards/RoleCard-icon.png'
-    },
-    BlueGoldDigger : {
-      front_cover : 'images/cards/BlueGoldDigger-cover-front.png',
-      back_cover  : 'images/Role-cover-back.png',
-      icon        : 'images/cards/BlueGoldDigger-icon.png'
-    },
-    GreenGoldDigger : {
-      front_cover : 'images/cards/GreenGoldDigger-cover-front.png',
-      back_cover  : 'images/Role-cover-back.png',
-      icon        : 'images/cards/GreenGoldDigger-icon.png'
-    },
-    Boss : {
-      front_cover : 'images/cards/Boss-cover-front.png',
-      back_cover  : 'images/Role-cover-back.png',
-      icon        : 'images/cards/Boss-icon.png'
-    },
-    Geologist : {
-      front_cover : 'images/cards/Geologist-cover-front.png',
-      back_cover  : 'images/Role-cover-back.png',
-      icon        : 'images/cards/Geologist-icon.png'
-    },
-    Profiteer : {
-      front_cover : 'images/cards/Profiteer-cover-front.png',
-      back_cover  : 'images/Role-cover-back.png',
-      icon        : 'images/cards/Profiteer-icon.png'
-    },
-    Saboteur : {
-      front_cover : 'images/cards/Saboteur-cover-front.png',
-      back_cover  : 'images/Role-cover-back.png',
-      icon        : 'images/cards/Saboteur-icon.png'
-    },
-    StartCard : {
-      front_cover : 'images/cards/StartCard-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/StartCard-icon.png'
-    },
-    FullCrossStartCard : {
-      front_cover : 'images/cards/FullCrossStartCard-cover-front.png',
-      back_cover  : 'images/Card-cover-back.png',
-      icon        : 'images/cards/FullCrossStartCard-icon.png'
-    }
   }
 };/******************************************************************************/
+
+/**
+ * @FILE: client/SaboteurOptions.js
+ */
+U.extend(true, SaboteurOptions, {
+  webRoot : 'http://localhost/Saboteur/',
+  server : {
+    address : 'http://192.168.1.101:6969'
+  },
+  options : {
+    card_width    : 65,
+    card_height   : 110
+  },
+  classes : {
+    main  : 'Saboteur',
+    hand  : 'Saboteur-hand',
+    card  : 'Saboteur-card',
+    map : {
+      main  : 'Saboteur-map',
+      table : 'Saboteur-map-table',
+      td    : 'Saboteur-map-td'
+    },
+    hand : {
+      main  : 'Saboteur-hand',
+      cards : 'Saboteur-hand-cards'
+    }
+  },
+  images : {
+    BlockFullCrossPathCard : {
+      front_cover : 'http://localhost/Saboteur/images/cards/BlockFullCrossPathCard-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/BlockFullCrossPathCard-icon.png'
+    },
+    BlockHorizontalCrossCrystalCard : {
+      front_cover : 'http://localhost/Saboteur/images/cards/BlockHorizontalCrossCrystalCard-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/BlockHorizontalCrossCrystalCard-icon.png'
+    },
+    BlockHorizontalCrossPathCard : {
+      front_cover : 'http://localhost/Saboteur/images/cards/BlockHorizontalCrossPathCard-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/BlockHorizontalCrossPathCard-icon.png'
+    },
+    BlockHorizontalGreenGateCard : {
+      front_cover : 'http://localhost/Saboteur/images/cards/BlockHorizontalGreenGateCard-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/BlockHorizontalGreenGateCard-icon.png'
+    },
+    BlockHorizontalPathCard : {
+      front_cover : 'http://localhost/Saboteur/images/cards/BlockHorizontalPathCard-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/BlockHorizontalPathCard-icon.png'
+    },
+    BlockRightPathCard : {
+      front_cover : 'http://localhost/Saboteur/images/cards/BlockRightPathCard-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/BlockRightPathCard-icon.png'
+    },
+    BlockTopLeftPathCard : {
+      front_cover : 'http://localhost/Saboteur/images/cards/BlockTopLeftPathCard-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/BlockTopLeftPathCard-icon.png'
+    },
+    BlockTopPathCard : {
+      front_cover : 'http://localhost/Saboteur/images/cards/BlockTopPathCard-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/BlockTopPathCard-icon.png'
+    },
+    BlockTopRightPathCard : {
+      front_cover : 'http://localhost/Saboteur/images/cards/BlockTopRightPathCard-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/BlockTopRightPathCard-icon.png'
+    },
+    BlockVerticalCrossCrystalCard : {
+      front_cover : 'http://localhost/Saboteur/images/cards/BlockVerticalCrossCrystalCard-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/BlockVerticalCrossCrystalCard-icon.png'
+    },
+    BlockVerticalCrossPathCard : {
+      front_cover : 'http://localhost/Saboteur/images/cards/BlockVerticalCrossPathCard-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/BlockVerticalCrossPathCard-icon.png'
+    },
+    BlockVerticalLineCrystalCard : {
+      front_cover : 'http://localhost/Saboteur/images/cards/BlockVerticalLineCrystalCard-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/BlockVerticalLineCrystalCard-icon.png'
+    },
+    BlockVerticalPathCard : {
+      front_cover : 'http://localhost/Saboteur/images/cards/BlockVerticalPathCard-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/BlockVerticalPathCard-icon.png'
+    },
+    BlueGateCard : {
+      front_cover : 'http://localhost/Saboteur/images/cards/BlueGateCard-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/BlueGateCard-icon.png'
+    },
+    BlueGoldDigger : {
+      front_cover : 'http://localhost/Saboteur/images/cards/BlueGoldDigger-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Role-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/BlueGoldDigger-icon.png'
+    },
+    Boss : {
+      front_cover : 'http://localhost/Saboteur/images/cards/Boss-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Role-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/Boss-icon.png'
+    },
+    BridgePathCard : {
+      front_cover : 'http://localhost/Saboteur/images/cards/BridgePathCard-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/BridgePathCard-icon.png'
+    },
+    BrokenCart : {
+      front_cover : 'http://localhost/Saboteur/images/cards/BrokenCart-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/BrokenCart-icon.png'
+    },
+    BrokenLamp : {
+      front_cover : 'http://localhost/Saboteur/images/cards/BrokenLamp-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/BrokenLamp-icon.png'
+    },
+    BrokenPickaxe : {
+      front_cover : 'http://localhost/Saboteur/images/cards/BrokenPickaxe-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/BrokenPickaxe-icon.png'
+    },
+    Card : {
+      front_cover : 'http://localhost/Saboteur/images/cards/Card-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/Card-icon.png'
+    },
+    Cart : {
+      front_cover : 'http://localhost/Saboteur/images/cards/Cart-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/Cart-icon.png'
+    },
+    CartLamp : {
+      front_cover : 'http://localhost/Saboteur/images/cards/CartLamp-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/CartLamp-icon.png'
+    },
+    CrystalCard : {
+      front_cover : 'http://localhost/Saboteur/images/cards/CrystalCard-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/CrystalCard-icon.png'
+    },
+    CurvedLeftGoalCard : {
+      front_cover : 'http://localhost/Saboteur/images/cards/CurvedLeftGoalCard-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Goal-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/CurvedLeftGoalCard-icon.png'
+    },
+    CurvedLeftLadderPath : {
+      front_cover : 'http://localhost/Saboteur/images/cards/CurvedLeftLadderPath-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/CurvedLeftLadderPath-icon.png'
+    },
+    CurvedLeftPathCard : {
+      front_cover : 'http://localhost/Saboteur/images/cards/CurvedLeftPathCard-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/CurvedLeftPathCard-icon.png'
+    },
+    CurvedRightGoalCard : {
+      front_cover : 'http://localhost/Saboteur/images/cards/CurvedRightGoalCard-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Goal-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/CurvedRightGoalCard-icon.png'
+    },
+    CurvedRightLadderPath : {
+      front_cover : 'http://localhost/Saboteur/images/cards/CurvedRightLadderPath-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/CurvedRightLadderPath-icon.png'
+    },
+    CurvedRightPathCard : {
+      front_cover : 'http://localhost/Saboteur/images/cards/CurvedRightPathCard-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/CurvedRightPathCard-icon.png'
+    },
+    DoubleCurvePathCard : {
+      front_cover : 'http://localhost/Saboteur/images/cards/DoubleCurvePathCard-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/DoubleCurvePathCard-icon.png'
+    },
+    DummyCard : {
+      front_cover : 'http://localhost/Saboteur/images/cards/DummyCard-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/DummyCard-icon.png'
+    },
+    FreeAtLast : {
+      front_cover : 'http://localhost/Saboteur/images/cards/FreeAtLast-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/FreeAtLast-icon.png'
+    },
+    FullCrossCrystalCard : {
+      front_cover : 'http://localhost/Saboteur/images/cards/FullCrossCrystalCard-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/FullCrossCrystalCard-icon.png'
+    },
+    FullCrossGoldCard : {
+      front_cover : 'http://localhost/Saboteur/images/cards/FullCrossGoldCard-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Goal-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/FullCrossGoldCard-icon.png'
+    },
+    FullCrossPathCard : {
+      front_cover : 'http://localhost/Saboteur/images/cards/FullCrossPathCard-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/FullCrossPathCard-icon.png'
+    },
+    FullCrossStartCard : {
+      front_cover : 'http://localhost/Saboteur/images/cards/FullCrossStartCard-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/FullCrossStartCard-icon.png'
+    },
+    GameCard : {
+      front_cover : 'http://localhost/Saboteur/images/cards/GameCard-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/GameCard-icon.png'
+    },
+    GateCard : {
+      front_cover : 'http://localhost/Saboteur/images/cards/GateCard-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/GateCard-icon.png'
+    },
+    Geologist : {
+      front_cover : 'http://localhost/Saboteur/images/cards/Geologist-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Role-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/Geologist-icon.png'
+    },
+    GoalCard : {
+      front_cover : 'http://localhost/Saboteur/images/cards/GoalCard-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Goal-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/GoalCard-icon.png'
+    },
+    GoldCard : {
+      front_cover : 'http://localhost/Saboteur/images/cards/GoldCard-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Goal-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/GoldCard-icon.png'
+    },
+    GreenGateCard : {
+      front_cover : 'http://localhost/Saboteur/images/cards/GreenGateCard-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/GreenGateCard-icon.png'
+    },
+    GreenGoldDigger : {
+      front_cover : 'http://localhost/Saboteur/images/cards/GreenGoldDigger-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Role-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/GreenGoldDigger-icon.png'
+    },
+    HandsOff : {
+      front_cover : 'http://localhost/Saboteur/images/cards/HandsOff-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/HandsOff-icon.png'
+    },
+    HorizontalBlueGateCard : {
+      front_cover : 'http://localhost/Saboteur/images/cards/HorizontalBlueGateCard-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/HorizontalBlueGateCard-icon.png'
+    },
+    HorizontalCrossCrystalCard : {
+      front_cover : 'http://localhost/Saboteur/images/cards/HorizontalCrossCrystalCard-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/HorizontalCrossCrystalCard-icon.png'
+    },
+    HorizontalCrossPathCard : {
+      front_cover : 'http://localhost/Saboteur/images/cards/HorizontalCrossPathCard-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/HorizontalCrossPathCard-icon.png'
+    },
+    HorizontalPathCard : {
+      front_cover : 'http://localhost/Saboteur/images/cards/HorizontalPathCard-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/HorizontalPathCard-icon.png'
+    },
+    Inspection : {
+      front_cover : 'http://localhost/Saboteur/images/cards/Inspection-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/Inspection-icon.png'
+    },
+    LadderPathCard : {
+      front_cover : 'http://localhost/Saboteur/images/cards/LadderPathCard-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/LadderPathCard-icon.png'
+    },
+    Lamp : {
+      front_cover : 'http://localhost/Saboteur/images/cards/Lamp-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/Lamp-icon.png'
+    },
+    LampPickaxe : {
+      front_cover : 'http://localhost/Saboteur/images/cards/LampPickaxe-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/LampPickaxe-icon.png'
+    },
+    LeftCurvedBlueGatePath : {
+      front_cover : 'http://localhost/Saboteur/images/cards/LeftCurvedBlueGatePath-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/LeftCurvedBlueGatePath-icon.png'
+    },
+    MapActionCard : {
+      front_cover : 'http://localhost/Saboteur/images/cards/MapActionCard-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/MapActionCard-icon.png'
+    },
+    MapCard : {
+      front_cover : 'http://localhost/Saboteur/images/cards/MapCard-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/MapCard-icon.png'
+    },
+    MapClient : {
+      front_cover : 'http://localhost/Saboteur/images/cards/MapClient-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/MapClient-icon.png'
+    },
+    PathCard : {
+      front_cover : 'http://localhost/Saboteur/images/cards/PathCard-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/PathCard-icon.png'
+    },
+    Pickaxe : {
+      front_cover : 'http://localhost/Saboteur/images/cards/Pickaxe-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/Pickaxe-icon.png'
+    },
+    PickaxeCart : {
+      front_cover : 'http://localhost/Saboteur/images/cards/PickaxeCart-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/PickaxeCart-icon.png'
+    },
+    Player : {
+      front_cover : 'http://localhost/Saboteur/images/cards/Player-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/Player-icon.png'
+    },
+    PlayerActionCard : {
+      front_cover : 'http://localhost/Saboteur/images/cards/PlayerActionCard-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/PlayerActionCard-icon.png'
+    },
+    PrivatePlayerActionCard : {
+      front_cover : 'http://localhost/Saboteur/images/cards/PrivatePlayerActionCard-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/PrivatePlayerActionCard-icon.png'
+    },
+    Profiteer : {
+      front_cover : 'http://localhost/Saboteur/images/cards/Profiteer-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Role-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/Profiteer-icon.png'
+    },
+    PublicPlayerActionCard : {
+      front_cover : 'http://localhost/Saboteur/images/cards/PublicPlayerActionCard-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/PublicPlayerActionCard-icon.png'
+    },
+    RightCrystalCard : {
+      front_cover : 'http://localhost/Saboteur/images/cards/RightCrystalCard-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/RightCrystalCard-icon.png'
+    },
+    RightCurvedGreenGateCard : {
+      front_cover : 'http://localhost/Saboteur/images/cards/RightCurvedGreenGateCard-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/RightCurvedGreenGateCard-icon.png'
+    },
+    RightLadderPath : {
+      front_cover : 'http://localhost/Saboteur/images/cards/RightLadderPath-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/RightLadderPath-icon.png'
+    },
+    Rockfall : {
+      front_cover : 'http://localhost/Saboteur/images/cards/Rockfall-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/Rockfall-icon.png'
+    },
+    RoleCard : {
+      front_cover : 'http://localhost/Saboteur/images/cards/RoleCard-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Role-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/RoleCard-icon.png'
+    },
+    Saboteur : {
+      front_cover : 'http://localhost/Saboteur/images/cards/Saboteur-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Role-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/Saboteur-icon.png'
+    },
+    StartCard : {
+      front_cover : 'http://localhost/Saboteur/images/cards/StartCard-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/StartCard-icon.png'
+    },
+    SwapHand : {
+      front_cover : 'http://localhost/Saboteur/images/cards/SwapHand-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/SwapHand-icon.png'
+    },
+    SwapHats : {
+      front_cover : 'http://localhost/Saboteur/images/cards/SwapHats-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/SwapHats-icon.png'
+    },
+    Theft : {
+      front_cover : 'http://localhost/Saboteur/images/cards/Theft-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/Theft-icon.png'
+    },
+    TopCrystalCard : {
+      front_cover : 'http://localhost/Saboteur/images/cards/TopCrystalCard-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/TopCrystalCard-icon.png'
+    },
+    TopLadderPath : {
+      front_cover : 'http://localhost/Saboteur/images/cards/TopLadderPath-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/TopLadderPath-icon.png'
+    },
+    Trapped : {
+      front_cover : 'http://localhost/Saboteur/images/cards/Trapped-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/Trapped-icon.png'
+    },
+    VerticalBlueGateCard : {
+      front_cover : 'http://localhost/Saboteur/images/cards/VerticalBlueGateCard-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/VerticalBlueGateCard-icon.png'
+    },
+    VerticalCrossCrystalCard : {
+      front_cover : 'http://localhost/Saboteur/images/cards/VerticalCrossCrystalCard-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/VerticalCrossCrystalCard-icon.png'
+    },
+    VerticalCrossPathCard : {
+      front_cover : 'http://localhost/Saboteur/images/cards/VerticalCrossPathCard-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/VerticalCrossPathCard-icon.png'
+    },
+    VerticalGreenGateCard : {
+      front_cover : 'http://localhost/Saboteur/images/cards/VerticalGreenGateCard-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/VerticalGreenGateCard-icon.png'
+    },
+    VerticalPathCard : {
+      front_cover : 'http://localhost/Saboteur/images/cards/VerticalPathCard-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/VerticalPathCard-icon.png'
+    },
+    ViewGoalCard : {
+      front_cover : 'http://localhost/Saboteur/images/cards/ViewGoalCard-cover-front.png',
+      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
+      icon        : 'http://localhost/Saboteur/images/cards/ViewGoalCard-icon.png'
+    }
+  }
+});/******************************************************************************/
 
 /**
  * @FILE: lib/Card.abstract.js
@@ -1283,14 +1307,14 @@ S.Card = S.Card.extend({
         var h = 40;
         var x = (obj.width-w) / 2;
         var y = (obj.height-h) / 2;
-        addImageAt.call( this, 'images/icon-diamond.png', x, y, w, h );
+        addImageAt.call( this, SO.webRoot + 'images/icon-diamond.png', x, y, w, h );
       };
       if( obj.hasLadder ){
         var w = 40;
         var h = 50;
         var x = (obj.width-w) / 2;
         var y = (obj.height-h) / 2;
-        addImageAt.call( this, 'images/icon-ladder.gif', x, y, w, h );
+        addImageAt.call( this, SO.webRoot + 'images/icon-ladder.gif', x, y, w, h );
       };
       if( obj instanceof S.GateCard ){
         var w = 60;
@@ -1298,9 +1322,9 @@ S.Card = S.Card.extend({
         var x = (obj.width-w) / 2;
         var y = (obj.height-h) / 2;
         if( obj instanceof S.BlueGateCard )
-          addImageAt.call( this, 'images/icon-gate-blue.png', x, y, w, h );
+          addImageAt.call( this, SO.webRoot + 'images/icon-gate-blue.png', x, y, w, h );
         else
-          addImageAt.call( this, 'images/icon-gate-green.png', x, y, w, h );
+          addImageAt.call( this, SO.webRoot + 'images/icon-gate-green.png', x, y, w, h );
       };
       this.saveState();
       return true;
@@ -3086,7 +3110,9 @@ var SaboteurClient = Saboteur.extend({
       };
       
       this._super( options, cards );
-      this.target = target;
+      U.extend( this, {
+        target  : target
+      });
       
       var self = this;
       preload_images.call( self, function(){ create_structure.apply( self ); } );

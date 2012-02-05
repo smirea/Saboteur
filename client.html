@@ -1,242 +1,292 @@
 <html>
   <head>
+  
+    <link type="text/css" rel="stylesheet" href="http://localhost/Saboteur/css/jquery.progressBar.css" />
+    <link type="text/css" rel="stylesheet" href="http://localhost/Saboteur/css/Saboteur.css" />
+  
     <script src="/socket.io/socket.io.js"></script>
-    <script src="http://localhost/Saboteur/client_includes.js"></script>
-  </head>
-  <body>
+    <script src="http://localhost/Saboteur/client/jquery/jquery.js" type="text/javascript" language="javascript"></script>
+    <script src="http://localhost/Saboteur/client/jquery/jquery.mouseToken.js" type="text/javascript" language="javascript"></script>
+    <script src="http://localhost/Saboteur/client/jquery/jquery.progressBar.js" type="text/javascript" language="javascript"></script>
+    <script src="http://localhost/Saboteur/lib/logger.js" type="text/javascript" language="javascript"></script>
+    <script src="http://localhost/Saboteur/lib/inheritance.js" type="text/javascript" language="javascript"></script>
+    <script src="http://localhost/Saboteur/lib/Utils.js" type="text/javascript" language="javascript"></script>
+    <script src="http://localhost/Saboteur/lib/Factory.class.js" type="text/javascript" language="javascript"></script>
+    <script src="http://localhost/Saboteur/client/Preloader.js" type="text/javascript" language="javascript"></script>
+    <script src="http://localhost/Saboteur/lib/SaboteurOptions.js" type="text/javascript" language="javascript"></script>
+    <script src="http://localhost/Saboteur/client/SaboteurOptions.js" type="text/javascript" language="javascript"></script>
+    <script src="http://localhost/Saboteur/lib/Card.abstract.js" type="text/javascript" language="javascript"></script>
+    <script src="http://localhost/Saboteur/client/Card.abstract.js" type="text/javascript" language="javascript"></script>
+    <script src="http://localhost/Saboteur/lib/DummyCard.abstract.js" type="text/javascript" language="javascript"></script>
+    <script src="http://localhost/Saboteur/lib/GameCard.abstract.js" type="text/javascript" language="javascript"></script>
+    <script src="http://localhost/Saboteur/lib/MapCard.abstract.js" type="text/javascript" language="javascript"></script>
+    <script src="http://localhost/Saboteur/lib/Map.class.js" type="text/javascript" language="javascript"></script>
+    <script src="http://localhost/Saboteur/client/ClientMap.class.js" type="text/javascript" language="javascript"></script>
+    <script src="http://localhost/Saboteur/lib/ActionCard.class.js" type="text/javascript" language="javascript"></script>
+    <script src="http://localhost/Saboteur/lib/PathCard.class.js" type="text/javascript" language="javascript"></script>
+    <script src="http://localhost/Saboteur/lib/GoalCard.class.js" type="text/javascript" language="javascript"></script>
+    <script src="http://localhost/Saboteur/lib/LadderPathCard.class.js" type="text/javascript" language="javascript"></script>
+    <script src="http://localhost/Saboteur/lib/RoleCard.class.js" type="text/javascript" language="javascript"></script>
+    <script src="http://localhost/Saboteur/lib/CrystalPathCard.class.js" type="text/javascript" language="javascript"></script>
+    <script src="http://localhost/Saboteur/lib/GatePathCard.class.js" type="text/javascript" language="javascript"></script>
+    <script src="http://localhost/Saboteur/lib/GoldCard.class.js" type="text/javascript" language="javascript"></script>
+    <script src="http://localhost/Saboteur/lib/Hand.class.js" type="text/javascript" language="javascript"></script>
+    <script src="http://localhost/Saboteur/client/ClientHand.class.js" type="text/javascript" language="javascript"></script>
+    <script src="http://localhost/Saboteur/client/HiddenHand.class.js" type="text/javascript" language="javascript"></script>
+    <script src="http://localhost/Saboteur/lib/Player.class.js" type="text/javascript" language="javascript"></script>
+    <script src="http://localhost/Saboteur/client/ClientPlayer.class.js" type="text/javascript" language="javascript"></script>
+    <script src="http://localhost/Saboteur/client/HiddenPlayer.class.js" type="text/javascript" language="javascript"></script>
+    <script src="http://localhost/Saboteur/lib/Protocol.js" type="text/javascript" language="javascript"></script>
+    <script src="http://localhost/Saboteur/lib/StartCard.class.js" type="text/javascript" language="javascript"></script>
+    <script src="http://localhost/Saboteur/lib/Saboteur.class.js" type="text/javascript" language="javascript"></script>
+    <script src="http://localhost/Saboteur/client/ClientSaboteur.class.js" type="text/javascript" language="javascript"></script>
     
     <script>
-        
-    function status_update(txt){
-      document.getElementById('status').innerHTML = txt;
-    };
     
-    function send() {
-      //gameState.socket.send("Hello Server!");    
-      console.log('wtf??');
-      gameState.socket.emit('message', '{aaa: "bbb"}');
-    };        
-    
-    var gameState = {
-      socket        : null,
-      playerID      : 0,
-      player        : null,
-      firstconnect  : true,
-    };
-    
-    adminHandlers = U.extend(true, {}, Protocol.events.client.admin);
-    handlers      = U.extend(true, {}, Protocol.events.client.custom);
-    actions       = U.extend(true, {}, Protocol.events.server.custom);
-    
-    // default handlers
-    var defaultAction = function(action) {
-      return function(event) {
-        gameState.socket.emit(action.name, event);
+      var client;
+      var gameState = {
+        socket        : null,
+        playerID      : 0,
+        firstconnect  : true
       };
-    };
-    
-    for (var h in actions) {
-      var action = actions[h];
-      action.callback = defaultAction;
-    }
-    
-    // HANDLERS
-    
-    // ADMIN
-    adminHandlers.disconnect.callback = function() {
-      gameState.gameState.socket.disconnect();
-    };
-        
-    adminHandlers.message.callback = function(data) {
-      document.getElementById('message').innerHTML = "Server says: " + data;
-    };
-    
-    adminHandlers.connect.callback =  function() { 
-      status_update("Connected to Server"); 
-    };
-        
-    adminHandlers.disconnect.callback = function() { 
-      status_update("Disconnected from Server"); 
-    };
-        
-    adminHandlers.reconnect.callback = function(){ 
-      status_update("Reconnected to Server"); 
-    };
-        
-    adminHandlers.reconnecting.callback = function( nextRetry ) { 
-      status_update("Reconnecting in " + nextRetry + " seconds"); 
-    };
-    
-    // CUSTOM
-
-    handlers.chat.callback = function(event) {
-      // TODO: this is bullshit, please do a chat system :))
-      document.getElementById('status').innerHTML += event.data.message;
-    };
-
-    handlers.setup.callback = function(event) {
-      var data = event.data;
-      gameState.playerID = data.playerID;
-      // TODO: name should be gotten from an interface somehow..preset! 
-      // You should not call doSetup here, but rather when ready..
-      actions.setup.callback({}); //TODO: even if call from here, instantiate
-    };
-    
-    handlers.result.callback = function(event) {
-      // TODO: front end stuff...
-      // look into event.data.state == Protocol.state.CORRECT or ERROR;
-    };
-    
-    handlers.reset.callback = function(event) {
-      var data = event.data;
-      gameState.player = data.players[gameState.playerID];
-      //TODO: reset all state...in the SaboteurClient maybe?
-    };
       
-    handlers.multiple.callback = function(event) {
-      var events = event.data.events;
-      for (var i in events) {
-        console.log('handling event:', events[i].name, events[i]);
-        handlers[events[i].name].callback(events[i]);
+      function status_update(txt){
+        document.getElementById('status').innerHTML = txt;
       };
-    };
       
-    // ACTIONS
-    
-    // CUSTOM
-    // TODO: when we actually use this and not just test it, like now
-    // basically you just pass the Protocol.event that the function needs, and you send it
-    actions.chat.callback = function(event) {
-      var event = Protocol.createEvent('chat', 'server', 'custom');
-      // data.message = message;
-      event.data.playerID = gameState.playerID;
-      event.data.message = 'testing...';
-      gameState.socket.emit('chat', event);
-    };
-
-    actions.discard.callback = function (event) {
-      var event = Protocol.createEvent('discard', 'server', 'custom');
-      event.data.playerID = gameState.playerID
-      event.data.cards = [ gameState.player.private.hand.cards[0] ]; // [ 1000 ] ; //
+      function send() {
+        //gameState.socket.send("Hello Server!");    
+        console.log('wtf??');
+        gameState.socket.emit('message', '{aaa: "bbb"}');
+      };        
       
-      gameState.socket.json.emit('discard', event);
-    };
-    
-    actions.targetMap.callback = function (event) {
-      var event = Protocol.createEvent('targetMap', 'server', 'custom');
-      event.data.playerID = playerID;
-      event.data.cardID   = 3;
-      event.data.posx     = 1;
-      event.data.posy     = 2;
+      adminHandlers = U.extend(true, {}, Protocol.events.client.admin);
+      handlers      = U.extend(true, {}, Protocol.events.client.custom);
+      actions       = U.extend(true, {}, Protocol.events.server.custom);
       
-      gameState.socket.json.emit('targetMap',  event);
-    };
-    
-    actions.targetPublicPlayer.callback = function(event) {
-      var event = Protocol.createEvent('targetPublicPlayer', 'server', 'custom');
-      event.data.playerID = playerID;
-      event.data.targetID = playerID;
-      event.data.targetCardID = 100;
-      
-      gameState.socket.json.emit('targetPublicPlayer',  event);
-    };
-    
-    actions.targetPrivatePlayer.callback = function(event) {
-      var event = Protocol.createEvent('targetPrivatePlayer', 'server', 'custom');
-      // data.cardID = cardID;
-      // data.targetID = targetID;
-      event.data.playerID = playerID;
-      // TODO: hack...fix later :p
-      event.data.cardID = player.private.hand.cards[0];
-      event.data.targetID = playerID;
-      
-      gameState.socket.json.emit('targetPrivatePlayer', event);
-    };
-    
-    actions.heal.callback = function(event) {
-      var event = Protocol.createEvent('heal', 'server', 'custom');
-      // data.cards = cards;
-      // data.targetCardID = targetCardID;
-      event.data.playerID = playerID;
-      // TODO: hack...fix later :p
-      event.data.cards = [ player.private.hand.cards[0], player.private.hand.cards[1]];
-      event.data.targetCardID = 100;
-      
-      gameState.socket.json.emit('discard',  event);
-    };
-    
-    actions.setup.callback = function(event) {
-      var event = Protocol.createEvent('setup', 'server', 'custom');
-      event.data.playerID = gameState.playerID;
-      event.data.name = 'Mati';
-      
-      gameState.socket.emit('setup', event);
-      //TODO: major hack, need a handshake until you start game, 
-      // or some form of ACK mechanism, mb even call start separately...
-      setTimeout(function() {
-        actions.startGame.callback(Protocol.createEvent('startGame','server','custom'))
-      }, 1000);
-    };
-    
-    actions.startGame.callback = function(event) {
-      //TODO: think about this shit...
-      gameState.socket.emit('startGame', event);
-      //TODO: testing phase...
-      setTimeout(function() {
-        actions.discard.callback(Protocol.createEvent('discard','server','custom'))
-      }, 1000);
-    };
-    
-    // LOG stuff
-    for (var i in actions) {
-      actions[i]._callback = actions[i].callback;
-      actions[i].callback = (function(action) {
+      // default handlers
+      var defaultAction = function(action) {
         return function(event) {
-          console.log('***ACTION',action.name);
-          return action._callback(event);
+          gameState.socket.emit(action.name, event);
         };
-      })(actions[i]);
-    };
-    
-    window.onLoad = connect();
-        
-    function connect() {
-      if(gameState.firstconnect) {
-        gameState.socket = io.connect( null ); // TODO: need to stop modifying each other :))
+      };
+      
+      for (var h in actions) {
+        var action = actions[h];
+        action.callback = defaultAction;
+      }
+      
+      // HANDLERS
+      
+      // ADMIN
+      adminHandlers.disconnect.callback = function() {
+        gameState.gameState.socket.disconnect();
+      };
           
-        // ADMIN HANDLERS
-        for (var a in adminHandlers) {
-          gameState.socket.on(adminHandlers[a].name, adminHandlers[a].callback);
-        };  
+      adminHandlers.message.callback = function(data) {
+        document.getElementById('message').innerHTML = "Server says: " + data;
+      };
+      
+      adminHandlers.connect.callback =  function() { 
+        status_update("Connected to Server"); 
+      };
+          
+      adminHandlers.disconnect.callback = function() { 
+        status_update("Disconnected from Server"); 
+      };
+          
+      adminHandlers.reconnect.callback = function(){ 
+        status_update("Reconnected to Server"); 
+      };
+          
+      adminHandlers.reconnecting.callback = function( nextRetry ) { 
+        status_update("Reconnecting in " + nextRetry + " seconds"); 
+      };
+      
+      // CUSTOM
+
+      handlers.chat.callback = function(event) {
+        // TODO: this is bullshit, please do a chat system :))
+        document.getElementById('status').innerHTML += event.data.message;
+      };
+
+      handlers.setup.callback = function(event) {
+        var data = event.data;
+        gameState.playerID = data.playerID;
+        client = new ClientSaboteur( $('#Saboteur'), {} );
+        console.log( 'Client: ', client );
+      };
+      
+      handlers.result.callback = function(event) {
+        // TODO: front end stuff...
+        // look into event.data.state == Protocol.state.CORRECT or ERROR;
+      };
+      
+      handlers.reset.callback = function(event) {
+        var data = event.data;
+        gameState.player = data.players[gameState.playerID];
         
-        // CUSTOM HANDLERS
-        var fun = function(handler) {
+        client
+          .setPlayers( data.players )
+          .createMap()
+          .createHand();
+        client.structure.map.hide();
+        client.structure.players.hide();
+        
+        client.structure.progressBar
+          .fadeOut( 600, function(){
+            client.structure.map.fadeIn( 600 );
+            client.structure.players.fadeIn( 3000 );
+          });
+      };
+        
+      handlers.multiple.callback = function(event) {
+        var events = event.data.events;
+        for (var i in events) {
+          console.log('handling event:', events[i].name, events[i]);
+          handlers[events[i].name].callback(events[i]);
+        };
+      };
+        
+      // ACTIONS
+      
+      // CUSTOM
+      // TODO: when we actually use this and not just test it, like now
+      // basically you just pass the Protocol.event that the function needs, and you send it
+      actions.chat.callback = function(event) {
+        var event = Protocol.createEvent('chat', 'server', 'custom');
+        // data.message = message;
+        event.data.playerID = gameState.playerID;
+        event.data.message = 'testing...';
+        gameState.socket.emit('chat', event);
+      };
+
+      actions.discard.callback = function (event) {
+        var event = Protocol.createEvent('discard', 'server', 'custom');
+        event.data.playerID = gameState.playerID
+        event.data.cards = [ gameState.player.private.hand.cards[0] ]; // [ 1000 ] ; //
+        
+        gameState.socket.json.emit('discard', event);
+      };
+      
+      actions.targetMap.callback = function (event) {
+        var event = Protocol.createEvent('targetMap', 'server', 'custom');
+        event.data.playerID = playerID;
+        event.data.cardID   = 3;
+        event.data.posx     = 1;
+        event.data.posy     = 2;
+        
+        gameState.socket.json.emit('targetMap',  event);
+      };
+      
+      actions.targetPublicPlayer.callback = function(event) {
+        var event = Protocol.createEvent('targetPublicPlayer', 'server', 'custom');
+        event.data.playerID = playerID;
+        event.data.targetID = playerID;
+        event.data.targetCardID = 100;
+        
+        gameState.socket.json.emit('targetPublicPlayer',  event);
+      };
+      
+      actions.targetPrivatePlayer.callback = function(event) {
+        var event = Protocol.createEvent('targetPrivatePlayer', 'server', 'custom');
+        // data.cardID = cardID;
+        // data.targetID = targetID;
+        event.data.playerID = playerID;
+        // TODO: hack...fix later :p
+        event.data.cardID = player.private.hand.cards[0];
+        event.data.targetID = playerID;
+        
+        gameState.socket.json.emit('targetPrivatePlayer', event);
+      };
+      
+      actions.heal.callback = function(event) {
+        var event = Protocol.createEvent('heal', 'server', 'custom');
+        // data.cards = cards;
+        // data.targetCardID = targetCardID;
+        event.data.playerID = playerID;
+        // TODO: hack...fix later :p
+        event.data.cards = [ player.private.hand.cards[0], player.private.hand.cards[1]];
+        event.data.targetCardID = 100;
+        
+        gameState.socket.json.emit('discard',  event);
+      };
+      
+      actions.setup.callback = function(event) {
+        var event = Protocol.createEvent('setup', 'server', 'custom');
+        event.data.playerID = gameState.playerID;
+        event.data.name = $('#name').val();
+        
+        gameState.socket.emit('setup', event);
+        client.preloadImages();
+        //TODO: major hack, need a handshake until you start game, 
+        // or some form of ACK mechanism, mb even call start separately...
+      };
+      
+      actions.startGame.callback = function(event) {
+        //TODO: think about this shit...
+        event = event || Protocol.createEvent('startGame', 'server', 'custom');
+        gameState.socket.emit('startGame', event);
+      };
+      
+      // LOG stuff
+      for (var i in actions) {
+        actions[i]._callback = actions[i].callback;
+        actions[i].callback = (function(action) {
           return function(event) {
-            if (handler.name != event.name) {
-              throw new Error('Invalid datatype ' + event.name + ' for event ' + handler.name);
-            } else {
-              console.log('handling event:', event.name, event);
-              return handler.callback.call(this, event);
+            console.log('[ACTION]',action.name);
+            return action._callback(event);
+          };
+        })(actions[i]);
+      };
+      
+      window.onLoad = connect();
+          
+      function connect() {
+        if(gameState.firstconnect) {
+          gameState.socket = io.connect( SO.server.address ); // TODO: need to stop modifying each other :))
+            
+          // ADMIN HANDLERS
+          for (var a in adminHandlers) {
+            gameState.socket.on(adminHandlers[a].name, adminHandlers[a].callback);
+          };  
+          
+          // CUSTOM HANDLERS
+          var fun = function(handler) {
+            return function(event) {
+              if (handler.name != event.name) {
+                throw new Error('Invalid datatype ' + event.name + ' for event ' + handler.name);
+              } else {
+                console.log('handling event:', event.name, event);
+                return handler.callback.call(this, event);
+              };
             };
           };
-        };
+            
+          for (var h in handlers) {
+            var handler = handlers[h]
+            gameState.socket.on(handler.name, fun(handler));
+          }
           
-        for (var h in handlers) {
-          var handler = handlers[h]
-          gameState.socket.on(handler.name, fun(handler));
+          firstconnect = false;
         }
-        
-        firstconnect = false;
+        else {
+          gameState.socket.socket.reconnect();
+        }
       }
-      else {
-        gameState.socket.socket.reconnect();
-      }
-    }
-    
     </script>
+  </head>
+  
+  <body>
     
-    <h1>socket.io Test</h1>
     <div><p id="status">Waiting for input</p></div>
+    
+    <input type="text" id="name" value="Stefan" />
+    <input type="button" id="setup" value="Setup" onclick="actions.setup.callback()" />
+    
+    <hr />
+    
+    <button id="doStartGame" onClick='actions.startGame.callback()'/>START GAME</button>
     <button id="discard" onClick='actions.discard.callback()'/>discard</button>
     <button id="doTargetMap" onClick='actions.targetMap.callback()'/>doTargetMap</button>
     <button id="targetPerson" onClick='actions.targetPublicPlayer.callback()'/>targetPublicPlayer</button>
@@ -246,6 +296,11 @@
     <button id="connect" onClick='connect()'/>connect</button>
     <button id="disconnect" onClick='disconnect()'>disconnect</button>
     <button id="send" onClick='send()'/>message</button>
-    <button id="doStartGame" onClick='actions.startGame.callback()'/>START GAME</button>
+    
+    <hr />
+    
+    <div id="Saboteur"></div>
+    
   </body>
+  
 </html>
