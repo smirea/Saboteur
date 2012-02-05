@@ -24,7 +24,7 @@
     'lib/Factory.class.js',
     'lib/Map.class.js',
     'lib/Saboteur.class.js',
-    'server/SaboteurServer.class.js'
+    'server/ServerSaboteur.class.js'
   ];
   
   for( var i in includes ){

@@ -5,14 +5,11 @@ var connect = require('connect');
 
 var app = connect.createServer(
   connect.static( __dirname + '/' )
-).listen(8080)
+).listen(6969)
 
 var io = require('socket.io').listen(app);
-// using var Protocol
-//var Protocol = new Protocol();
-var sab = new SaboteurServer(io);
+var sab = new ServerSaboteur(io);
 
-//sab.setupGame();
 io.sockets.on('connection', function(socket){
     console.log("Connection " + socket.id + " accepted.");
 

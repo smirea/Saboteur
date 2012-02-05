@@ -2715,6 +2715,8 @@ S.Player = Class.extend({
       public        : {
         name    : name || 'Player-Name',
         id      : null,
+        turn    : 0,
+        playing : false,
         lamp    : [],
         cart    : [],
         pickaxe : [],
@@ -2838,6 +2840,7 @@ Protocol = {
           players : [] // all players, public for everyone, private for you
         }),
         update    : new Event('update', {
+          turn      : 0, // playerID
           prevEvent : {}, // previous event information
           response  : {} // special response for each event
         })
