@@ -1,4 +1,5 @@
 S.Card = S.Card.extend({
+  _className : "Card",
   init : function(){
     U.extend( this, {
       name          : 'Card-Name',
@@ -179,7 +180,6 @@ S.Card = S.Card.extend({
           canvas      : $(document.createElement('canvas')),
           description : $(document.createElement('span')),
           overlay     : $(document.createElement('a')),
-          rotate      : $(document.createElement('a')),
           _context    : null
         };
         this.structure._context = this.structure.canvas[0].getContext('2d');
@@ -199,34 +199,15 @@ S.Card = S.Card.extend({
             'class' : 'card-overlay',
             'href'  : 'javascript:void(0)'
           });
-        this.structure.rotate
-          .attr({
-            'class' : 'card-rotate',
-            'href'  : 'javascript:void(0)',
-            'title' : 'Flip Card'
-          }).html(
-            $(document.createElement('img'))
-              .attr('src',SO.webRoot+'/images/icon-rotate.png')
-          ).bind('click.rotate', function(e){
-            e.stopPropagation();
-            self.isFlipped = !self.isFlipped;
-            self.rotate( self.isFlipped ? 270 : 90 );
-          }).hide();
-          
         this.structure.main
           .data( 'card', this )
           .attr( 'class', SO.classes.card )
           .append( this.structure.name, this.structure.canvas, 
-                   this.structure.description, this.structure.overlay,
-                   this.structure.rotate
+                   this.structure.description, this.structure.overlay
           ).bind('mouseenter.toggleInfo', function(){
             self.structure.name.slideDown( 'fast' );
-            if( self.structure.main.hasClass('selected') ){
-              self.structure.rotate.show();
-            };
           }).bind('mouseleave.toggleInfo', function(){
             self.structure.name.hide();
-            self.structure.rotate.hide();
           }).trigger('mouseleave.toggleInfo');
         setup.call( this );
       };

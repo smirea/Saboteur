@@ -32,10 +32,46 @@ html{
 .Saboteur-map-cardHolder:hover{
   background  : orange;
 }
-.Saboteur-hand-cards{
+.Saboteur-hand{
   position  : absolute;
   right     : 10px;
   top       : 10;
+}
+.Saboteur-hand-actions{
+  border-bottom : 1px solid #666;
+  background    : #eee;
+  margin        : 0 0 2px 0;
+  padding       : 2px;
+  text-align    : center;
+}
+.Saboteur-hand-action{
+  display         : inline-block;
+  border-radius   : 5px;
+  border          : 1px solid #666;
+  background      : #fafafa;
+  margin          : 1px 2px;
+  padding         : 3px 5px;
+  font-family     : verdana;
+  font-size       : 9pt;
+  font-weight     : bold;
+  text-decoration : none;
+  color           : #666;
+}
+.Saboteur-hand-action.selected{
+  background  : orange;
+}
+.Saboteur-hand-action.special{
+  background  : lightblue;
+}
+.Saboteur-hand-action:hover{
+  border      : 1px solid #000;
+  background  : #ececec;
+  color       : #000;
+}
+.Saboteur-hand-action:active, .Saboteur-hand-action:focus{
+  border      : 1px solid darkgreen;
+  background  : lightgreen;
+  color       : darkgreen;
 }
 .Saboteur-card{
   position    : relative;

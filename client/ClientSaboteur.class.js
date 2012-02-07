@@ -9,6 +9,13 @@ var ClientSaboteur = Saboteur.extend({
       };
       
       this._super( options, cards );
+      
+      $.extend($.expr[':'], {
+        selected : function(el){
+          return !!$(el).hasClass('selected');
+        }
+      });
+      
       U.extend( this, {
         target    : target,
         map       : null,
@@ -22,25 +29,6 @@ var ClientSaboteur = Saboteur.extend({
     function bindLiveEvents(){
       // Select Card
       var self = this;
-      $('.'+SO.classes.hand.main+' .'+SO.classes.card)
-        .live( 'click.selectCard', function(){
-          if( !$(this).hasClass('selected') ){
-            if( self.selected.length > 0 ){
-              self.selected.trigger('click.selectCard');
-              self.selected = $();
-            }
-            self.selected = self.selected.add( $(this) );
-            var card = $(this).data('card');
-            card.rotate( card.isFlipped ? 270 : 90 );
-            $(this)
-              .addClass( 'selected' )
-              .trigger( 'mouseenter.toggleInfo' );
-          } else {
-            $(this).removeClass( 'selected' );
-            self.selected = self.selected.not( $(this) );
-            $(this).data('card').rotate( 0 );
-          };
-        });
         
       // Target Map
       $('.'+SO.classes.map.table)

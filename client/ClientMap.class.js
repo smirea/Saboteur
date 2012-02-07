@@ -31,7 +31,7 @@ ClientMap = Map.extend({
             $(document.createElement('td')).attr({
               'id'    : id,
               'class' : SO.classes.map.td
-            }).html( element.toElement() )
+            }).html( element.toElement().data('pos',[x,y]) )
           );
           element.rotate( 90 );
         };
@@ -46,14 +46,18 @@ ClientMap = Map.extend({
         .html( tr );
     };
   })(),
-  insertCardAt: function( aPathCard, x, y ){
-    this._super( aPathCard, x, y );
-    var elem    = aPathCard.toElement();
-    var elemPos = this.structure.table.find( '#field_'+x+'_'+y );
-    elem.data( 'swap-card', elemPos );
-    elemPos.html( elem );
-    aPathCard.rotate( aPathCard.isFlipped ? 90 : 270 );
-    return this;
+  _insertCardAt : function( cardWrapper, x, y ){
+    if( this._super( cardWrapper, x, y ) ){
+      var aPathCard = F.get.apply( F, cardWrapper );
+      var elem      = aPathCard.toElement();
+      var elemPos   = this.structure.table.find( '#field_'+x+'_'+y );
+      elem.data( 'swap-card', elemPos );
+      elemPos.html( elem );
+      aPathCard.rotate( aPathCard.isFlipped ? 90 : 270 );
+      aPathCard.structure.rotate.hide();
+      return true;
+    }
+    return false;
   },
   removeCardAt: function( x, y ){
     var card = this._super( x, y );

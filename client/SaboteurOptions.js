@@ -16,8 +16,10 @@ U.extend(true, SaboteurOptions, {
       td    : 'Saboteur-map-td'
     },
     hand : {
-      main  : 'Saboteur-hand',
-      cards : 'Saboteur-hand-cards'
+      main    : 'Saboteur-hand',
+      cards   : 'Saboteur-hand-cards',
+      action  : 'Saboteur-hand-action',
+      actions : 'Saboteur-hand-actions'
     }
   },
   images : {

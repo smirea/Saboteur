@@ -24,6 +24,7 @@
     <script src="http://localhost/Saboteur/client/ClientMap.class.js" type="text/javascript" language="javascript"></script>
     <script src="http://localhost/Saboteur/lib/ActionCard.class.js" type="text/javascript" language="javascript"></script>
     <script src="http://localhost/Saboteur/lib/PathCard.class.js" type="text/javascript" language="javascript"></script>
+    <script src="http://localhost/Saboteur/client/PathCard.class.js" type="text/javascript" language="javascript"></script>
     <script src="http://localhost/Saboteur/lib/GoalCard.class.js" type="text/javascript" language="javascript"></script>
     <script src="http://localhost/Saboteur/lib/LadderPathCard.class.js" type="text/javascript" language="javascript"></script>
     <script src="http://localhost/Saboteur/lib/RoleCard.class.js" type="text/javascript" language="javascript"></script>
@@ -60,9 +61,9 @@
         gameState.socket.emit('message', '{aaa: "bbb"}');
       };        
       
-      adminHandlers = U.extend(true, {}, Protocol.events.client.admin);
-      handlers      = U.extend(true, {}, Protocol.events.client.custom);
-      actions       = U.extend(true, {}, Protocol.events.server.custom);
+      var adminHandlers = U.extend(true, {}, Protocol.events.client.admin);
+      var handlers      = U.extend(true, {}, Protocol.events.client.custom);
+      var actions       = U.extend(true, {}, Protocol.events.server.custom);
       
       // default handlers
       var defaultAction = function(action) {
@@ -73,7 +74,7 @@
       
       for (var h in actions) {
         var action = actions[h];
-        action.callback = defaultAction;
+        action.callback = defaultAction( action );
       }
       
       // HANDLERS
@@ -114,7 +115,6 @@
         var data = event.data;
         gameState.playerID = data.playerID;
         client = new ClientSaboteur( $('#Saboteur'), {} );
-        console.log( 'Client: ', client );
       };
       
       handlers.result.callback = function(event) {
@@ -143,11 +143,27 @@
       handlers.multiple.callback = function(event) {
         var events = event.data.events;
         for (var i in events) {
-          console.log('handling event:', events[i].name, events[i]);
+          console.log('[EVENT] ---', events[i].name, events[i]);
           handlers[events[i].name].callback(events[i]);
         };
       };
+      
+      handlers.update.callback = function( event ){
+        var data  = event.data;
+        var prev  = data.prevEvent.data;
+        var res   = data.response;
         
+        switch( data.prevEvent.name ){
+          case 'discard':
+            client.players[ prev.playerID ].private.hand.remove( prev.cards );
+            client.players[ prev.playerID ].private.hand.add( res.newcards );
+            client.players[ prev.playerID ].private.hand.selected = $();
+            break;
+          default:
+            logger.warn('[handlers.update.callback] Unknown event', arguments);
+        }
+      }
+      
       // ACTIONS
       
       // CUSTOM
@@ -161,23 +177,6 @@
         gameState.socket.emit('chat', event);
       };
 
-      actions.discard.callback = function (event) {
-        var event = Protocol.createEvent('discard', 'server', 'custom');
-        event.data.playerID = gameState.playerID
-        event.data.cards = [ gameState.player.private.hand.cards[0] ]; // [ 1000 ] ; //
-        
-        gameState.socket.json.emit('discard', event);
-      };
-      
-      actions.targetMap.callback = function (event) {
-        var event = Protocol.createEvent('targetMap', 'server', 'custom');
-        event.data.playerID = playerID;
-        event.data.cardID   = 3;
-        event.data.posx     = 1;
-        event.data.posy     = 2;
-        
-        gameState.socket.json.emit('targetMap',  event);
-      };
       
       actions.targetPublicPlayer.callback = function(event) {
         var event = Protocol.createEvent('targetPublicPlayer', 'server', 'custom');
@@ -209,7 +208,7 @@
         event.data.cards = [ player.private.hand.cards[0], player.private.hand.cards[1]];
         event.data.targetCardID = 100;
         
-        gameState.socket.json.emit('discard',  event);
+        gameState.socket.json.emit('heal',  event);
       };
       
       actions.setup.callback = function(event) {
@@ -244,8 +243,8 @@
           
       function connect() {
         if(gameState.firstconnect) {
-          // gameState.socket = io.connect( SO.server.address ); // TODO: need to stop modifying each other :))
-          gameState.socket = io.connect( null );
+           gameState.socket = io.connect( SO.server.address ); 
+          //gameState.socket = io.connect( null ); // TODO: need to stop modifying each other :))m
             
           // ADMIN HANDLERS
           for (var a in adminHandlers) {
@@ -258,7 +257,7 @@
               if (handler.name != event.name) {
                 throw new Error('Invalid datatype ' + event.name + ' for event ' + handler.name);
               } else {
-                console.log('handling event:', event.name, event);
+                console.log('[EVENT]', event.name, event);
                 return handler.callback.call(this, event);
               };
             };

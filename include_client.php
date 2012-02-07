@@ -30,6 +30,7 @@
     'client/ClientMap.class.js',
     'lib/ActionCard.class.js',
     'lib/PathCard.class.js',
+    'client/PathCard.class.js',
     'lib/GoalCard.class.js',
     'lib/LadderPathCard.class.js',
     'lib/RoleCard.class.js',
