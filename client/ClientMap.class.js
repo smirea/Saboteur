@@ -21,11 +21,12 @@ ClientMap = Map.extend({
           var id = 'field_'+x+'_'+y;
           var card = this.getCardAt( x, y );
           var element;
-          if( !U.isUndefined(card) ) element = card;
-            else {
-              element = new S.Card();
-              element.name = 'Empty Slot';
-            }
+          if( card !== null ) {
+            element = card;
+          } else {
+            element = new S.Card();
+            element.name = 'Empty Slot';
+          };
           td = td.add(
             $(document.createElement('td')).attr({
               'id'    : id,
