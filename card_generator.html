@@ -1,9 +1,6 @@
-<?php 
-  $_GET['view'] = 'script'; 
-  require_once('include_lib.php'); 
-?>
-
+<script src="client_includes.js"></script>
 <link rel="stylesheet" href="css/Saboteur.css" />
+
 <style>
   html{ background : #eaeaea; }
 </style>
@@ -16,7 +13,7 @@
     strokeStyle : '#000000'
   };
   $(function(){
-    var sab = new SaboteurClient( $('#saboteur'), {} );
+    var sab = new ClientSaboteur( $('#saboteur'), {} );
     
     var namespaces = ['start', 'dummyGoal', 'goal', 'role', 'game'];
     for( var k in namespaces ){
@@ -27,8 +24,12 @@
         if( !arr[i].toElement || bitmask[arr[i]._className] ) continue;
         bitmask[arr[i]._className] = true;
         var container = arr[i].toElement();
-        container.data( 'obj', arr[i] );
-        container.data( 'name', arr[i]._className );
+        container
+          .data( 'obj', arr[i] )
+          .data( 'name', arr[i]._className )
+          .bind( 'click.info', function info(){
+            console.log( $(this).data('name'), $(this).data('obj') );
+          });
         $('#main').append( container );
       };
     };

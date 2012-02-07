@@ -23,8 +23,9 @@
     <script src="http://localhost/Saboteur/lib/Map.class.js" type="text/javascript" language="javascript"></script>
     <script src="http://localhost/Saboteur/client/ClientMap.class.js" type="text/javascript" language="javascript"></script>
     <script src="http://localhost/Saboteur/lib/ActionCard.class.js" type="text/javascript" language="javascript"></script>
+    <script src="http://localhost/Saboteur/lib/PathCard.abstract.js" type="text/javascript" language="javascript"></script>
+    <script src="http://localhost/Saboteur/client/PathCard.abstract.js" type="text/javascript" language="javascript"></script>
     <script src="http://localhost/Saboteur/lib/PathCard.class.js" type="text/javascript" language="javascript"></script>
-    <script src="http://localhost/Saboteur/client/PathCard.class.js" type="text/javascript" language="javascript"></script>
     <script src="http://localhost/Saboteur/lib/GoalCard.class.js" type="text/javascript" language="javascript"></script>
     <script src="http://localhost/Saboteur/lib/LadderPathCard.class.js" type="text/javascript" language="javascript"></script>
     <script src="http://localhost/Saboteur/lib/RoleCard.class.js" type="text/javascript" language="javascript"></script>
@@ -158,6 +159,9 @@
             client.players[ prev.playerID ].private.hand.remove( prev.cards );
             client.players[ prev.playerID ].private.hand.add( res.newcards );
             client.players[ prev.playerID ].private.hand.selected = $();
+            break;
+          case 'targetMap':
+            client.map.insertCardAt( prev.cardID, prev.posx, prev.posy );
             break;
           default:
             logger.warn('[handlers.update.callback] Unknown event', arguments);

@@ -182,6 +182,7 @@ S.Card = S.Card.extend({
           overlay     : $(document.createElement('a')),
           _context    : null
         };
+        
         this.structure._context = this.structure.canvas[0].getContext('2d');
         this.structure.name
           .attr('class', 'card-name')

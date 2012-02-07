@@ -552,6 +552,8 @@ var Factory = F = {
     } else {
       logger.warn('[Factory.get] Unknown namespace', arguments);
     };
+    
+    return null;
   },
   /**
    * Gets a range of elements from a namespace
@@ -614,7 +616,8 @@ var Factory = F = {
     }
     return arr;
   },
-};/******************************************************************************/
+};
+/******************************************************************************/
 
 /**
  * @FILE: client/Preloader.js
@@ -762,9 +765,9 @@ var SaboteurOptions = SO = {
  * @FILE: client/SaboteurOptions.js
  */
 U.extend(true, SaboteurOptions, {
-  webRoot : 'http://localhost/Saboteur/',
+  webRoot : 'http://localhost:8080',
   server : {
-    address : 'http://192.168.1.101:6969'
+    address : 'http://192.168.1.101:8080'
   },
   options : {
     card_width    : 65,
@@ -772,7 +775,6 @@ U.extend(true, SaboteurOptions, {
   },
   classes : {
     main  : 'Saboteur',
-    hand  : 'Saboteur-hand',
     card  : 'Saboteur-card',
     map : {
       main  : 'Saboteur-map',
@@ -780,430 +782,432 @@ U.extend(true, SaboteurOptions, {
       td    : 'Saboteur-map-td'
     },
     hand : {
-      main  : 'Saboteur-hand',
-      cards : 'Saboteur-hand-cards'
+      main    : 'Saboteur-hand',
+      cards   : 'Saboteur-hand-cards',
+      action  : 'Saboteur-hand-action',
+      actions : 'Saboteur-hand-actions'
     }
   },
   images : {
     BlockFullCrossPathCard : {
-      front_cover : 'http://localhost/Saboteur/images/cards/BlockFullCrossPathCard-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/BlockFullCrossPathCard-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/BlockFullCrossPathCard-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/BlockFullCrossPathCard-icon.png'
     },
     BlockHorizontalCrossCrystalCard : {
-      front_cover : 'http://localhost/Saboteur/images/cards/BlockHorizontalCrossCrystalCard-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/BlockHorizontalCrossCrystalCard-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/BlockHorizontalCrossCrystalCard-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/BlockHorizontalCrossCrystalCard-icon.png'
     },
     BlockHorizontalCrossPathCard : {
-      front_cover : 'http://localhost/Saboteur/images/cards/BlockHorizontalCrossPathCard-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/BlockHorizontalCrossPathCard-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/BlockHorizontalCrossPathCard-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/BlockHorizontalCrossPathCard-icon.png'
     },
     BlockHorizontalGreenGateCard : {
-      front_cover : 'http://localhost/Saboteur/images/cards/BlockHorizontalGreenGateCard-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/BlockHorizontalGreenGateCard-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/BlockHorizontalGreenGateCard-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/BlockHorizontalGreenGateCard-icon.png'
     },
     BlockHorizontalPathCard : {
-      front_cover : 'http://localhost/Saboteur/images/cards/BlockHorizontalPathCard-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/BlockHorizontalPathCard-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/BlockHorizontalPathCard-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/BlockHorizontalPathCard-icon.png'
     },
     BlockRightPathCard : {
-      front_cover : 'http://localhost/Saboteur/images/cards/BlockRightPathCard-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/BlockRightPathCard-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/BlockRightPathCard-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/BlockRightPathCard-icon.png'
     },
     BlockTopLeftPathCard : {
-      front_cover : 'http://localhost/Saboteur/images/cards/BlockTopLeftPathCard-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/BlockTopLeftPathCard-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/BlockTopLeftPathCard-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/BlockTopLeftPathCard-icon.png'
     },
     BlockTopPathCard : {
-      front_cover : 'http://localhost/Saboteur/images/cards/BlockTopPathCard-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/BlockTopPathCard-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/BlockTopPathCard-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/BlockTopPathCard-icon.png'
     },
     BlockTopRightPathCard : {
-      front_cover : 'http://localhost/Saboteur/images/cards/BlockTopRightPathCard-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/BlockTopRightPathCard-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/BlockTopRightPathCard-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/BlockTopRightPathCard-icon.png'
     },
     BlockVerticalCrossCrystalCard : {
-      front_cover : 'http://localhost/Saboteur/images/cards/BlockVerticalCrossCrystalCard-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/BlockVerticalCrossCrystalCard-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/BlockVerticalCrossCrystalCard-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/BlockVerticalCrossCrystalCard-icon.png'
     },
     BlockVerticalCrossPathCard : {
-      front_cover : 'http://localhost/Saboteur/images/cards/BlockVerticalCrossPathCard-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/BlockVerticalCrossPathCard-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/BlockVerticalCrossPathCard-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/BlockVerticalCrossPathCard-icon.png'
     },
     BlockVerticalLineCrystalCard : {
-      front_cover : 'http://localhost/Saboteur/images/cards/BlockVerticalLineCrystalCard-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/BlockVerticalLineCrystalCard-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/BlockVerticalLineCrystalCard-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/BlockVerticalLineCrystalCard-icon.png'
     },
     BlockVerticalPathCard : {
-      front_cover : 'http://localhost/Saboteur/images/cards/BlockVerticalPathCard-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/BlockVerticalPathCard-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/BlockVerticalPathCard-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/BlockVerticalPathCard-icon.png'
     },
     BlueGateCard : {
-      front_cover : 'http://localhost/Saboteur/images/cards/BlueGateCard-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/BlueGateCard-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/BlueGateCard-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/BlueGateCard-icon.png'
     },
     BlueGoldDigger : {
-      front_cover : 'http://localhost/Saboteur/images/cards/BlueGoldDigger-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Role-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/BlueGoldDigger-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/BlueGoldDigger-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Role-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/BlueGoldDigger-icon.png'
     },
     Boss : {
-      front_cover : 'http://localhost/Saboteur/images/cards/Boss-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Role-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/Boss-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/Boss-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Role-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/Boss-icon.png'
     },
     BridgePathCard : {
-      front_cover : 'http://localhost/Saboteur/images/cards/BridgePathCard-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/BridgePathCard-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/BridgePathCard-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/BridgePathCard-icon.png'
     },
     BrokenCart : {
-      front_cover : 'http://localhost/Saboteur/images/cards/BrokenCart-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/BrokenCart-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/BrokenCart-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/BrokenCart-icon.png'
     },
     BrokenLamp : {
-      front_cover : 'http://localhost/Saboteur/images/cards/BrokenLamp-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/BrokenLamp-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/BrokenLamp-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/BrokenLamp-icon.png'
     },
     BrokenPickaxe : {
-      front_cover : 'http://localhost/Saboteur/images/cards/BrokenPickaxe-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/BrokenPickaxe-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/BrokenPickaxe-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/BrokenPickaxe-icon.png'
     },
     Card : {
-      front_cover : 'http://localhost/Saboteur/images/cards/Card-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/Card-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/Card-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/Card-icon.png'
     },
     Cart : {
-      front_cover : 'http://localhost/Saboteur/images/cards/Cart-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/Cart-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/Cart-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/Cart-icon.png'
     },
     CartLamp : {
-      front_cover : 'http://localhost/Saboteur/images/cards/CartLamp-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/CartLamp-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/CartLamp-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/CartLamp-icon.png'
     },
     CrystalCard : {
-      front_cover : 'http://localhost/Saboteur/images/cards/CrystalCard-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/CrystalCard-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/CrystalCard-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/CrystalCard-icon.png'
     },
     CurvedLeftGoalCard : {
-      front_cover : 'http://localhost/Saboteur/images/cards/CurvedLeftGoalCard-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Goal-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/CurvedLeftGoalCard-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/CurvedLeftGoalCard-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Goal-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/CurvedLeftGoalCard-icon.png'
     },
     CurvedLeftLadderPath : {
-      front_cover : 'http://localhost/Saboteur/images/cards/CurvedLeftLadderPath-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/CurvedLeftLadderPath-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/CurvedLeftLadderPath-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/CurvedLeftLadderPath-icon.png'
     },
     CurvedLeftPathCard : {
-      front_cover : 'http://localhost/Saboteur/images/cards/CurvedLeftPathCard-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/CurvedLeftPathCard-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/CurvedLeftPathCard-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/CurvedLeftPathCard-icon.png'
     },
     CurvedRightGoalCard : {
-      front_cover : 'http://localhost/Saboteur/images/cards/CurvedRightGoalCard-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Goal-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/CurvedRightGoalCard-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/CurvedRightGoalCard-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Goal-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/CurvedRightGoalCard-icon.png'
     },
     CurvedRightLadderPath : {
-      front_cover : 'http://localhost/Saboteur/images/cards/CurvedRightLadderPath-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/CurvedRightLadderPath-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/CurvedRightLadderPath-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/CurvedRightLadderPath-icon.png'
     },
     CurvedRightPathCard : {
-      front_cover : 'http://localhost/Saboteur/images/cards/CurvedRightPathCard-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/CurvedRightPathCard-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/CurvedRightPathCard-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/CurvedRightPathCard-icon.png'
     },
     DoubleCurvePathCard : {
-      front_cover : 'http://localhost/Saboteur/images/cards/DoubleCurvePathCard-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/DoubleCurvePathCard-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/DoubleCurvePathCard-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/DoubleCurvePathCard-icon.png'
     },
     DummyCard : {
-      front_cover : 'http://localhost/Saboteur/images/cards/DummyCard-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/DummyCard-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/DummyCard-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/DummyCard-icon.png'
     },
     FreeAtLast : {
-      front_cover : 'http://localhost/Saboteur/images/cards/FreeAtLast-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/FreeAtLast-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/FreeAtLast-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/FreeAtLast-icon.png'
     },
     FullCrossCrystalCard : {
-      front_cover : 'http://localhost/Saboteur/images/cards/FullCrossCrystalCard-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/FullCrossCrystalCard-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/FullCrossCrystalCard-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/FullCrossCrystalCard-icon.png'
     },
     FullCrossGoldCard : {
-      front_cover : 'http://localhost/Saboteur/images/cards/FullCrossGoldCard-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Goal-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/FullCrossGoldCard-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/FullCrossGoldCard-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Goal-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/FullCrossGoldCard-icon.png'
     },
     FullCrossPathCard : {
-      front_cover : 'http://localhost/Saboteur/images/cards/FullCrossPathCard-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/FullCrossPathCard-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/FullCrossPathCard-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/FullCrossPathCard-icon.png'
     },
     FullCrossStartCard : {
-      front_cover : 'http://localhost/Saboteur/images/cards/FullCrossStartCard-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/FullCrossStartCard-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/FullCrossStartCard-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/FullCrossStartCard-icon.png'
     },
     GameCard : {
-      front_cover : 'http://localhost/Saboteur/images/cards/GameCard-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/GameCard-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/GameCard-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/GameCard-icon.png'
     },
     GateCard : {
-      front_cover : 'http://localhost/Saboteur/images/cards/GateCard-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/GateCard-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/GateCard-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/GateCard-icon.png'
     },
     Geologist : {
-      front_cover : 'http://localhost/Saboteur/images/cards/Geologist-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Role-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/Geologist-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/Geologist-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Role-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/Geologist-icon.png'
     },
     GoalCard : {
-      front_cover : 'http://localhost/Saboteur/images/cards/GoalCard-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Goal-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/GoalCard-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/GoalCard-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Goal-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/GoalCard-icon.png'
     },
     GoldCard : {
-      front_cover : 'http://localhost/Saboteur/images/cards/GoldCard-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Goal-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/GoldCard-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/GoldCard-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Goal-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/GoldCard-icon.png'
     },
     GreenGateCard : {
-      front_cover : 'http://localhost/Saboteur/images/cards/GreenGateCard-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/GreenGateCard-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/GreenGateCard-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/GreenGateCard-icon.png'
     },
     GreenGoldDigger : {
-      front_cover : 'http://localhost/Saboteur/images/cards/GreenGoldDigger-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Role-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/GreenGoldDigger-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/GreenGoldDigger-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Role-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/GreenGoldDigger-icon.png'
     },
     HandsOff : {
-      front_cover : 'http://localhost/Saboteur/images/cards/HandsOff-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/HandsOff-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/HandsOff-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/HandsOff-icon.png'
     },
     HorizontalBlueGateCard : {
-      front_cover : 'http://localhost/Saboteur/images/cards/HorizontalBlueGateCard-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/HorizontalBlueGateCard-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/HorizontalBlueGateCard-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/HorizontalBlueGateCard-icon.png'
     },
     HorizontalCrossCrystalCard : {
-      front_cover : 'http://localhost/Saboteur/images/cards/HorizontalCrossCrystalCard-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/HorizontalCrossCrystalCard-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/HorizontalCrossCrystalCard-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/HorizontalCrossCrystalCard-icon.png'
     },
     HorizontalCrossPathCard : {
-      front_cover : 'http://localhost/Saboteur/images/cards/HorizontalCrossPathCard-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/HorizontalCrossPathCard-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/HorizontalCrossPathCard-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/HorizontalCrossPathCard-icon.png'
     },
     HorizontalPathCard : {
-      front_cover : 'http://localhost/Saboteur/images/cards/HorizontalPathCard-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/HorizontalPathCard-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/HorizontalPathCard-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/HorizontalPathCard-icon.png'
     },
     Inspection : {
-      front_cover : 'http://localhost/Saboteur/images/cards/Inspection-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/Inspection-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/Inspection-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/Inspection-icon.png'
     },
     LadderPathCard : {
-      front_cover : 'http://localhost/Saboteur/images/cards/LadderPathCard-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/LadderPathCard-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/LadderPathCard-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/LadderPathCard-icon.png'
     },
     Lamp : {
-      front_cover : 'http://localhost/Saboteur/images/cards/Lamp-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/Lamp-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/Lamp-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/Lamp-icon.png'
     },
     LampPickaxe : {
-      front_cover : 'http://localhost/Saboteur/images/cards/LampPickaxe-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/LampPickaxe-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/LampPickaxe-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/LampPickaxe-icon.png'
     },
     LeftCurvedBlueGatePath : {
-      front_cover : 'http://localhost/Saboteur/images/cards/LeftCurvedBlueGatePath-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/LeftCurvedBlueGatePath-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/LeftCurvedBlueGatePath-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/LeftCurvedBlueGatePath-icon.png'
     },
     MapActionCard : {
-      front_cover : 'http://localhost/Saboteur/images/cards/MapActionCard-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/MapActionCard-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/MapActionCard-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/MapActionCard-icon.png'
     },
     MapCard : {
-      front_cover : 'http://localhost/Saboteur/images/cards/MapCard-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/MapCard-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/MapCard-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/MapCard-icon.png'
     },
     MapClient : {
-      front_cover : 'http://localhost/Saboteur/images/cards/MapClient-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/MapClient-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/MapClient-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/MapClient-icon.png'
     },
     PathCard : {
-      front_cover : 'http://localhost/Saboteur/images/cards/PathCard-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/PathCard-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/PathCard-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/PathCard-icon.png'
     },
     Pickaxe : {
-      front_cover : 'http://localhost/Saboteur/images/cards/Pickaxe-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/Pickaxe-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/Pickaxe-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/Pickaxe-icon.png'
     },
     PickaxeCart : {
-      front_cover : 'http://localhost/Saboteur/images/cards/PickaxeCart-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/PickaxeCart-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/PickaxeCart-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/PickaxeCart-icon.png'
     },
     Player : {
-      front_cover : 'http://localhost/Saboteur/images/cards/Player-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/Player-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/Player-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/Player-icon.png'
     },
     PlayerActionCard : {
-      front_cover : 'http://localhost/Saboteur/images/cards/PlayerActionCard-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/PlayerActionCard-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/PlayerActionCard-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/PlayerActionCard-icon.png'
     },
     PrivatePlayerActionCard : {
-      front_cover : 'http://localhost/Saboteur/images/cards/PrivatePlayerActionCard-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/PrivatePlayerActionCard-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/PrivatePlayerActionCard-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/PrivatePlayerActionCard-icon.png'
     },
     Profiteer : {
-      front_cover : 'http://localhost/Saboteur/images/cards/Profiteer-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Role-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/Profiteer-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/Profiteer-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Role-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/Profiteer-icon.png'
     },
     PublicPlayerActionCard : {
-      front_cover : 'http://localhost/Saboteur/images/cards/PublicPlayerActionCard-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/PublicPlayerActionCard-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/PublicPlayerActionCard-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/PublicPlayerActionCard-icon.png'
     },
     RightCrystalCard : {
-      front_cover : 'http://localhost/Saboteur/images/cards/RightCrystalCard-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/RightCrystalCard-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/RightCrystalCard-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/RightCrystalCard-icon.png'
     },
     RightCurvedGreenGateCard : {
-      front_cover : 'http://localhost/Saboteur/images/cards/RightCurvedGreenGateCard-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/RightCurvedGreenGateCard-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/RightCurvedGreenGateCard-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/RightCurvedGreenGateCard-icon.png'
     },
     RightLadderPath : {
-      front_cover : 'http://localhost/Saboteur/images/cards/RightLadderPath-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/RightLadderPath-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/RightLadderPath-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/RightLadderPath-icon.png'
     },
     Rockfall : {
-      front_cover : 'http://localhost/Saboteur/images/cards/Rockfall-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/Rockfall-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/Rockfall-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/Rockfall-icon.png'
     },
     RoleCard : {
-      front_cover : 'http://localhost/Saboteur/images/cards/RoleCard-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Role-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/RoleCard-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/RoleCard-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Role-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/RoleCard-icon.png'
     },
     Saboteur : {
-      front_cover : 'http://localhost/Saboteur/images/cards/Saboteur-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Role-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/Saboteur-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/Saboteur-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Role-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/Saboteur-icon.png'
     },
     StartCard : {
-      front_cover : 'http://localhost/Saboteur/images/cards/StartCard-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/StartCard-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/StartCard-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/StartCard-icon.png'
     },
     SwapHand : {
-      front_cover : 'http://localhost/Saboteur/images/cards/SwapHand-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/SwapHand-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/SwapHand-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/SwapHand-icon.png'
     },
     SwapHats : {
-      front_cover : 'http://localhost/Saboteur/images/cards/SwapHats-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/SwapHats-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/SwapHats-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/SwapHats-icon.png'
     },
     Theft : {
-      front_cover : 'http://localhost/Saboteur/images/cards/Theft-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/Theft-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/Theft-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/Theft-icon.png'
     },
     TopCrystalCard : {
-      front_cover : 'http://localhost/Saboteur/images/cards/TopCrystalCard-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/TopCrystalCard-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/TopCrystalCard-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/TopCrystalCard-icon.png'
     },
     TopLadderPath : {
-      front_cover : 'http://localhost/Saboteur/images/cards/TopLadderPath-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/TopLadderPath-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/TopLadderPath-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/TopLadderPath-icon.png'
     },
     Trapped : {
-      front_cover : 'http://localhost/Saboteur/images/cards/Trapped-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/Trapped-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/Trapped-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/Trapped-icon.png'
     },
     VerticalBlueGateCard : {
-      front_cover : 'http://localhost/Saboteur/images/cards/VerticalBlueGateCard-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/VerticalBlueGateCard-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/VerticalBlueGateCard-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/VerticalBlueGateCard-icon.png'
     },
     VerticalCrossCrystalCard : {
-      front_cover : 'http://localhost/Saboteur/images/cards/VerticalCrossCrystalCard-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/VerticalCrossCrystalCard-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/VerticalCrossCrystalCard-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/VerticalCrossCrystalCard-icon.png'
     },
     VerticalCrossPathCard : {
-      front_cover : 'http://localhost/Saboteur/images/cards/VerticalCrossPathCard-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/VerticalCrossPathCard-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/VerticalCrossPathCard-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/VerticalCrossPathCard-icon.png'
     },
     VerticalGreenGateCard : {
-      front_cover : 'http://localhost/Saboteur/images/cards/VerticalGreenGateCard-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/VerticalGreenGateCard-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/VerticalGreenGateCard-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/VerticalGreenGateCard-icon.png'
     },
     VerticalPathCard : {
-      front_cover : 'http://localhost/Saboteur/images/cards/VerticalPathCard-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/VerticalPathCard-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/VerticalPathCard-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/VerticalPathCard-icon.png'
     },
     ViewGoalCard : {
-      front_cover : 'http://localhost/Saboteur/images/cards/ViewGoalCard-cover-front.png',
-      back_cover  : 'http://localhost/Saboteur/images/Card-cover-back.png',
-      icon        : 'http://localhost/Saboteur/images/cards/ViewGoalCard-icon.png'
+      front_cover : 'http://localhost:8080/images/cards/ViewGoalCard-cover-front.png',
+      back_cover  : 'http://localhost:8080/images/Card-cover-back.png',
+      icon        : 'http://localhost:8080/images/cards/ViewGoalCard-icon.png'
     }
   }
 });/******************************************************************************/
@@ -1222,6 +1226,7 @@ S.Card = Class.extend({
  * @FILE: client/Card.abstract.js
  */
 S.Card = S.Card.extend({
+  _className : "Card",
   init : function(){
     U.extend( this, {
       name          : 'Card-Name',
@@ -1394,6 +1399,8 @@ S.Card = S.Card.extend({
     };
     return function(){
       if( !this.structure ){
+        var self = this;
+        
         this.structure = {
           main        : $(document.createElement('span')),
           name        : $(document.createElement('span')),
@@ -1402,6 +1409,7 @@ S.Card = S.Card.extend({
           overlay     : $(document.createElement('a')),
           _context    : null
         };
+        
         this.structure._context = this.structure.canvas[0].getContext('2d');
         this.structure.name
           .attr('class', 'card-name')
@@ -1419,17 +1427,16 @@ S.Card = S.Card.extend({
             'class' : 'card-overlay',
             'href'  : 'javascript:void(0)'
           });
-        var self = this;
         this.structure.main
           .data( 'card', this )
           .attr( 'class', SO.classes.card )
           .append( this.structure.name, this.structure.canvas, 
-                   this.structure.description, this.structure.overlay )
-          .bind('mouseenter.toggleName', function(){
+                   this.structure.description, this.structure.overlay
+          ).bind('mouseenter.toggleInfo', function(){
             self.structure.name.slideDown( 'fast' );
-          }).bind('mouseleave.toggleName', function(){
+          }).bind('mouseleave.toggleInfo', function(){
             self.structure.name.hide();
-          }).trigger('mouseleave.toggleName');
+          }).trigger('mouseleave.toggleInfo');
         setup.call( this );
       };
       return this.structure.main;
@@ -1479,7 +1486,6 @@ S.GameCard = S.Card.extend({
 /**
  * @FILE: lib/MapCard.abstract.js
  */
-
 S.MapCard = S.GameCard.extend({
   _className  : 'MapCard',
   execute     : function(dryrun, map, posx, posy) {
@@ -1492,37 +1498,44 @@ S.MapCard = S.GameCard.extend({
  * @FILE: lib/Map.class.js
  */
 
-S.Map = Class.extend({
+Map = Class.extend({
   _className  : 'Map',
   init        : (function(){
     return function( options ){
       if( !options ){
         logger.warn('[Map.init] Invalid Options!');
         return null;
-      }
+      };
       U.extend( this, {
         maxCards    : 100,
         cards       : [],
+        // potential starting points for reaching the goal; holds realIndex
+        ladderCards : [],
         // The box in which cards are put already on the map
         // left-top-X/Y, right-top-X/Y
         boundaries  : { min_X:0, min_Y:0, max_X:0, max_Y:0 },
         startCards  : options.startCards || SO.options.startCards,
         goalCards   : options.goalCards || SO.options.goalCards
       });
-      for( var i=0; i<this.maxCards*2; ++i ){
-        this.cards[i] = [];
-      };
+      this.cards = this._createEmptyMap();
       add_starting_cards.apply( this );
     };
     function add_starting_cards(){
       for( var i in this.startCards ){
-        this.insertCardAt( this.startCards[i][0], this.startCards[i][1], this.startCards[i][2] );
+        this._insertCardAt( this.startCards[i][0], this.startCards[i][1], this.startCards[i][2] );
       };
       for( var i in this.goalCards ){
-        this.insertCardAt( this.goalCards[i][0], this.goalCards[i][1], this.goalCards[i][2] );
+        this._insertCardAt( this.goalCards[i][0], this.goalCards[i][1], this.goalCards[i][2] );
       };
     };
   })(),
+  _createEmptyMap : function() {
+    var cards = [];
+    for ( var i=0; i<this.maxCards*2; ++i ) {
+        cards[i] = [];
+    };
+    return cards;
+  },
   neighbour  : function( x, y, pos ){
     switch( pos ){
       case D.top:     y -= 1; break;
@@ -1533,7 +1546,10 @@ S.Map = Class.extend({
         logger.warn( '[Map.neighbour] Unknown case', arguments );
         return null;
     }
-    return [ x, y ];
+    return {
+      x : x,
+      y : y
+    };
   },
   checkSide : function( card_1, side_1, card_2, side_2 ){
     function p(v){ return v.hasPath; }
@@ -1545,13 +1561,29 @@ S.Map = Class.extend({
       y : this.maxCards + y
     };
   },
+  /**
+   * Tells if there is a card at the absolute positions on the map given.
+   *
+   * @param posx -- the absolute x coordinate
+   * @param posy -- the absolute y coordinate
+   * @return true or false, if has or not a card
+   */
+  _isCardAt : function( posx, posy ) {
+    var content = this.cards[posx][posy];
+    return ( content ? true : false );
+  },
   getCardAt  : function( x, y ){
     var pos = this._realIndex( x, y );
     if( pos.x >= 0 && pos.x <= this.maxCards * 2 && pos.y >= 0 && pos.y <= this.maxCards * 2 ){
-      return this.cards[pos.x][pos.y];
+      var cardInfo = this.cards[pos.x][pos.y];
+      if (cardInfo) {
+        return F.get.apply(F, cardInfo);
+      } else {
+        return null;
+      };
     } else {
       logger.warn( '[Map.getCardAt] Indexes out of bounds', arguments );
-      return false;
+      return null;
     };
   },
   checkRemoveCardAt : function( x,y ){
@@ -1564,33 +1596,50 @@ S.Map = Class.extend({
       }
     } else {
       logger.warn('[Map.checkRemoveCardAt] Indexes ouf of bounds', arguments);
-    }
+    };
+    
     return false;
   },
   removeCardAt : function( x, y ) {
     if( this.checkRemoveCardAt( x, y ) ){
-      var card = this.positions[x][y];
-      delete this.positions[x][y];
+      var card = this.getCardAt(x, y);
+      var pos = this._realIndex(x, y);
+      delete this.cards[pos.x][pos.y];
+      // update ladderCards
+      if (card.hasLadder) {
+        for (var i in this.ladderCards) {
+          var cur = this.ladderCards[i];
+          if (cur.x === pos.x && cur.y === pos.y ) {
+            this.ladderCards.splice(i, 1);
+            break;
+          };
+        };
+      };
       return card;
-    }
+    };
+    
     return false;
   },
-  checkInsertCardAt : function( aPathCard, x, y ){
+  checkInsertCardAt : function(cardID, x, y) {
+    return this._checkInsertCardAt(['game', cardID], x, y);
+  },
+  _checkInsertCardAt : function( cardWrapper, x, y ){
+    var aPathCard = F.get.apply(F, cardWrapper);
     var pos = this._realIndex( x, y );
     if( pos.x >= 0 && pos.y >= 0 ){
       if( aPathCard instanceof S.StartCard || aPathCard instanceof S.GoalCard ){
         return true;
       } else if( aPathCard instanceof S.PathCard ){
-        if( U.isUndefined( this.getCardAt(x, y) ) ){
+        if( null === this.getCardAt(x, y) ) {
           var ok            = true;
           var foreverAlone  = true;
           var directions    = [ D.top, D.right, D.bottom, D.left ];
           for( var i in directions ){
             var neighbourPos  = this.neighbour(x,y,directions[i]);
-            var neighbour     = this.getCardAt.apply( this, neighbourPos );
-            if( !U.isUndefined( neighbour ) ){
-              var pos = D.opposite( directions[i] );
-              ok = ok && this.checkSide( aPathCard, directions[i], neighbour, pos );
+            var neighbour     = this.getCardAt( neighbourPos.x, neighbourPos.y );
+            if( null !== neighbour ){
+              var side = D.opposite( directions[i] );
+              ok = ok && this.checkSide( aPathCard, directions[i], neighbour, side );
               foreverAlone = false;
             };
           };
@@ -1604,16 +1653,25 @@ S.Map = Class.extend({
     };
     return false;
   },
-  insertCardAt : function( aPathCard, x, y ){
+  insertCardAt : function( cardID, x, y) {
+    return this._insertCardAt([ 'game', cardID ], x, y);
+  },
+  _insertCardAt : function( cardWrapper, x, y ) { 
     if( x < this.boundaries.min_X ) this.boundaries.min_X = x;
     if( y < this.boundaries.min_Y ) this.boundaries.min_Y = y;
     if( x > this.boundaries.max_X ) this.boundaries.max_X = x;
     if( y > this.boundaries.max_Y ) this.boundaries.max_Y = y;
     var pos = this._realIndex( x, y );
     if( pos.x >= 0 && pos.y >= 0 ){
-      if( this.checkInsertCardAt.apply( this, arguments ) ){
+      if( this._checkInsertCardAt.apply( this, arguments ) ){
+        // TODO: not sure if next line needed...
         if( !this.cards[pos.x] ){ this.cards[pos.y] = []; }
-        this.cards[pos.x][pos.y] = aPathCard;
+        this.cards[pos.x][pos.y] = cardWrapper;
+        // update ladderCards
+        var card = this.getCardAt(x, y);
+        if (card.hasLadder) {
+          this.ladderCards.push(pos);
+        };
         return true;
       } else {
         logger.warn( '[Map.insertCardAt] Unable to place card on map', arguments );
@@ -1621,10 +1679,48 @@ S.Map = Class.extend({
       };
     } else {
       logger.warn( '[Map.insertCardAt] Indexes out of bounds (max:'+this.maxCards+')', arguments );
-      return this;
+      return false;
     };
   },
   canReachGold : function( player ) {
+    var cards = this._createEmptyMap();
+    var newTile = function() {
+      var ret = {};
+      ret[D.top] = false;
+      ret[D.right] = false;
+      ret[D.bottom] = false;
+      ret[D.left] = false;
+     return ret;
+    };
+    var finalStack = [];
+    // pre-seed with ladder cards
+    var startStack = U.extend([], this.ladderCards);
+    for (var i in startStack) {
+      var pos = startStack[i];
+      var card = this.getCardAt(pos.x, pos.y);
+      var sides = card.sides;
+      for (var dir in sides) {
+        if (sides[dir].hasPath) {
+          //TODO: continue here...
+        };
+      };
+    };
+    for (var i in startStack) {
+      var pos = startStack[i];
+      var card = this.getCardAt(pos.x, pos.y);
+      var sides = card.sides;
+      for (var dir in sides) {
+        var side = sides[dir];
+        var neighbour = this.neighbour(pos.x, pos.y, dir);
+        var canConnect = side.hasPath && this.isCardAt(neighbour.x, neighbour.y);
+        if (canConnect) {
+          finalStack.push(neighbour);
+          cards[pos.x][pos.y][dir] = true;
+        };
+      };
+    }; // TODO: continue here
+    
+    // TODO: prode from here.....
     _CardState = Class.extend({
       init : function(aPos, aPathCard, aDir) {
         this.pos      = aPos;
@@ -1691,11 +1787,11 @@ S.Map = Class.extend({
 /******************************************************************************/
 
 /**
- * @FILE: client/MapClient.class.js
+ * @FILE: client/ClientMap.class.js
  */
 
-S.MapClient = S.Map.extend({
-  _className  : 'MapClient',
+ClientMap = Map.extend({
+  _className  : 'ClientMap',
   init : (function(){
     return function( options ){
       U.extend( this, {
@@ -1716,16 +1812,17 @@ S.MapClient = S.Map.extend({
           var id = 'field_'+x+'_'+y;
           var card = this.getCardAt( x, y );
           var element;
-          if( !U.isUndefined(card) ) element = card;
-            else {
-              element = new S.Card();
-              element.name = 'Empty Slot';
-            }
+          if( card !== null ) {
+            element = card;
+          } else {
+            element = new S.Card();
+            element.name = 'Empty Slot';
+          };
           td = td.add(
             $(document.createElement('td')).attr({
               'id'    : id,
               'class' : SO.classes.map.td
-            }).html( element.toElement() )
+            }).html( element.toElement().data('pos',[x,y]) )
           );
           element.rotate( 90 );
         };
@@ -1740,11 +1837,18 @@ S.MapClient = S.Map.extend({
         .html( tr );
     };
   })(),
-  insertCardAt: function( aPathCard, x, y ){
-    this._super( aPathCard, x, y );
-    this.structure.table.find( '#field_'+x+'_'+y ).html( aPathCard.toElement() );
-    aPathCard.rotate( aPathCard.isFlipped ? 90 : 270 );
-    return this;
+  _insertCardAt : function( cardWrapper, x, y ){
+    if( this._super( cardWrapper, x, y ) ){
+      var aPathCard = F.get.apply( F, cardWrapper );
+      var elem      = aPathCard.toElement();
+      var elemPos   = this.structure.table.find( '#field_'+x+'_'+y );
+      elem.data( 'swap-card', elemPos );
+      elemPos.html( elem );
+      aPathCard.rotate( aPathCard.isFlipped ? 90 : 270 );
+      aPathCard.structure.rotate.hide();
+      return true;
+    }
+    return false;
   },
   removeCardAt: function( x, y ){
     var card = this._super( x, y );
@@ -1757,7 +1861,8 @@ S.MapClient = S.Map.extend({
   toElement : function(){
     return this.structure.main;
   }
-});/******************************************************************************/
+});
+/******************************************************************************/
 
 /**
  * @FILE: lib/ActionCard.class.js
@@ -1817,7 +1922,11 @@ S.PrivatePlayerActionCard = S.PlayerActionCard.extend({
   _className  : 'PrivatePlayerActionCard',
   target      : 'private',
   execute     : function(dryrun, player) {
-    return null;
+    if (dryrun) {
+      return true;
+    } else {
+      return null;
+    };
   }
 });
 
@@ -1928,7 +2037,7 @@ S.Rockfall      = S.MapActionCard.extend({
       return false;
     };
     
-    console.log(this._className, 'Failed doing action');
+    logger.warn(this._className, 'Failed doing action');
     return null;
   }
 });
@@ -1938,20 +2047,24 @@ S.ViewGoalCard = S.MapActionCard.extend({
   target     : 'GoalCard',
   execute    : function(dryrun, map, posx, posy) {
     var card = map.getCardAt(posx, posy);
-    if (dryrun) {
-      return card instanceof S[this.target];
+    if (!card || !(card instanceof S[this.target])) {
+      return false;
     } else {
-      return card.id;
+      if (dryrun) {
+        return true;
+      } else {
+        return card.id;
+      };
     };
-    console.log(this._className, 'Failed doing action');
+    
+    logger.warn(this._className, 'Failed doing action');
   }
 });
 /******************************************************************************/
 
 /**
- * @FILE: lib/PathCard.class.js
+ * @FILE: lib/PathCard.abstract.js
  */
-
 (function(){
   var Node = Class.extend({
     init    : function(hasPath, links) {
@@ -1969,24 +2082,25 @@ S.ViewGoalCard = S.MapActionCard.extend({
       this._super();
       U.extend(this, {
         destructible  : false,
-        sides : [
-          new Node(),
-          new Node(),
-          new Node(),
-          new Node()
-        ]
+        sides         :  {}
       });
+      for (var i in [D.top, D.right, D.bottom, D.left]) {
+        this.sides[i] = new Node();
+      };
     },
-    execute   : function(dryrun, map, posx, posy) {
+    execute   : function(dryrun, map, posx, posy, flipped) {
+      var needToFlip = (this.isFlipped && !flipped) || (!this.isFlipped && flipped);
+      if (needToFlip) {
+        this.flip();
+      };
+      
       if (dryrun) {
-        return map.checkInsertCardAt(this, posx, posy);
+        return map.checkInsertCardAt(this.id, posx, posy);
       } else {
-        map.insertCardAt(this, posx, posy);
-        
-        return true;
+        return map.insertCardAt(this.id, posx, posy);
       };
     
-      //logger.warn(this._className, 'Failed doing action');
+      logger.warn(this._className, 'Failed doing action');
       return false;
     },
     isFlipped : false,
@@ -2014,7 +2128,41 @@ S.ViewGoalCard = S.MapActionCard.extend({
       return this;
     }
   });
-})();
+})();/******************************************************************************/
+
+/**
+ * @FILE: client/PathCard.abstract.js
+ */
+S.PathCard = S.PathCard.extend({
+  _className  : 'PathCard',
+  toElement   : function(){
+    if( !this.structure ){
+      this._super();
+      this.structure.rotate = $(document.createElement('a'));
+      var self = this;
+      this.structure.rotate
+        .attr({
+          'class' : 'card-rotate',
+          'href'  : 'javascript:void(0)',
+          'title' : 'Flip Card'
+        }).html(
+          $(document.createElement('img'))
+            .attr('src',SO.webRoot+'/images/icon-rotate.png')
+        ).bind('click.rotate', function(e){
+          e.stopPropagation();
+          self.isFlipped = !self.isFlipped;
+          self.rotate( self.isFlipped ? 270 : 90 );
+        });
+      this.structure.overlay.append( this.structure.rotate );
+    };
+    return this.structure.main;
+  }
+}); 
+/******************************************************************************/
+
+/**
+ * @FILE: lib/PathCard.class.js
+ */
 
 // 4 pieces
 S.HorizontalPathCard = S.PathCard.extend({
@@ -2222,8 +2370,7 @@ S.BlockTopLeftPathCard = S.PathCard.extend({
 
     this.nodes( D.top, D.left );
   }
-});
-/******************************************************************************/
+});/******************************************************************************/
 
 /**
  * @FILE: lib/GoalCard.class.js
@@ -2571,6 +2718,7 @@ S.FullCrossGoldCard = S.GoldCard.extend({
  * @FILE: lib/Hand.class.js
  */
 var Hand = Class.extend({
+  _className : 'Hand',
   /**
    * 
    */
@@ -2579,7 +2727,6 @@ var Hand = Class.extend({
       cards : []
     });
     if( ids && ids.length > 0 ){
-      console.log( ids );
       this.add( ids );
     };
   },
@@ -2591,40 +2738,39 @@ var Hand = Class.extend({
   add : function( ids ){
     for( var i in ids ){
       this.cards.push( ids[i] );
-    }
+    };
     return this;
   },
   /**
-   * Selects a card from the hand by id
+   * Checks whether a certain card (id) is in the hand
    * @param {Int} id
-   * @return {Int} the position in the hand or null
+   * @return {Boolean}
    */
-  get : function( id ){
-    for( var i=0; i<this.cards.length; ++i ){
-      if( this.cards[i] == id ){
-        return i;
-      };
-    };
-    logger.warn('[Hand.get] No card in hand with that id', arguments);
-    return null;
+  has : function( id ){
+    return this.cards.indexOf( id ) !== -1 ? true : false;
   },
   /**
    * Removes multiple card ids from hand
    * @param {Array} ids
    */
-  remove : function( ids ){
-    for( var i in ids ){
-      var pos = this.get( ids[i] );
-      if( pos !== null ){
-        delete this.cards[pos];
-      } else {
-        logger.warn('[Hand.remove] Unknown id', arguments);
-        return null;
+  remove : (function(){
+    return function( ids ){
+      for( var i in ids ){
+        var pos = get.call( this, ids[i] );
+        if( pos > -1 ){
+          delete this.cards[pos];
+        } else {
+          logger.warn('[Hand.remove] Unknown id', arguments);
+          return null;
+        }
       }
-    }
-    this.compact();
-    return this;
-  },
+      this.compact();
+      return this;
+    };
+    function get( id ){
+      return this.cards.indexOf( id );
+    };
+  })(),
   /**
    * Removes null/empty slots from hand
    */
@@ -2646,7 +2792,7 @@ var Hand = Class.extend({
    */
   validateCards : function( cardIDs ) {
     for (var i in cardIDs) {
-      if( this.get( cardIDs[i] ) === null ){
+      if( !this.has( cardIDs[i] ) ){
         return false;
       };
     };
@@ -2656,17 +2802,24 @@ var Hand = Class.extend({
 /******************************************************************************/
 
 /**
- * @FILE: client/Hand.class.js
+ * @FILE: client/ClientHand.class.js
  */
 
-var Hand = Hand.extend({
-  cards : {},
+var ClientHand = Hand.extend({
+  _className : 'ClientHand',
   init  : (function(){
     return function( ids ){
       U.extend( this, {
+        selected  : $(),
         structure : {
-          main  : $(document.createElement('div')),
-          cards : $(document.createElement('div'))
+          main    : $(document.createElement('div')),
+          cards   : $(document.createElement('div')),
+          actions : {
+            main      : $(document.createElement('div')),
+            playCard  : $(document.createElement('a')),
+            heal      : $(document.createElement('a')),
+            discard   : $(document.createElement('a'))
+          }
         }
       });
       this._super( ids );
@@ -2676,17 +2829,98 @@ var Hand = Hand.extend({
     function create_structure(){
       this.structure.cards
         .addClass( SO.classes.hand.cards );
+      
+      for( var i in this.structure.actions ){
+        var el = this.structure.actions[i];
+        if( el[0].tagName.toLowerCase() == 'a' ){
+          el.attr({
+              href  : 'javascript:void(0)',
+              class : SO.classes.hand.action
+            }).html( i );
+          this.structure.actions.main.append( el );
+        };
+      };
+      
+      var self    = this;
+      var accept  = this.structure.actions.accept;
+      this.structure.actions.playCard
+        .bind( 'click.playCard', function(){
+          var cards = client.map.structure.table.find('.'+SO.classes.card);
+          cards
+            .unbind('click.placeCard')
+            .bind('click.placeCard', function(){
+              if( self.selected.length != 1 ){
+                logger.info('You can only play one card at a time');
+                return;
+              };
+              //if( client.map.checkInsertCardAt(  )
+              //cards.unbind('click.placeCard');
+              var pos   = $(this).data('pos');
+              var card  = self.selected.eq(0).data('card');
+              if( client.map.checkInsertCardAt( card.id, pos[0], pos[1]) ){
+                var event = Protocol.createEvent('targetMap', 'server', 'custom');
+                event.data.playerID = gameState.playerID;
+                event.data.cardID   = card.id;
+                event.data.posx     = pos[0];
+                event.data.posy     = pos[1];
+                event.data.flipped  = card.isFlipped;
+                actions.targetMap.callback(event);
+              } else {
+                logger.info('You are unable to place that card on that location');
+              }
+            });
+        });
+        
+      this.structure.actions.heal
+        .bind( 'click.heal', function(){
+          //TODO: ME!
+        });
+        
+      this.structure.actions.discard
+        .bind( 'click.discard', function(){
+          if( self.selected.length == 0 ){
+            logger.info('Select at least 1 card to discard');
+            return;
+          };
+          var ids = self.selected.map(function(){ 
+            return $(this).data('card').id;
+          });
+          var event = Protocol.createEvent('discard', 'server', 'custom');
+          event.data.playerID = gameState.playerID;
+          event.data.cards = ids.toArray();
+          actions.discard.callback(event);
+        });
+      
+      this.structure.actions.main
+        .addClass( SO.classes.hand.actions );
         
       this.structure.main
         .addClass( SO.classes.hand.main )
-        .append( this.structure.cards );
+        .append( this.structure.actions.main, this.structure.cards );
     };
   })(),
   add : function( ids ){
+    var self = this;
     if( this._super( ids ) ){
       for( var i in ids ){
-        this.structure.cards.append( F.get( 'game', ids[i]).toElement() );
-      }
+        F.get( 'game', ids[i])
+          .toElement()
+          .appendTo( this.structure.cards )
+          .bind( 'click.selectCard', function(){
+            if( !$(this).hasClass('selected') ){
+              self.selected = self.selected.add( $(this) );
+              var card = $(this).data('card');
+              card.rotate( card.isFlipped ? 270 : 90 );
+              $(this)
+                .addClass( 'selected' )
+                .trigger( 'mouseenter.toggleInfo' );
+            } else {
+              $(this).removeClass( 'selected' );
+              self.selected = self.selected.not( $(this) );
+              $(this).data('card').rotate( 0 );
+            };
+          });
+      };
       return this;
     };
     return null;
@@ -2694,7 +2928,7 @@ var Hand = Hand.extend({
   remove : function( ids ){
     if( this._super( ids ) ){
       for( var i in ids ){
-        F.get( 'game', ids[i]).detach();
+        F.get( 'game', ids[i]).toElement().detach();
       };
       return this;
     };
@@ -2706,14 +2940,49 @@ var Hand = Hand.extend({
 });/******************************************************************************/
 
 /**
+ * @FILE: client/HiddenHand.class.js
+ */
+
+/**
+ * NOTE: Must extend the extended client-ready Hand!!!
+ * This is just like a normal hand class, only that it server dummy cards intead
+ */
+var HiddenHand = ClientHand.extend({
+  _className : 'HiddenHand',
+  init : function( ids ){
+    this._super( ids );
+    U.extend( this, {
+      cards : []
+    });
+  },
+  add : function( ids ){
+    for( var i in ids ){
+      var card = new S.GameCard();
+      this.cards.push( card );
+      this.structure.cards.append( card.toElement() );
+    };
+    return this;
+  },
+  remove : function( ids ){
+    for( var i in ids ){
+      var card = this.cards.pop();
+      card.detach();
+    };
+    return this;
+  }
+}); 
+/******************************************************************************/
+
+/**
  * @FILE: lib/Player.class.js
  */
-S.Player = Class.extend({
+Player = Class.extend({
   _className    : 'Player',
-  init          : function( name ){
-    U.extend( this, {
-      public        : {
-        name    : name || 'Player-Name',
+  init          : function( attributes, handClass ){
+    handClass = handClass || Hand;
+    var defaults = {
+      public : {
+        name    : 'Player-Name',
         id      : null,
         turn    : 0,
         playing : false,
@@ -2723,11 +2992,14 @@ S.Player = Class.extend({
         jail    : [],
         theft   : []
         },
-      private       : {
+      private : {
         roleCard  : null,
-        hand      : new Hand()
+        hand      : {}
       }
-    });
+    };
+    U.extend( true, this, defaults, attributes);
+    var args = this.private.hand.cards ? this.private.hand.cards : [];
+    this.private.hand = new handClass( args );
   },
   setName         : function( name ) {
     this.public.name = name;
@@ -2745,6 +3017,26 @@ S.Player = Class.extend({
   }
 });
 /******************************************************************************/
+
+/**
+ * @FILE: client/ClientPlayer.class.js
+ */
+ClientPlayer = Player.extend({
+  init : function( attributes, handClass ){
+    handClass = handClass || ClientHand;
+    this._super( attributes, handClass );
+  }
+});/******************************************************************************/
+
+/**
+ * @FILE: client/HiddenPlayer.class.js
+ */
+HiddenPlayer = ClientPlayer.extend({
+  init : function( attributes, handClass ){
+    handClass = handClass || HiddenHand;
+    this._super( attributes, handClass );
+  }
+});/******************************************************************************/
 
 /**
  * @FILE: lib/Protocol.js
@@ -2803,7 +3095,8 @@ Protocol = {
           playerID      : 0, // player
           cardID        : 0, // card
           posx          : 0, // mapX
-          posy          : 0 // mapY
+          posy          : 0, // mapY
+          flipped       : false
         }), 
         heal                  : new Event('heal', {
           playerID      : 0, // player
@@ -2903,107 +3196,191 @@ S.FullCrossStartCard = S.StartCard.extend({
  * @FILE: lib/Saboteur.class.js
  */
 var Saboteur = Class.extend({
-  init  : function( options, cards ){
-    // General multi-purpose object. Will store in it all information regarding the game
-    U.extend( this, {
-      // {Array} list of all player objects
-      players      : {},
-      //{Object} class for holding map state information
-      map : {},
-      // {Object} class for holding event info: handle, check, execute
-      events : {},
-      // {Object} the extended options object, stored for later use
-      opt             : {},
-      // {Object} the extended classes object, stored for later use
-      cls             : {},
-      // {Object} the extended cards object, stored for later use
-      cards           : {},
-      // [Abstract] defined later in sub-classes
-      map             : null
-    });
+  init  : (function(){
+    return function( options, cards ){
+      // General multi-purpose object. Will store in it all information regarding the game
+      U.extend( this, {
+        // {Array} list of all player objects
+        players      : {},
+        //{Object} class for holding map state information
+        map : {},
+        // {Object} class for holding event info: handle, check, execute
+        events : {},
+        // {Object} the extended options object, stored for later use
+        opt             : {},
+        // {Object} the extended classes object, stored for later use
+        cls             : {},
+        // {Object} the extended cards object, stored for later use
+        cards           : {},
+        // {Array} array of player IDs in the order in which they will play the game
+        turns           : [],
+        // {Int} the current index in the this.turns representing the player to play
+        currentTurn     : 0
+      });
+      
+      U.extend( this.opt, SO.options, options );
+      U.extend( true, this.cards, SO.cards, cards );
+      
+      create_factory.call( this );
+      create_events.call( this );
+      
+    };
     
-    U.extend( this.opt, SO.options, options );
-    U.extend( true, this.cards, SO.cards, cards );
-    
-    var startListDetails     = {};
-    var gameListDetails      = {};
-    var roleListDetails      = {};
-    var goalListDetails      = {};
-    var dummyGoalListDetails = {};
+    function create_factory(){
+      var startListDetails     = {};
+      var gameListDetails      = {};
+      var roleListDetails      = {};
+      var goalListDetails      = {};
+      var dummyGoalListDetails = {};
 
-    U.extend( startListDetails, this.cards.start );
-    U.extend( gameListDetails, this.cards.path, this.cards.action );
-    U.extend( roleListDetails, this.cards.role );
-    dummyGoalListDetails = { GoalCard:U.objectLength(this.cards.goal) };
-    goalListDetails = this.cards.goal;
-    // create the card decks
-    F.register({
-      'start'     : startListDetails,
-      'goal'      : goalListDetails,
-      'dummyGoal' : dummyGoalListDetails,
-      'game'      : gameListDetails,
-      'role'      : roleListDetails
-    });
+      U.extend( startListDetails, this.cards.start );
+      U.extend( gameListDetails, this.cards.path, this.cards.action );
+      U.extend( roleListDetails, this.cards.role );
+      dummyGoalListDetails = { GoalCard:U.objectLength(this.cards.goal) };
+      goalListDetails = this.cards.goal;
+      
+      // create the card decks
+      F.register({
+        'start'     : startListDetails,
+        'goal'      : goalListDetails,
+        'dummyGoal' : dummyGoalListDetails,
+        'game'      : gameListDetails,
+        'role'      : roleListDetails
+      });
+    };
     
-    for (var h in Protocol.events.server.custom) {
-      this.events[h] = {};
-      this.events[h].handle = function() {
-        logger.warn('Undefined handle for', h);
+    function create_events(){
+      for (var h in Protocol.events.server.custom) {
+        this.events[h] = {};
+        U.extend(this.events[h], {
+          handle  : function() {
+            logger.warn('Undefined handle for', h);
+          },
+          check : function() {
+            logger.warn('Undefined check for', h);
+          },
+          execute : function() {
+            logger.warn('Undefined execute for', h);
+          }
+        });
       };
-      this.events[h].check = function() {
-        logger.warn('Undefined check for', h);
-      };
-      this.events[h].execute = function() {
-        logger.warn('Undefined execute for', h);
-      };
+      
+      // EVENT discard
+      U.extend(this.events.discard, {
+        check : function(event) {
+          var data = event.data;
+          return this.doDiscard(true, data.playerID, data.cards);
+        },
+        execute : function(event) {
+          var data = event.data;
+          return this.doDiscard(false, data.playerID, data.cards);
+        }
+      });
+      
+      // EVENT targetPublicPlayer
+      U.extend(this.events.targetPublicPlayer, {
+        check : function(event) {
+          var data = event.data;
+          return this.doTargetPublicPlayer(false, data.playerID, data.playerCardID, data.targetID, data.targetCardID);
+        },
+        execute : function(event) {
+          var data = event.data;
+          return this.doTargetPublicPlayer(true, data.playerID, data.playerCardID, data.targetID, data.targetCardID);
+        }
+      });
+      
+      // EVENT targetPrivatePlayer
+      U.extend(this.events.targetPrivatePlayer, {
+        check : function(event) {
+          var data = event.data;
+          return this.doTargetPrivatePlayer(false, data.playerID, data.playerCardID, data.targetID);
+        },
+        execute : function(event) {
+          var data = event.data;
+          return this.doTargetPrivatePlayer(true, data.playerID, data.playerCardID, data.targetID);
+        }
+      });
+      
+      // EVENT targetMap
+      U.extend(this.events.targetMap, {
+        check : function(event) {
+          var data = event.data;
+          return this.doTargetMap(false, data.map, data.posx, data.posy, data.flipped);
+        },
+        execute : function(event) {
+          var data = event.data;
+          return this.doTargetMap(true, data.map, data.posx, data.posy, data.flipped);
+        }
+      });
+      
+      // EVENT heal
+      U.extend(this.events.heal, {
+        check : function(event) {
+          var data = event.data;
+          return this.doHeal(false, data.playerID, data.cards, data.targetCardID);
+        },
+        execute : function(event) {
+          var data = event.data;
+          return this.doHeal(true, data.playerID, data.cards, data.targetCardID);
+        }
+      });
     };
     
-    // EVENT discard
-    this.events.discard.check = function(playerID, cards) {
-      return this.doDiscard(true, playerID, cards);
-    };
+  })(),
+  
+  /**
+   * Creates the set of options to be used on the map.
+   * @param {BOOLEAN} useGoalCards -- indicate if to use goal or dummyGoal
+   */
+  createMapOptions : function(useGoalCards) {
+    var goal = (useGoalCards ? 'goal' : 'dummyGoal');
     
-    this.events.discard.execute = function(playerID, cards) {
-      return this.doDiscard(false, playerID, cards);
-    };
-    
-    // EVENT targetPublicPlayer
-    this.events.targetPublicPlayer.check = function(playerID, playerCardID, targetID, targetCardID) {
-      return this.doTargetPublicPlayer(false, playerID, playerCardID, targetID, targetCardID);
-    };
-    
-    this.events.targetPublicPlayer.execute = function(playerID, playerCardID, targetID, targetCardID) {
-      return this.doTargetPublicPlayer(true, playerID, playerCardID, targetID, targetCardID);
-    };
-    
-    // EVENT targetPrivatePlayer
-    this.events.targetPrivatePlayer.check = function(playerID, playerCardID, targetID) {
-      return this.doTargetPrivatePlayer(false, playerID, playerCardID, targetID);
-    };
-    
-    this.events.targetPrivatePlayer.execute = function(playerID, playerCardID, targetID) {
-      return this.doTargetPrivatePlayer(true, playerID, playerCardID, targetID);
-    };
-    
-    // EVENT targetMap
-    this.events.targetMap.check = function(map, posx, posy) {
-      return this.doTargetMap(false, map, posx, posy);
-    };
-    
-    this.events.targetMap.execute = function(map, posx, posy) {
-      return this.doTargetMap(true, map, posx, posy);
-    };
-    
-    // EVENT heal
-    this.events.heal.check = function(playerID, cards, targetCardID) {
-      return this.doHeal(false, playerID, cards, targetCardID);
-    };
-    
-    this.events.heal.execute = function(playerID, cards, targetCardID) {
-      return this.doHeal(true, playerID, cards, targetCardID);
+    return {
+      maxCards    : F.size(),
+      startCards  : this.opt.startCards.map(function(v,i){ v.unshift(['start', i]); return v; }),
+      goalCards   : this.opt.goalCards.map(function(v,i){ v.unshift([goal, i]); return v; })
     };
   },
   
+  setPlayers : function( players ){
+    this.players = {};
+    for( var i in players ){
+      this.players[ i ] = new S.Player( players[i] );
+    };
+    return this;
+  },
+  
+  cleanState : function() {
+    this.players = {};
+    this.map = {};
+    this.turns = [];
+    this.currentTurn = 0;
+  },
+  
+  prepareTurn : function(playerID) {
+    return true; // TODO: hacked for Stefan :p
+    var player = this.players[playerID];
+    // got player, his turn, first event
+    if (player && this.currentTurn == player.public.turn && !player.public.playing) {
+      player.public.playing = true;
+      return true;
+    } else {
+      return false;
+    };
+  },
+  
+  advanceTurn : function() {
+    // unset the playing state of the current player
+    var playerID = this.turns[this.currentTurn];
+    this.players[playerID].public.playing = false;
+    // advance the play turn
+    this.currentTurn++;
+    if (this.currentTurn >= this.turns.length) {
+      this.currentTurn = 0;
+    };
+    return this.currentTurn;
+  },
+
   // EVENTS
   doDiscard : function(dryrun, playerID, cards) {
     var player = this.players[playerID];
@@ -3031,9 +3408,11 @@ var Saboteur = Class.extend({
       return false;
     } else {
       var target = this.players[targetID];
-      var card = player.private.hand.get(playerCardID);
+      var card = (player.private.hand.has(playerCardID) 
+                    ? this.factory.get('game', playerCardID) 
+                    : null);
       
-      if (!target || !card) {
+      if (!target || !card || !(card instanceof PublicPlayerActionCard)) {
         return false;
       } else {
         return card.execute(dryrun, target, targetCardID);
@@ -3050,11 +3429,11 @@ var Saboteur = Class.extend({
       return false;
     } else {
       var target = this.players[targetID];
-      var card = (player.private.hand.get(playerCardID) 
+      var card = (player.private.hand.has(playerCardID) 
                     ? this.factory.get('game', playerCardID) 
                     : null);
       
-      if (!target || !card) {
+      if (!target || !card || !(card instanceof PrivatePlayerActionCard)) {
         return false;
       } else {
         return (dryrun ? true : null);
@@ -3062,19 +3441,19 @@ var Saboteur = Class.extend({
     };
   },
   
-  doTargetMap : function(dryrun, playerID, cardID, posx, posy) {
+  doTargetMap : function(dryrun, playerID, cardID, posx, posy, flipped) {
     var player = this.players[playerID];
     if (!player) {
       return false;
     } else {
-      var card = (player.private.hand.get(playerCardID) 
+      var card = (player.private.hand.has(playerCardID) 
                     ? this.factory.get('game', playerCardID) 
                     : null);
                     
-      if (!card) {
+      if (!card || !(card instanceof MapCard)) {
         return false;
       } else {
-        return card.execute(dryrun, this.map, posx, posy);
+        return card.execute(dryrun, this.map, posx, posy, flipped);
       };
     }; 
   },
@@ -3086,13 +3465,7 @@ var Saboteur = Class.extend({
       || !cards.length == this.opt.healDiscard
       || !player.private.hand.validateCards(cards))
     {
-      if (dryrun) {
-        // TODO: continue here
-        return true;
-      } else {
-        this.doDiscard(playerID, cards);
-        // TODO: continue here
-      }
+      return this.doDiscard(dryrun, playerID, cards);
     } else {
       return false;
     };
@@ -3101,11 +3474,12 @@ var Saboteur = Class.extend({
 /******************************************************************************/
 
 /**
- * @FILE: client/SaboteurClient.class.js
+ * @FILE: client/ClientSaboteur.class.js
  */
 
-var SaboteurClient = Saboteur.extend({
-  init    : (function(){
+var ClientSaboteur = Saboteur.extend({
+  _className : 'ClientSaboteur',
+  init : (function(){
     return function( target, options, cards ){
       if( !target || target.length == 0 ){
         logger.warn( '[SaboteurClient.init] Invalid target', arguments );
@@ -3113,39 +3487,51 @@ var SaboteurClient = Saboteur.extend({
       };
       
       this._super( options, cards );
-      U.extend( this, {
-        target  : target
+      
+      $.extend($.expr[':'], {
+        selected : function(el){
+          return !!$(el).hasClass('selected');
+        }
       });
       
-      var self = this;
-      preload_images.call( self, function(){ create_structure.apply( self ); } );
+      U.extend( this, {
+        target    : target,
+        map       : null,
+        selected  : $()
+      });
+      
+      createStructure.call(this);
+      bindLiveEvents.call(this);
     };
     
-    function create_structure(){
+    function bindLiveEvents(){
+      // Select Card
       var self = this;
-      var mapOptions = {
-        maxCards    : F.size(),
-        startCards  : this.opt.startCards.map(function(v,i){ v.unshift(F.get('start',i)); return v; }),
-        goalCards   : this.opt.goalCards.map(function(v,i){ v.unshift(F.get('dummyGoal',i)); return v; }),
-        factory     : F
+        
+      // Target Map
+      $('.'+SO.classes.map.table)
+        .live('click.placeCard',function(){
+          
+        });
+    };
+    
+    function createStructure(){
+      this.structure  = {
+        wrapper     : $(document.createElement('div')),
+        map         : $(document.createElement('div')),
+        players     : $(document.createElement('div')),
+        hand        : $(document.createElement('div')),
+        progressBar : $(document.createElement('div'))
       };
       
-      var self = this;
-      this.map        = new S.MapClient( mapOptions );
-      this.structure  = {
-        wrapper : $(document.createElement('div')),
-        map     : this.map.toElement(),
-        players : $(),
-        // TODO: SET THIS TO: this.players[ owning_player ].hand.toElement() !!!!
-        hand    : new Hand( [5,18,21,32,45,23] ).toElement()
-      };
-      this.structure.map
-        .addClass( SO.classes.map.main );
-      this.structure.hand
-        .addClass( SO.classes.hand );
       this.structure.wrapper
         .addClass( SO.classes.main )
-        .append( this.structure.map, this.structure.players, this.structure.hand );
+        .append( this.structure.progressBar, 
+                this.structure.map, 
+                this.structure.players, 
+                this.structure.hand 
+        );
+        
       this.target.html( this.structure.wrapper );
       
       /*// JUST FOR TESTING
@@ -3206,30 +3592,62 @@ var SaboteurClient = Saboteur.extend({
       this.structure.wrapper.append( test );
       // END TESTING
       */
+      return this;
     };
-    
-    function preload_images( callback ){
-      var images = [];
-      U.each( SO.images, function( k, v ){
-        images.push( v.front_cover, v.back_cover );
-      });
-      var s = $('#progressBar').progressBar({
-        title : 'loading...',
-        max   : images.length
-      });
-      var self = this;
-      P.multiLoad(images, function( image ){
-        s.progressBar('increment');
-        if( this._total == this._finished ){
-          s.progressBar('setMessage', ['---- Image loading done ----']);
-          s.progressBar('setTitle', ['now what?!']);
-          callback.call( self );
-        } else {
-          s.progressBar('setMessage', [image.src]);
-        }
-      });
+  })(),
+
+  createHand : function(){
+    this.structure.hand
+      .append( this.players[gameState.playerID].private.hand.toElement() );
+    return this;
+  },
+  
+  createMap : function(){
+    var self = this;
+    this.map = new ClientMap( this.createMapOptions(false) );
+    this.structure.map
+      .append( this.map.toElement() )
+      .addClass( SO.classes.map.main );
+    return this;
+  },
+  
+  preloadImages : function( callback ){
+    callback = callback || function(){};
+    var images = [];
+    U.each( SO.images, function( k, v ){
+      images.push( v.front_cover, v.back_cover );
+    });
+    var s = this.structure.progressBar.progressBar({
+      title : 'loading...',
+      max   : images.length
+    });
+    var self = this;
+    P.multiLoad(images, function( image ){
+      s.progressBar('increment');
+      if( this._total == this._finished ){
+        s.progressBar('setMessage', ['---- Image loading done ----']);
+        s.progressBar('setTitle', ['now what?!']);
+        callback.call( self );
+      } else {
+        s.progressBar('setMessage', [image.src]);
+      }
+    });
+    return this;
+  },
+  
+  setPlayers : function( players ){
+    this.players = {};
+    for( var i in players ){
+      if( i === gameState.playerID ){
+        this.players[ i ] = new ClientPlayer( players[i] );
+      } else {
+        //TODO: add support for other players
+        continue;
+        this.players[ i ] = new HiddenPlayer( players[i] );
+      };
     };
-    
-  })()
+    return this;
+  }
+  
 });
 /******************************************************************************/

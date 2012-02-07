@@ -49,15 +49,16 @@ var ClientHand = Hand.extend({
               };
               //if( client.map.checkInsertCardAt(  )
               //cards.unbind('click.placeCard');
-              var pos = $(this).data('pos');
-              var id  = self.selected.eq(0).data('card').id;
-              if( client.map.checkInsertCardAt( id, pos[0], pos[1]) ){
+              var pos   = $(this).data('pos');
+              var card  = self.selected.eq(0).data('card');
+              if( client.map.checkInsertCardAt( card.id, pos[0], pos[1]) ){
                 var event = Protocol.createEvent('targetMap', 'server', 'custom');
                 event.data.playerID = gameState.playerID;
-                event.data.cardID   = id;
+                event.data.cardID   = card.id;
                 event.data.posx     = pos[0];
                 event.data.posy     = pos[1];
-                actions.discard.callback(event);
+                event.data.flipped  = card.isFlipped;
+                actions.targetMap.callback(event);
               } else {
                 logger.info('You are unable to place that card on that location');
               }

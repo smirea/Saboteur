@@ -12,6 +12,7 @@
     'lib/DummyCard.abstract.js',
     'lib/GameCard.abstract.js',
     'lib/MapCard.abstract.js',
+    'lib/PathCard.abstract.js',
     'lib/PathCard.class.js',
     'lib/ActionCard.class.js',
     'lib/RoleCard.class.js',
