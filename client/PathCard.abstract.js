@@ -15,11 +15,14 @@ S.PathCard = S.PathCard.extend({
             .attr('src',SO.webRoot+'/images/icon-rotate.png')
         ).bind('click.rotate', function(e){
           e.stopPropagation();
-          self.isFlipped = !self.isFlipped;
-          self.rotate( self.isFlipped ? 270 : 90 );
+          self.flip();
         });
       this.structure.overlay.append( this.structure.rotate );
     };
     return this.structure.main;
+  },
+  flip : function(){
+    this._super();
+    this.rotate( this.isFlipped ? 90 : 270 );
   }
 }); 

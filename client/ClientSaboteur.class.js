@@ -55,65 +55,6 @@ var ClientSaboteur = Saboteur.extend({
         );
         
       this.target.html( this.structure.wrapper );
-      
-      /*// JUST FOR TESTING
-      var test = $(document.createElement('div'));
-      test.css({
-        'position'    : 'absolute',
-        'top'         : 0,
-        'right'       : 0,
-        'width'       : 600,
-        'background'  : 'red'
-      });
-      var factory   = F.getNamespaces('game');
-      var bitmask   = {};
-      var selected  = $();
-      for( var i in factory ){
-        if( S[factory[i]._className] && !bitmask[factory[i]._className]){
-          var card = new S[factory[i]._className];
-          card.name = card._className.replace(/([A-Z])/g, " $1");
-          test.append( card.toElement() );
-          card
-            .toElement()
-            .data('object', card)
-            .bind('click', function(){
-            if( !$(this).hasClass('selected') ){
-              $(this).addClass('selected');
-              selected.removeClass('selected');
-              selected = $(this);
-              $(this).data('object').rotate( 270 );
-            } else {
-              $(this).removeClass('selected');
-              selected = $();
-              $(this).data('object').rotate( 0 );
-            };
-          });
-          bitmask[factory[i]._className] = true;
-        };
-      };
-      var self = this;
-      self.structure.map
-        .find('.'+SO.classes.card)
-        .each(function(){
-          $(this).bind('click', function(){
-            if( selected ){
-              var obj = selected.data('card');
-              var id  = $(this).parent().attr('id').split('_');
-              var x   = parseInt( id[1] );
-              var y   = parseInt( id[2] );
-              if( self.map.checkInsertCardAt( obj, x, y ) ){
-                self.map.insertCardAt( obj, x, y );
-              } else {
-                logger.info(' [] You can\'t insert a card at that position', obj, x, y, arguments );
-              }
-            } else {
-              logger.info( '[] You must select a card first', arguments );
-            }
-          });
-        });
-      this.structure.wrapper.append( test );
-      // END TESTING
-      */
       return this;
     };
   })(),

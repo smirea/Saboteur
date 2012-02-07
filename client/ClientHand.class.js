@@ -47,11 +47,10 @@ var ClientHand = Hand.extend({
                 logger.info('You can only play one card at a time');
                 return;
               };
-              //if( client.map.checkInsertCardAt(  )
-              //cards.unbind('click.placeCard');
               var pos   = $(this).data('pos');
               var card  = self.selected.eq(0).data('card');
-              if( client.map.checkInsertCardAt( card.id, pos[0], pos[1]) ){
+              console.log( 'flip::::', card.isFlipped );
+              if( card.execute( true, client.map, pos[0], pos[1], card.isFlipped ) ){
                 var event = Protocol.createEvent('targetMap', 'server', 'custom');
                 event.data.playerID = gameState.playerID;
                 event.data.cardID   = card.id;
@@ -61,7 +60,7 @@ var ClientHand = Hand.extend({
                 actions.targetMap.callback(event);
               } else {
                 logger.info('You are unable to place that card on that location');
-              }
+              };
             });
         });
         
@@ -104,7 +103,7 @@ var ClientHand = Hand.extend({
             if( !$(this).hasClass('selected') ){
               self.selected = self.selected.add( $(this) );
               var card = $(this).data('card');
-              card.rotate( card.isFlipped ? 270 : 90 );
+              card.rotate( card.isFlipped ? 90 : 270 );
               $(this)
                 .addClass( 'selected' )
                 .trigger( 'mouseenter.toggleInfo' );

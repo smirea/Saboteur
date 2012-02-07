@@ -162,6 +162,9 @@
             break;
           case 'targetMap':
             client.map.insertCardAt( prev.cardID, prev.posx, prev.posy );
+            client.players[ prev.playerID ].private.hand.selected.removeClass('selected');
+            client.players[ prev.playerID ].private.hand.add( res.newcards );
+            client.players[ prev.playerID ].private.hand.selected = $();
             break;
           default:
             logger.warn('[handlers.update.callback] Unknown event', arguments);
@@ -193,8 +196,6 @@
       
       actions.targetPrivatePlayer.callback = function(event) {
         var event = Protocol.createEvent('targetPrivatePlayer', 'server', 'custom');
-        // data.cardID = cardID;
-        // data.targetID = targetID;
         event.data.playerID = playerID;
         // TODO: hack...fix later :p
         event.data.cardID = player.private.hand.cards[0];
@@ -237,7 +238,7 @@
         actions[i]._callback = actions[i].callback;
         actions[i].callback = (function(action) {
           return function(event) {
-            console.log('[ACTION]',action.name);
+            console.log('[ACTION]', action.name, 'action:', action, 'event:', event);
             return action._callback(event);
           };
         })(actions[i]);
@@ -261,7 +262,7 @@
               if (handler.name != event.name) {
                 throw new Error('Invalid datatype ' + event.name + ' for event ' + handler.name);
               } else {
-                console.log('[EVENT]', event.name, event);
+                console.log('[EVENT]', event.name, 'eventL', event, 'handler:', handler);
                 return handler.callback.call(this, event);
               };
             };
