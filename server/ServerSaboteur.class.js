@@ -319,7 +319,7 @@ var ServerSaboteur = Saboteur.extend({
     if (!this.prepareTurn(data.playerID)) return this.resolveError(data.playerID);
     
     if (this.execute(event)) {
-      var newcards = this.replaceCard(data.playerID, data.cardID);
+      var newcards = this.replaceCards(data.playerID, [data.cardID]);
       if (!U.isUndefined(newcards)) {
         var extra = { newcards : newcards };
       };
