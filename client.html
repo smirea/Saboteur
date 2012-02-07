@@ -244,8 +244,8 @@
           
       function connect() {
         if(gameState.firstconnect) {
-          gameState.socket = io.connect( SO.server.address ); // TODO: need to stop modifying each other :))
-          // gameState.socket = io.connect( null );
+          // gameState.socket = io.connect( SO.server.address ); // TODO: need to stop modifying each other :))
+          gameState.socket = io.connect( null );
             
           // ADMIN HANDLERS
           for (var a in adminHandlers) {

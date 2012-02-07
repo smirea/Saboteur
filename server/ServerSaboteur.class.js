@@ -10,10 +10,10 @@ var ServerSaboteur = Saboteur.extend({
       this.map          = {};
       this.playerList   = {};
       
-      create_events.call(this);
+      create_handlers.call(this);
     };
     
-    function create_events() {  
+    function create_handlers() {  
       this.events.chat.handle = function(event) {
         // TODO: again...please think for a chat system :))
         this.playerList[event.data.playerID].socket.emit(event.name, event);
@@ -86,7 +86,6 @@ var ServerSaboteur = Saboteur.extend({
     // pre-discard the set amout of cards
     this.discardFromGameDeck( this.gameDeck, this.opt.discardCards );
     // setup map 
-    //TODO: ...fuck!!
     this.map = new Map( this.createMapOptions(false));
   },
   
@@ -229,13 +228,14 @@ var ServerSaboteur = Saboteur.extend({
   // HANDLERS
   handleDiscard : function(event) {
     var data = event.data;
-    if (this.prepareTurn(data.playerID)) return this.resolveError(data.playerID);
+    if (!this.prepareTurn(data.playerID)) return this.resolveError(data.playerID);
     
     if (this.execute(event)) {
       var newcards = this.replaceCards(data.playerID, data.cards);
       
       var extra = { newcards : newcards };
       this.resolveCorrect(data.playerID, event, extra);
+      this.advanceTurn();
     } else {
       return this.resolveError(data.playerID);
     }
@@ -243,14 +243,15 @@ var ServerSaboteur = Saboteur.extend({
   
   handleTargetPublicPlayer : function(event) {
     var data = event.data;
-    if (this.prepareTurn(data.playerID)) return this.resolveError(data.playerID);
+    if (!this.prepareTurn(data.playerID)) return this.resolveError(data.playerID);
     
-    if (this.execute(event.name, data.playerID, data.cardID, data.targetID, data.targetCardID)) 
+    if (this.execute(event)) 
     {
       var newcards = this.replaceCards(data.playerID, [data.cardID]);
       
       var extra = { newcards : newcards };
       this.resolveCorrect(data.playerID, event, extra);
+      this.advanceTurn();
     } else {
       this.resolveError(data.playerID);
     }
@@ -258,9 +259,9 @@ var ServerSaboteur = Saboteur.extend({
   
   handleTargetPrivatePlayer : function(event) {
     var data = event.data;
-    if (this.prepareTurn(data.playerID)) return this.resolveError(data.playerID);
+    if (!this.prepareTurn(data.playerID)) return this.resolveError(data.playerID);
     
-    var result = this.execute(event.name, data.playerID, data.cardID, data.targetID);
+    var result = this.execute(event);
     if (!result) {
       if (null == result) {
         var player = this.players[data.playerID];
@@ -270,17 +271,13 @@ var ServerSaboteur = Saboteur.extend({
         
         var card = F.get('game', data.cardID);
         var target = this.players[data.targetID];
-        
+        var extra = {};
         switch(card._className) {
         case 'Inspection':
-          var extra = {
-            roleCard : target.private.roleCard
-          };
+          extra.roleCard = target.private.roleCard;
           
           var newcards = this.replaceCards(data.playerID, [data.cardID]);
           extra.newcards = newcards;
-          
-          this.resolveCorrect(data.playerID, event, extra);
           break;
         case 'SwapHand':
           if (!player.private.hand.has(data.cardID)) {
@@ -289,28 +286,26 @@ var ServerSaboteur = Saboteur.extend({
           
           var newcards = this.replaceCards(data.playerID, [data.cardID]);
           
-          var extra = { newcards : newcards };
+          extra.newcards = newcards;
           
           var temp = player.private.hand.cards;
           player.private.hand.cards = target.private.hand.cards;
           target.private.hand.cards = temp;
           
           // TODO: need to also transmit to the other player and to everyone else...
-          this.resolveCorrect(data.playerID, event, extra);
           break;
         case 'SwapHats':
           // TODO: what if no more roles left...
           var newRole = this.drawCard(this.roleDeck);
           target.private.roleCard = newRole;
-          var extra = {
-            roleCard : newRole
-          };
-          this.resolveCorrect(data.targetID, event, extra);
+          extra.roleCard = newRole;
           break;
         default:
           throw new Error('Unexpected card played', card._className, card.id);
           break;
         }
+        this.resolveCorrect(data.targetID, event, extra);
+        this.advanceTurn();
       } else {
         this.resolveError(data.playerID);
       }
@@ -321,15 +316,16 @@ var ServerSaboteur = Saboteur.extend({
   
   handleTargetMap : function(event) {
     var data = event.data;
-    if (this.prepareTurn(data.playerID)) return this.resolveError(data.playerID);
+    if (!this.prepareTurn(data.playerID)) return this.resolveError(data.playerID);
     
-    if (this.execute(event.name, data.playerID, data.cardID, data.posx, data.posy)) {
+    if (this.execute(event)) {
       var newcards = this.replaceCard(data.playerID, data.cardID);
       if (!U.isUndefined(newcards)) {
         var extra = { newcards : newcards };
       };
       
       this.resolveCorrect(data.playerID, event, extra);
+      this.advanceTurn();
     } else {
       this.resolveError(data.playerID);
     }
@@ -337,12 +333,13 @@ var ServerSaboteur = Saboteur.extend({
   
   handleHeal : function(event) {
     var data = event.data;
-    if (this.prepareTurn(data.playerID)) return this.resolveError(data.playerID);
+    if (!this.prepareTurn(data.playerID)) return this.resolveError(data.playerID);
     
-    if (this.execute(event.name, data.playerID, data.cards, data.target)) {
+    if (this.execute(event)) {
       // TODO: discarded by now, time to add back the cards...
       
       this.resolveCorrect(data.playerID, event, extra);
+      this.advanceTurn();
     } else {
       this.resolveError(data.playerID);
     }
