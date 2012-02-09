@@ -13,7 +13,8 @@ var ClientHand = Hand.extend({
             playCard  : $(document.createElement('a')),
             heal      : $(document.createElement('a')),
             discard   : $(document.createElement('a'))
-          }
+          },
+          attributes  : $(document.createElement('div'))
         }
       });
       this._super( ids );
@@ -49,7 +50,6 @@ var ClientHand = Hand.extend({
               };
               var pos   = $(this).data('pos');
               var card  = self.selected.eq(0).data('card');
-              console.log( 'flip::::', card.isFlipped );
               if( card.execute( true, client.map, pos[0], pos[1], card.isFlipped ) ){
                 var event = Protocol.createEvent('targetMap', 'server', 'custom');
                 event.data.playerID = gameState.playerID;
