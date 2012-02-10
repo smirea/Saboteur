@@ -220,6 +220,7 @@
         var event = Protocol.createEvent('setup', 'server', 'custom');
         event.data.playerID = gameState.playerID;
         event.data.name = $('#name').val();
+        event.data.room = Math.floor( Math.random() * 10000 );
         
         gameState.socket.emit('setup', event);
         client.preloadImages();
@@ -262,7 +263,7 @@
               if (handler.name != event.name) {
                 throw new Error('Invalid datatype ' + event.name + ' for event ' + handler.name);
               } else {
-                console.log('[EVENT]', event.name, 'eventL', event, 'handler:', handler);
+                console.log('[EVENT]:', event.name, ', event:', event, ', handler:', handler);
                 return handler.callback.call(this, event);
               };
             };

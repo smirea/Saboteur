@@ -396,8 +396,8 @@ var D = {
       if( arguments[0] === true ){
         for( var i=2; i<arguments.length; ++i ){
           for( var j in arguments[i] ){
-            if( typeof arguments[i][j] === "object" && !U.isUndefined(arguments[1][j]) ){
-              arguments[1][j] = arguments[1][j] || (U.isArray(arguments[1][j]) ? [] : {});
+            if( typeof arguments[i][j] === "object" ){
+              arguments[1][j] = arguments[1][j] || (U.isArray(arguments[i][j]) ? [] : {});
               U.extend( true, arguments[1][j], arguments[i][j] );
             } else {
               arguments[1][j] = arguments[i][j];
@@ -468,7 +468,7 @@ var D = {
 /**
  * This is just a specialized container for the S. classes
  */
-var Factory = F = {
+var Factory = Class.extend({
   namespaces  : {},
   _total      : 0,
   /**
@@ -616,8 +616,7 @@ var Factory = F = {
     }
     return arr;
   },
-};
-/******************************************************************************/
+});/******************************************************************************/
 
 /**
  * @FILE: client/Preloader.js
@@ -681,7 +680,7 @@ var SaboteurOptions = SO = {
     // position of every start card. NOTE: the first one must be [0,0]
     startCards    : [ [0,0] ],
     //position of every goal card relative to the start card [0,0]
-    goalCards     : [ [2,8], [0,8], [-2,8] ]
+    goalCards     : [ [2,4], [0,4], [-2,4] ]
   },
   cards : {
     start : {
@@ -759,7 +758,8 @@ var SaboteurOptions = SO = {
       FreeAtLast    : 4
     }
   }
-};/******************************************************************************/
+};
+/******************************************************************************/
 
 /**
  * @FILE: client/SaboteurOptions.js
@@ -1501,12 +1501,13 @@ S.MapCard = S.GameCard.extend({
 Map = Class.extend({
   _className  : 'Map',
   init        : (function(){
-    return function( options ){
+    return function( factory, options ){
       if( !options ){
         logger.warn('[Map.init] Invalid Options!');
         return null;
       };
       U.extend( this, {
+        factory     : factory,
         maxCards    : 100,
         cards       : [],
         // potential starting points for reaching the goal; holds realIndex
@@ -1577,7 +1578,7 @@ Map = Class.extend({
     if( pos.x >= 0 && pos.x <= this.maxCards * 2 && pos.y >= 0 && pos.y <= this.maxCards * 2 ){
       var cardInfo = this.cards[pos.x][pos.y];
       if (cardInfo) {
-        return F.get.apply(F, cardInfo);
+        return this.factory.get.apply(F, cardInfo);
       } else {
         return null;
       };
@@ -1624,7 +1625,7 @@ Map = Class.extend({
     return this._checkInsertCardAt(['game', cardID], x, y);
   },
   _checkInsertCardAt : function( cardWrapper, x, y ){
-    var aPathCard = F.get.apply(F, cardWrapper);
+    var aPathCard = this.factory.get.apply(F, cardWrapper);
     var pos = this._realIndex( x, y );
     if( pos.x >= 0 && pos.y >= 0 ){
       if( aPathCard instanceof S.StartCard || aPathCard instanceof S.GoalCard ){
@@ -1684,12 +1685,13 @@ Map = Class.extend({
   },
   canReachGold : function( player ) {
     var cards = this._createEmptyMap();
-    var newTile = function() {
+    var newTile = function(t, r, b, l) {
+      // 0 is untouched, 1 is entered through here, 2 is finished checking
       var ret = {};
-      ret[D.top] = false;
-      ret[D.right] = false;
-      ret[D.bottom] = false;
-      ret[D.left] = false;
+      ret[D.top] = t || 0;
+      ret[D.right] = r || 0;
+      ret[D.bottom] = b || 0;
+      ret[D.left] = l || 0;
      return ret;
     };
     var finalStack = [];
@@ -1699,12 +1701,24 @@ Map = Class.extend({
       var pos = startStack[i];
       var card = this.getCardAt(pos.x, pos.y);
       var sides = card.sides;
+      var tile = newTile();
       for (var dir in sides) {
-        if (sides[dir].hasPath) {
-          //TODO: continue here...
+        var side = sides[dir];
+        var neighbour = this.neighbour(pos.x, pos.y, dir);
+        var canConnect = side.hasPath && this.isCardAt(neighbour.x, neighbour.y);
+        if (canConnect) {
+          tile[dir] = 2;
+          finalStack.push(neighbour);
+          cards[pos.x][pos.y][D.opposite(dir)] = 1;
         };
       };
+      cards[pos.x][pos.y] = tile;
     };
+    
+    while (true) {
+      //TODO: continue from here..
+    };
+    /*
     for (var i in startStack) {
       var pos = startStack[i];
       var card = this.getCardAt(pos.x, pos.y);
@@ -1718,7 +1732,8 @@ Map = Class.extend({
           cards[pos.x][pos.y][dir] = true;
         };
       };
-    }; // TODO: continue here
+    };
+    */
     
     // TODO: prode from here.....
     _CardState = Class.extend({
@@ -2089,11 +2104,9 @@ S.ViewGoalCard = S.MapActionCard.extend({
       };
     },
     execute   : function(dryrun, map, posx, posy, flipped) {
-      var needToFlip = (this.isFlipped && !flipped) || (!this.isFlipped && flipped);
-      if (needToFlip) {
+      if (this.isFlipped != flipped) {
         this.flip();
       };
-      
       if (dryrun) {
         return map.checkInsertCardAt(this.id, posx, posy);
       } else {
@@ -2150,12 +2163,15 @@ S.PathCard = S.PathCard.extend({
             .attr('src',SO.webRoot+'/images/icon-rotate.png')
         ).bind('click.rotate', function(e){
           e.stopPropagation();
-          self.isFlipped = !self.isFlipped;
-          self.rotate( self.isFlipped ? 270 : 90 );
+          self.flip();
         });
       this.structure.overlay.append( this.structure.rotate );
     };
     return this.structure.main;
+  },
+  flip : function(){
+    this._super();
+    this.rotate( this.isFlipped ? 90 : 270 );
   }
 }); 
 /******************************************************************************/
@@ -2819,7 +2835,8 @@ var ClientHand = Hand.extend({
             playCard  : $(document.createElement('a')),
             heal      : $(document.createElement('a')),
             discard   : $(document.createElement('a'))
-          }
+          },
+          attributes  : $(document.createElement('div'))
         }
       });
       this._super( ids );
@@ -2853,11 +2870,9 @@ var ClientHand = Hand.extend({
                 logger.info('You can only play one card at a time');
                 return;
               };
-              //if( client.map.checkInsertCardAt(  )
-              //cards.unbind('click.placeCard');
               var pos   = $(this).data('pos');
               var card  = self.selected.eq(0).data('card');
-              if( client.map.checkInsertCardAt( card.id, pos[0], pos[1]) ){
+              if( card.execute( true, client.map, pos[0], pos[1], card.isFlipped ) ){
                 var event = Protocol.createEvent('targetMap', 'server', 'custom');
                 event.data.playerID = gameState.playerID;
                 event.data.cardID   = card.id;
@@ -2867,7 +2882,7 @@ var ClientHand = Hand.extend({
                 actions.targetMap.callback(event);
               } else {
                 logger.info('You are unable to place that card on that location');
-              }
+              };
             });
         });
         
@@ -2910,7 +2925,7 @@ var ClientHand = Hand.extend({
             if( !$(this).hasClass('selected') ){
               self.selected = self.selected.add( $(this) );
               var card = $(this).data('card');
-              card.rotate( card.isFlipped ? 270 : 90 );
+              card.rotate( card.isFlipped ? 90 : 270 );
               $(this)
                 .addClass( 'selected' )
                 .trigger( 'mouseenter.toggleInfo' );
@@ -3201,21 +3216,23 @@ var Saboteur = Class.extend({
       // General multi-purpose object. Will store in it all information regarding the game
       U.extend( this, {
         // {Array} list of all player objects
-        players      : {},
-        //{Object} class for holding map state information
-        map : {},
+        players     : {},
+        // {Object} class for holding map state information
+        map         : {},
+        // {Object}
+        factory     : new Factory(),
         // {Object} class for holding event info: handle, check, execute
-        events : {},
+        events      : {},
         // {Object} the extended options object, stored for later use
-        opt             : {},
+        opt         : {},
         // {Object} the extended classes object, stored for later use
-        cls             : {},
+        cls         : {},
         // {Object} the extended cards object, stored for later use
-        cards           : {},
+        cards       : {},
         // {Array} array of player IDs in the order in which they will play the game
-        turns           : [],
+        turns       : [],
         // {Int} the current index in the this.turns representing the player to play
-        currentTurn     : 0
+        currentTurn : 0
       });
       
       U.extend( this.opt, SO.options, options );
@@ -3240,7 +3257,7 @@ var Saboteur = Class.extend({
       goalListDetails = this.cards.goal;
       
       // create the card decks
-      F.register({
+      this.factory.register({
         'start'     : startListDetails,
         'goal'      : goalListDetails,
         'dummyGoal' : dummyGoalListDetails,
@@ -3281,11 +3298,11 @@ var Saboteur = Class.extend({
       U.extend(this.events.targetPublicPlayer, {
         check : function(event) {
           var data = event.data;
-          return this.doTargetPublicPlayer(false, data.playerID, data.playerCardID, data.targetID, data.targetCardID);
+          return this.doTargetPublicPlayer(true, data.playerID, data.playerCardID, data.targetID, data.targetCardID);
         },
         execute : function(event) {
           var data = event.data;
-          return this.doTargetPublicPlayer(true, data.playerID, data.playerCardID, data.targetID, data.targetCardID);
+          return this.doTargetPublicPlayer(false, data.playerID, data.playerCardID, data.targetID, data.targetCardID);
         }
       });
       
@@ -3293,11 +3310,11 @@ var Saboteur = Class.extend({
       U.extend(this.events.targetPrivatePlayer, {
         check : function(event) {
           var data = event.data;
-          return this.doTargetPrivatePlayer(false, data.playerID, data.playerCardID, data.targetID);
+          return this.doTargetPrivatePlayer(true, data.playerID, data.playerCardID, data.targetID);
         },
         execute : function(event) {
           var data = event.data;
-          return this.doTargetPrivatePlayer(true, data.playerID, data.playerCardID, data.targetID);
+          return this.doTargetPrivatePlayer(false, data.playerID, data.playerCardID, data.targetID);
         }
       });
       
@@ -3305,11 +3322,11 @@ var Saboteur = Class.extend({
       U.extend(this.events.targetMap, {
         check : function(event) {
           var data = event.data;
-          return this.doTargetMap(false, data.map, data.posx, data.posy, data.flipped);
+          return this.doTargetMap(true, data.playerID, data.cardID, data.posx, data.posy, data.flipped);
         },
         execute : function(event) {
           var data = event.data;
-          return this.doTargetMap(true, data.map, data.posx, data.posy, data.flipped);
+          return this.doTargetMap(false, data.playerID, data.cardID, data.posx, data.posy, data.flipped);
         }
       });
       
@@ -3317,11 +3334,11 @@ var Saboteur = Class.extend({
       U.extend(this.events.heal, {
         check : function(event) {
           var data = event.data;
-          return this.doHeal(false, data.playerID, data.cards, data.targetCardID);
+          return this.doHeal(true, data.playerID, data.cards, data.targetCardID);
         },
         execute : function(event) {
           var data = event.data;
-          return this.doHeal(true, data.playerID, data.cards, data.targetCardID);
+          return this.doHeal(false, data.playerID, data.cards, data.targetCardID);
         }
       });
     };
@@ -3336,7 +3353,7 @@ var Saboteur = Class.extend({
     var goal = (useGoalCards ? 'goal' : 'dummyGoal');
     
     return {
-      maxCards    : F.size(),
+      maxCards    : this.factory.size(),
       startCards  : this.opt.startCards.map(function(v,i){ v.unshift(['start', i]); return v; }),
       goalCards   : this.opt.goalCards.map(function(v,i){ v.unshift([goal, i]); return v; })
     };
@@ -3433,7 +3450,7 @@ var Saboteur = Class.extend({
                     ? this.factory.get('game', playerCardID) 
                     : null);
       
-      if (!target || !card || !(card instanceof PrivatePlayerActionCard)) {
+      if (!target || !card || !(card instanceof S.PrivatePlayerActionCard)) {
         return false;
       } else {
         return (dryrun ? true : null);
@@ -3443,14 +3460,15 @@ var Saboteur = Class.extend({
   
   doTargetMap : function(dryrun, playerID, cardID, posx, posy, flipped) {
     var player = this.players[playerID];
+    
     if (!player) {
       return false;
     } else {
-      var card = (player.private.hand.has(playerCardID) 
-                    ? this.factory.get('game', playerCardID) 
+      var card = (player.private.hand.has(cardID) 
+                    ? this.factory.get('game', cardID) 
                     : null);
                     
-      if (!card || !(card instanceof MapCard)) {
+      if (!card || !(card instanceof S.MapCard)) {
         return false;
       } else {
         return card.execute(dryrun, this.map, posx, posy, flipped);
@@ -3533,65 +3551,6 @@ var ClientSaboteur = Saboteur.extend({
         );
         
       this.target.html( this.structure.wrapper );
-      
-      /*// JUST FOR TESTING
-      var test = $(document.createElement('div'));
-      test.css({
-        'position'    : 'absolute',
-        'top'         : 0,
-        'right'       : 0,
-        'width'       : 600,
-        'background'  : 'red'
-      });
-      var factory   = F.getNamespaces('game');
-      var bitmask   = {};
-      var selected  = $();
-      for( var i in factory ){
-        if( S[factory[i]._className] && !bitmask[factory[i]._className]){
-          var card = new S[factory[i]._className];
-          card.name = card._className.replace(/([A-Z])/g, " $1");
-          test.append( card.toElement() );
-          card
-            .toElement()
-            .data('object', card)
-            .bind('click', function(){
-            if( !$(this).hasClass('selected') ){
-              $(this).addClass('selected');
-              selected.removeClass('selected');
-              selected = $(this);
-              $(this).data('object').rotate( 270 );
-            } else {
-              $(this).removeClass('selected');
-              selected = $();
-              $(this).data('object').rotate( 0 );
-            };
-          });
-          bitmask[factory[i]._className] = true;
-        };
-      };
-      var self = this;
-      self.structure.map
-        .find('.'+SO.classes.card)
-        .each(function(){
-          $(this).bind('click', function(){
-            if( selected ){
-              var obj = selected.data('card');
-              var id  = $(this).parent().attr('id').split('_');
-              var x   = parseInt( id[1] );
-              var y   = parseInt( id[2] );
-              if( self.map.checkInsertCardAt( obj, x, y ) ){
-                self.map.insertCardAt( obj, x, y );
-              } else {
-                logger.info(' [] You can\'t insert a card at that position', obj, x, y, arguments );
-              }
-            } else {
-              logger.info( '[] You must select a card first', arguments );
-            }
-          });
-        });
-      this.structure.wrapper.append( test );
-      // END TESTING
-      */
       return this;
     };
   })(),
@@ -3604,7 +3563,7 @@ var ClientSaboteur = Saboteur.extend({
   
   createMap : function(){
     var self = this;
-    this.map = new ClientMap( this.createMapOptions(false) );
+    this.map = new ClientMap( this.factory, this.createMapOptions(false) );
     this.structure.map
       .append( this.map.toElement() )
       .addClass( SO.classes.map.main );

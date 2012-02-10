@@ -67,7 +67,7 @@ var ClientSaboteur = Saboteur.extend({
   
   createMap : function(){
     var self = this;
-    this.map = new ClientMap( this.createMapOptions(false) );
+    this.map = new ClientMap( this.factory, this.createMapOptions(false) );
     this.structure.map
       .append( this.map.toElement() )
       .addClass( SO.classes.map.main );
