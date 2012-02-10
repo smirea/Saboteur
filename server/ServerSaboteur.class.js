@@ -1,19 +1,26 @@
 var ServerSaboteur = Saboteur.extend({
   _className : 'ServerSaboteur',
   init  : (function(){
-    return function(io, protocol) {
+    return function(io) {
       this._super();
-      this.io           = io;
-      this.roleDeck     = [];
-      this.gameDeck     = [];
+      U.extend( this, {
+        // needed for socket broadcasting
+        io           : io,
+        // decks for roles and game cards
+        decks        : {},
+        // map for game logic
+        map          : {},
+        // players in the game
+        playerList   : {}
+      });
       
-      this.map          = {};
-      this.playerList   = {};
-      
-      create_handlers.call(this);
+      createHandlers.call(this);
     };
     
-    function create_handlers() {  
+    /**
+     * Initialization function for event handlers
+     */
+    function createHandlers() {  
       this.events.chat.handle = function(event) {
         // TODO: again...please think for a chat system :))
         this.playerList[event.data.playerID].socket.emit(event.name, event);
@@ -59,18 +66,17 @@ var ServerSaboteur = Saboteur.extend({
    */
   setupGame : function() {
     var i = -1;
-    while (++i < F.size('role')) {
-      this.roleDeck[i] = i;
+    while (++i < this.factory.size(Deck.role)) {
+      this.decks[Deck.role][i] = i;
     };
     
     i = -1;
-    while (++i < F.size('game')) {
-      this.gameDeck[i] = i;
+    while (++i < this.factory.size(Deck.game)) {
+      this.decks[Deck.game][i] = i;
     };
     
-    this.roleDeck = this.shuffle(this.roleDeck);
-    this.gameDeck = this.shuffle(this.gameDeck);
-
+    this.decks[Deck.role] = this.shuffle(this.decks[Deck.role]);
+    this.decks[Deck.game] = this.shuffle(this.decks[Deck.game]);
     // cleanup first
     this.cleanState();
     // create players based on the setup names / ids
@@ -84,7 +90,7 @@ var ServerSaboteur = Saboteur.extend({
     // give out cards
     this.assignCards( this.players, this.opt.initialCards );
     // pre-discard the set amout of cards
-    this.discardFromGameDeck( this.gameDeck, this.opt.discardCards );
+    this.discardFromGameDeck( this.decks[Deck.game], this.opt.discardCards );
     // setup map 
     this.map = new Map( this.factory, this.createMapOptions(false));
   },
@@ -105,7 +111,7 @@ var ServerSaboteur = Saboteur.extend({
    */
   assignRoles : function( players){
     for( var i in players ){
-      players[i].private.roleCard = this.drawCard( this.roleDeck);
+      players[i].private.roleCard = this.drawCard( this.decks[Deck.role]);
     };
   },
   
@@ -118,7 +124,7 @@ var ServerSaboteur = Saboteur.extend({
     for( var i in players ){
       var cards = []
       for( var j = 1; j<=maxcards; ++j ){
-        cards.push( this.drawCard( this.gameDeck ) );
+        cards.push( this.drawCard( this.decks[Deck.game] ) );
       };
       players[i].private.hand.add( cards );
     };
@@ -169,7 +175,7 @@ var ServerSaboteur = Saboteur.extend({
    * @return {Int} number The number of cards left
    */
   discardFromGameDeck : function( deck, number ){
-    deck = deck || this.gameDeck;
+    deck = deck || this.decks[Deck.game];
     for( var i=0; i<number; ++i ){
       deck.pop();
     }
@@ -188,7 +194,7 @@ var ServerSaboteur = Saboteur.extend({
     var newcards = [];
     
     for (var i in cardIDs) {
-      var newCardID = this.drawCard(this.gameDeck);
+      var newCardID = this.drawCard(this.decks[Deck.game]);
       if (U.isUndefined(newCardID)) {
         break;
       };
@@ -269,7 +275,7 @@ var ServerSaboteur = Saboteur.extend({
           return this.resolveError(data.playerID);
         };
         
-        var card = F.get('game', data.cardID);
+        var card = this.factory.get(Deck.game, data.cardID);
         var target = this.players[data.targetID];
         var extra = {};
         switch(card._className) {
@@ -296,7 +302,7 @@ var ServerSaboteur = Saboteur.extend({
           break;
         case 'SwapHats':
           // TODO: what if no more roles left...
-          var newRole = this.drawCard(this.roleDeck);
+          var newRole = this.drawCard(this.decks[Deck.role]);
           target.private.roleCard = newRole;
           extra.roleCard = newRole;
           break;

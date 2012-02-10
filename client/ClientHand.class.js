@@ -96,7 +96,7 @@ var ClientHand = Hand.extend({
     var self = this;
     if( this._super( ids ) ){
       for( var i in ids ){
-        client.factory.get( 'game', ids[i])
+        client.factory.get( Deck.game, ids[i])
           .toElement()
           .appendTo( this.structure.cards )
           .bind( 'click.selectCard', function(){
@@ -121,7 +121,7 @@ var ClientHand = Hand.extend({
   remove : function( ids ){
     if( this._super( ids ) ){
       for( var i in ids ){
-        F.get( 'game', ids[i]).toElement().detach();
+        F.get( Deck.game, ids[i]).toElement().detach();
       };
       return this;
     };
