@@ -1,15 +1,15 @@
 
-ClientMap = Map.extend({
+var ClientMap = Map.extend({
   _className  : 'ClientMap',
   init : (function(){
-    return function( options ){
+    return function( factory, options ){
       U.extend( this, {
         structure : {
           main  : $(document.createElement('div')),
           table : $(document.createElement('table'))
         }
       });
-      this._super( options );
+      this._super( factory, options );
       create_map.apply( this );
       this.structure.main.append( this.structure.table );
     };
@@ -48,7 +48,7 @@ ClientMap = Map.extend({
   })(),
   _insertCardAt : function( cardWrapper, x, y ){
     if( this._super( cardWrapper, x, y ) ){
-      var aPathCard = F.get.apply( F, cardWrapper );
+      var aPathCard = this.factory.get.apply( this.factory, cardWrapper );
       var elem      = aPathCard.toElement();
       var elemPos   = this.structure.table.find( '#field_'+x+'_'+y );
       elem.data( 'swap-card', elemPos );
