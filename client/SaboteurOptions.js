@@ -1,7 +1,7 @@
 U.extend(true, SaboteurOptions, {
   webRoot : 'http://localhost:8080',
   server : {
-    address : 'http://192.168.1.101:8080'
+    address : 'http://192.168.1.109:8080'
   },
   options : {
     card_width    : 65,

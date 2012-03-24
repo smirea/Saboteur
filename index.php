@@ -10,7 +10,7 @@
 <script>
   var client;
   $(function(){
-    client = new SaboteurClient( $('#Saboteur'), {});
+    client = new ClientSaboteur( $('#Saboteur'), {});
   });
 </script>
 
