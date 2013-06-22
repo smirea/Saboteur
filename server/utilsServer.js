@@ -1,5 +1,5 @@
 (function(){
-  
+
   var includes = [
     'lib/inheritance.js',
     'lib/logger.js',
@@ -27,17 +27,19 @@
     'lib/Saboteur.class.js',
     'server/ServerSaboteur.class.js'
   ];
-  
+
   for( var i in includes ){
     console.log(' [INCLUDE] ', includes[i]);
-    include( includes[i] );
+    with (global) {
+      include( includes[i] );
+    }
   };
-  
+
   with( global ){
     var root = function( dir ){
       //return dir.slice( 0, dir.lastIndexOf('/') );
       return dir;
     };
   };
-  
+
 })();

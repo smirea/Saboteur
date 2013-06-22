@@ -1,4 +1,4 @@
-var ServerSaboteur = Saboteur.extend({
+ServerSaboteur = Saboteur.extend({
   _className : 'ServerSaboteur',
   init  : (function(){
     return function(io) {
@@ -13,68 +13,71 @@ var ServerSaboteur = Saboteur.extend({
         // players in the game
         playerList   : {}
       });
-      
+
       createHandlers.call(this);
     };
-    
+
     /**
      * Initialization function for event handlers
      */
-    function createHandlers() {  
+    function createHandlers() {
       this.events.chat.handle = function(event) {
         // TODO: again...please think for a chat system :))
         this.playerList[event.data.playerID].socket.emit(event.name, event);
       };
-      
+
       this.events.setup.handle = function(event) {
         // TODO: is already hacked into server.js
       };
-      
+
       this.events.startGame.handle = function(event) {
         this.setupGame();
         this.broadcastStartGame();
       };
-      
+
       this.events.discard.handle = function(event) {
         this.handleDiscard(event);
       };
-      
+
       this.events.targetPublicPlayer.handle = function(event) {
         this.handleTargetPublicPlayer(event);
       };
-      
+
       this.events.targetPrivatePlayer.handle = function(event) {
         this.handleTargetPrivatePlayer(event);
       };
-      
+
       this.events.targetMap.handle = function(event) {
         this.handleTargetMap(event);
       };
-      
+
       this.events.heal.handle = function(event) {
         this.handleHeal(event);
       };
     };
   })(),
-  
+
   /**
-   * Prepares the game for start. 
-   * Sets up the decks of cards. 
+   * Prepares the game for start.
+   * Sets up the decks of cards.
    * Arranges the players, based on the given id <-> name in this.playerList.
    * Instantiates the players based on options and name.
    * Does the pre-game actions, like discards...
    */
   setupGame : function() {
     var i = -1;
+    for (var type in Deck) {
+      this.decks[Deck[type]] = [];
+    }
     while (++i < this.factory.size(Deck.role)) {
       this.decks[Deck.role][i] = i;
     };
-    
+
     i = -1;
     while (++i < this.factory.size(Deck.game)) {
       this.decks[Deck.game][i] = i;
     };
-    
+
     this.decks[Deck.role] = this.shuffle(this.decks[Deck.role]);
     this.decks[Deck.game] = this.shuffle(this.decks[Deck.game]);
     // cleanup first
@@ -91,10 +94,10 @@ var ServerSaboteur = Saboteur.extend({
     this.assignCards( this.players, this.opt.initialCards );
     // pre-discard the set amout of cards
     this.discardFromGameDeck( this.decks[Deck.game], this.opt.discardCards );
-    // setup map 
+    // setup map
     this.map = new Map( this.factory, this.createMapOptions(false));
   },
-  
+
   /**
    * Broadcasts a reset message to all clients with their respective state.
    */
@@ -104,7 +107,7 @@ var ServerSaboteur = Saboteur.extend({
       this.resetClientState(i);
     };
   },
-  
+
    /**
    * Assigns a role to each player
    * @param {Array} players  Array of Player objects to assign them roles
@@ -114,7 +117,7 @@ var ServerSaboteur = Saboteur.extend({
       players[i].private.roleCard = this.drawCard( this.decks[Deck.role]);
     };
   },
-  
+
   /**
    * Assign the default number of starting cards to each player
    * @param {Array} players  Array of Player objects to assign them cards
@@ -129,7 +132,7 @@ var ServerSaboteur = Saboteur.extend({
       players[i].private.hand.add( cards );
     };
   },
-  
+
   /**
    * Generates the list of player objects from opt.players into players
    * @param {Array} players  Array of player names
@@ -149,7 +152,7 @@ var ServerSaboteur = Saboteur.extend({
       this.turns.push(this.players[i].public.id);
     };
   },
-  
+
   /**
    * Randomizes the elements in the array
    * @param {Array} arr
@@ -160,7 +163,7 @@ var ServerSaboteur = Saboteur.extend({
       return arr.sort( randomSort );
     }
   })(),
-  
+
   /**
    * Given a deck a card, returns the top card and removes it from the deck;
    * @param {Array} deck  an array for the indexess of the deck of cards
@@ -168,7 +171,7 @@ var ServerSaboteur = Saboteur.extend({
   drawCard : function( indexes ){
     return indexes.pop();
   },
-  
+
   /**
    * Discards cards from the top of the deck
    * @param {Array} deck  The deck to draw from
@@ -181,64 +184,64 @@ var ServerSaboteur = Saboteur.extend({
     }
     return deck.length;
   },
-  
+
   /**
    * Replaces a set of cards from a player's hand.
-   * @param playerID -- the target player 
+   * @param playerID -- the target player
    * @param cardID -- the card to replace
-   * 
+   *
    * @return an array of the new cards (potentially empty)
    */
   replaceCards : function(playerID, cardIDs) {
     this.players[playerID].private.hand.remove(cardIDs);
     var newcards = [];
-    
+
     for (var i in cardIDs) {
       var newCardID = this.drawCard(this.decks[Deck.game]);
       if (U.isUndefined(newCardID)) {
         break;
       };
-      
+
       newcards.push(newCardID);
     };
-    
+
     if (newcards) {
       this.players[playerID].private.hand.add(newcards);
     };
-    
+
     return newcards;
   },
-  
+
   /**
    * Performs an execute method of a specific event.
-   * Is useful to make the execution code smaller and automated on server 
+   * Is useful to make the execution code smaller and automated on server
    * handlers.
-   * 
+   *
    * @return whatever the event would return
    */
   execute : function(event) {
     return this.events[event.name].execute.call(this, event);
   },
-  
+
   /**
    * Performs an check method of a specific event.
-   * Is useful to make the execution code smaller and automated on server 
+   * Is useful to make the execution code smaller and automated on server
    * handlers.
-   * 
+   *
    * @return whatever the event would return
    */
   check : function(event) {
     return this.events[event.name].check.call(this, event);
   },
-  
+
   // HANDLERS
   handleDiscard : function(event) {
     var data = event.data;
     if (!this.prepareTurn(data.playerID)) return this.resolveError(data.playerID);
-    
+
     if (this.execute(event)) {
       var newcards = this.replaceCards(data.playerID, data.cards);
-      
+
       var extra = { newcards : newcards };
       this.resolveCorrect(data.playerID, event, extra);
       this.advanceTurn();
@@ -246,15 +249,15 @@ var ServerSaboteur = Saboteur.extend({
       return this.resolveError(data.playerID);
     }
   },
-  
+
   handleTargetPublicPlayer : function(event) {
     var data = event.data;
     if (!this.prepareTurn(data.playerID)) return this.resolveError(data.playerID);
-    
-    if (this.execute(event)) 
+
+    if (this.execute(event))
     {
       var newcards = this.replaceCards(data.playerID, [data.cardID]);
-      
+
       var extra = { newcards : newcards };
       this.resolveCorrect(data.playerID, event, extra);
       this.advanceTurn();
@@ -262,11 +265,11 @@ var ServerSaboteur = Saboteur.extend({
       this.resolveError(data.playerID);
     }
   },
-  
+
   handleTargetPrivatePlayer : function(event) {
     var data = event.data;
     if (!this.prepareTurn(data.playerID)) return this.resolveError(data.playerID);
-    
+
     var result = this.execute(event);
     if (!result) {
       if (null == result) {
@@ -274,14 +277,14 @@ var ServerSaboteur = Saboteur.extend({
         if (!player.private.hand.has(data.cardID)) {
           return this.resolveError(data.playerID);
         };
-        
+
         var card = this.factory.get(Deck.game, data.cardID);
         var target = this.players[data.targetID];
         var extra = {};
         switch(card._className) {
         case 'Inspection':
           extra.roleCard = target.private.roleCard;
-          
+
           var newcards = this.replaceCards(data.playerID, [data.cardID]);
           extra.newcards = newcards;
           break;
@@ -289,15 +292,15 @@ var ServerSaboteur = Saboteur.extend({
           if (!player.private.hand.has(data.cardID)) {
             return this.resolveError(data.playerID);
           };
-          
+
           var newcards = this.replaceCards(data.playerID, [data.cardID]);
-          
+
           extra.newcards = newcards;
-          
+
           var temp = player.private.hand.cards;
           player.private.hand.cards = target.private.hand.cards;
           target.private.hand.cards = temp;
-          
+
           // TODO: need to also transmit to the other player and to everyone else...
           break;
         case 'SwapHats':
@@ -319,53 +322,53 @@ var ServerSaboteur = Saboteur.extend({
       this.resolveError(data.playerID);
     }
   },
-  
+
   handleTargetMap : function(event) {
     var data = event.data;
     if (!this.prepareTurn(data.playerID)) return this.resolveError(data.playerID);
-    
+
     if (this.execute(event)) {
       var newcards = this.replaceCards(data.playerID, [data.cardID]);
       if (!U.isUndefined(newcards)) {
         var extra = { newcards : newcards };
       };
-      
+
       this.resolveCorrect(data.playerID, event, extra);
       this.advanceTurn();
     } else {
       this.resolveError(data.playerID);
     }
   },
-  
+
   handleHeal : function(event) {
     var data = event.data;
     if (!this.prepareTurn(data.playerID)) return this.resolveError(data.playerID);
-    
+
     if (this.execute(event)) {
       // TODO: discarded by now, time to add back the cards...
-      
+
       this.resolveCorrect(data.playerID, event, extra);
       this.advanceTurn();
     } else {
       this.resolveError(data.playerID);
     }
   },
-  
+
   // HELPERS
-  
+
   // -- STATE
   /**
-   * Collects game state for a specific player. Gets public information on 
+   * Collects game state for a specific player. Gets public information on
    * all players, as well as the number of cards they have in their hand.
    * Also adds all the private information for the respective player given.
-   * 
+   *
    * @param playerID -- the player requested
    * @return {Object} the state as {map:_, players:_}
    */
   getGameState : function(playerID) {
     // public info on all people
-    var players = U.each(this.players, function(k, v) { 
-      return { 
+    var players = U.each(this.players, function(k, v) {
+      return {
         public  : v.public,
         private : {
           cards : new Array(v.private.hand.cards.length)
@@ -373,48 +376,48 @@ var ServerSaboteur = Saboteur.extend({
       }
     });
     // private info on you
-    players[playerID].private = this.players[playerID].private; 
+    players[playerID].private = this.players[playerID].private;
     var state = {
       map     : this.map,
       players : players
     };
     return state;
   },
-  
+
   /**
-   * Communicates back to a specific playerID the error result of his 
+   * Communicates back to a specific playerID the error result of his
    * communication.
    */
   resolveError : function(playerID, data) {
     console.log('*** ERROR');
-    
+
     var eventResult = Protocol.createEvent('result', 'client', 'custom', {
       state : Protocol.state.ERROR
     });
     var eventReset = Protocol.createEvent('reset', 'client', 'custom', this.getGameState(playerID));
-    
+
     var event = Protocol.createEvent('multiple', 'client', 'custom', {
       events : [ eventResult, eventReset ]
     });
-    
+
     this.playerList[playerID].socket.emit('multiple', event);
   },
-  
+
   /**
-   * Communicates back to a specific playerID the correct result of his 
+   * Communicates back to a specific playerID the correct result of his
    * communication. Can also send back extra information along, as an update.
-   * 
+   *
    * @param playerID -- the player to be targetted
    * @param prevEvent -- the event to which this is a response to, if required
    * @param eextra -- more information to be used as a update response data
    */
   resolveCorrect : function(playerID, prevEvent, extra) {
     console.log('*** CORRECT');
-    
+
     var eventResult = Protocol.createEvent('result', 'client', 'custom', {
       state : Protocol.state.CORRECT
     });
-    
+
     var name = 'result';
     var event = eventResult;
     if (prevEvent) {
@@ -423,22 +426,22 @@ var ServerSaboteur = Saboteur.extend({
         prevEvent : prevEvent,
         response  : extra || {}
       });
-      
+
       event = Protocol.createEvent('multiple', 'client', 'custom', {
         events : [ eventResult, eventUpdate ]
       });
     };
-    
+
     this.playerList[playerID].socket.emit(name, event);
   },
-  
+
   /**
    * //TODO: think about it...
    */
   updateClientState : function(playerID, data) {
-    
+
   },
-  
+
   /**
    * Sends back a complete reset to a specific player with the current game
    * state.
