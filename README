@@ -1,0 +1,9 @@
+This is an implementation of the popular "Saboteur 2" board game (http://boardgamegeek.com/boardgame/91072/saboteur-2)
+
+Dependencies:
+  // to be added
+
+Usage:
+```$> node server.js```
+
+The default client location will be http://localhost:8080/client.html
