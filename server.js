@@ -1,13 +1,17 @@
 global.include = require('include').include;
 include('server/utilsServer.js');
 
+var PORT = 8080;
+
 var connect = require('connect');
 
 var app = connect.createServer(
   connect.static( __dirname + '/' )
-).listen(8080)
+).listen(PORT)
 
 var io = require('socket.io').listen(app);
+
+console.log('Server started on port `%s' + "\n", PORT);
 
 var rooms = {};
 var players = {};
