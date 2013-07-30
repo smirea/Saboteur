@@ -1,8 +1,14 @@
-(function(){
+(function setup_server_includes (scope) {
+
+  try {
+    include('lib/Log.js');
+  } catch (ex) {
+    console.error(ex.stack);
+    scope.Logger = console;
+  }
 
   var includes = [
     'lib/inheritance.js',
-    'lib/logger.js',
     'lib/Utils.js',
     'lib/Protocol.js',
     'lib/Hand.class.js',
@@ -28,18 +34,22 @@
     'server/ServerSaboteur.class.js'
   ];
 
-  for( var i in includes ){
-    console.log(' [INCLUDE] ', includes[i]);
-    with (global) {
-      include( includes[i] );
+  try {
+    includes.forEach(include_file);
+  } catch (ex) {
+    Logger.error(ex.stack);
+  }
+
+  scope.root = function( dir ){
+    //return dir.slice( 0, dir.lastIndexOf('/') );
+    return dir;
+  };
+
+  function include_file (file) {
+    scope.Logger.log('%s %s', Color.yellow('INCLUDE'), file);
+    with (scope) {
+      include(file);
     }
-  };
+  }
 
-  with( global ){
-    var root = function( dir ){
-      //return dir.slice( 0, dir.lastIndexOf('/') );
-      return dir;
-    };
-  };
-
-})();
+})(global);
