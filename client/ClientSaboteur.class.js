@@ -4,7 +4,7 @@ var ClientSaboteur = Saboteur.extend({
   init : (function(){
     return function( target, options, cards ){
       if( !target || target.length == 0 ){
-        logger.warn( '[SaboteurClient.init] Invalid target', arguments );
+        Logger.warn( '[SaboteurClient.init] Invalid target', arguments );
         return null;
       };
       

@@ -45,7 +45,7 @@ var ClientHand = Hand.extend({
             .unbind('click.placeCard')
             .bind('click.placeCard', function(){
               if( self.selected.length != 1 ){
-                logger.info('You can only play one card at a time');
+                Logger.info('You can only play one card at a time');
                 return;
               };
               var pos   = $(this).data('pos');
@@ -59,7 +59,7 @@ var ClientHand = Hand.extend({
                 event.data.flipped  = card.isFlipped;
                 actions.targetMap.callback(event);
               } else {
-                logger.info('You are unable to place that card on that location');
+                Logger.info('You are unable to place that card on that location');
               };
             });
         });
@@ -72,7 +72,7 @@ var ClientHand = Hand.extend({
       this.structure.actions.discard
         .bind( 'click.discard', function(){
           if( self.selected.length == 0 ){
-            logger.info('Select at least 1 card to discard');
+            Logger.info('Select at least 1 card to discard');
             return;
           };
           var ids = self.selected.map(function(){ 

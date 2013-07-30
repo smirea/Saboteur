@@ -22,7 +22,7 @@ var Preloader = {
       };
       img.onerror = function(){
         if( onerror_callback.call( self, this ) === false ){
-          logger.warn('[Preloader.load] Unable to load image', arguments);
+          Logger.warn('[Preloader.load] Unable to load image', arguments);
         };
       };
       img.src     = path;
@@ -35,7 +35,7 @@ var Preloader = {
     if( this.img[ name ] ){
       return this.img[ name ];
     } else {
-      logger.warn('[Preloader.get] Unknown image name', arguments);
+      Logger.warn('[Preloader.get] Unknown image name', arguments);
     };
   }
 }; 

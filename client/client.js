@@ -120,7 +120,7 @@ handlers.update.callback = function( event ){
       client.players[ prev.playerID ].private.hand.selected = $();
       break;
     default:
-      logger.warn('[handlers.update.callback] Unknown event', arguments);
+      Logger.warn('[handlers.update.callback] Unknown event', arguments);
   }
 }
 

@@ -165,9 +165,9 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
 })(jQuery); /******************************************************************************/
 
 /**
- * @FILE: lib/logger.js
+ * @FILE: lib/Logger.js
  */
-var logger = {
+var Logger = {
   _console  : typeof console != 'undefined' && console != null ? {
       log   : typeof console.log == 'function',
       info  : typeof console.info == 'function',
@@ -324,7 +324,7 @@ var D = {
         };
       };
       return function(obj, uglyPrint, recursionDepth){
-        (logger || console).log( createString( obj, uglyPrint, recursionDepth, 0 ) );
+        (Logger || console).log( createString( obj, uglyPrint, recursionDepth, 0 ) );
       }
     })(),
     each : function(object, callback) {
@@ -501,7 +501,7 @@ var Factory = Class.extend({
             card.id = id++;
             arr.push( card );
           } else {
-            logger.warn( '[Unknown Class]: '+i );
+            Logger.warn( '[Unknown Class]: '+i );
           };
         };
       };
@@ -517,7 +517,7 @@ var Factory = Class.extend({
       this.namespaces[namespace].push( aClass );
       ++this._total;
     } else {
-      logger.warn('[Factory.get] Unknown namespace', arguments);
+      Logger.warn('[Factory.get] Unknown namespace', arguments);
     }
     return this;
   },
@@ -548,9 +548,9 @@ var Factory = Class.extend({
       if( index >= 0 && index < this.namespaces[namespace].length ){
         return this.namespaces[namespace][index];
       };
-      logger.warn('[Factory.get] Index out of bounds', arguments);
+      Logger.warn('[Factory.get] Index out of bounds', arguments);
     } else {
-      logger.warn('[Factory.get] Unknown namespace', arguments);
+      Logger.warn('[Factory.get] Unknown namespace', arguments);
     };
     
     return null;
@@ -576,7 +576,7 @@ var Factory = Class.extend({
         return a;
       };
     } else {
-      logger.warn('[Factory.getRange] Unknown namespace', arguments);
+      Logger.warn('[Factory.getRange] Unknown namespace', arguments);
       return null;
     };
   },
@@ -610,7 +610,7 @@ var Factory = Class.extend({
       if( this.hasNamespace( arguments[i] ) ){
         arr = arr.concat( this.namespaces[arguments[i]] );
       } else {
-        logger.warn('[Factory.getNamespaces] Unknown namespace', arguments);
+        Logger.warn('[Factory.getNamespaces] Unknown namespace', arguments);
         return null;
       }
     }
@@ -645,7 +645,7 @@ var Preloader = {
       };
       img.onerror = function(){
         if( onerror_callback.call( self, this ) === false ){
-          logger.warn('[Preloader.load] Unable to load image', arguments);
+          Logger.warn('[Preloader.load] Unable to load image', arguments);
         };
       };
       img.src     = path;
@@ -658,7 +658,7 @@ var Preloader = {
     if( this.img[ name ] ){
       return this.img[ name ];
     } else {
-      logger.warn('[Preloader.get] Unknown image name', arguments);
+      Logger.warn('[Preloader.get] Unknown image name', arguments);
     };
   }
 }; 
@@ -1503,7 +1503,7 @@ Map = Class.extend({
   init        : (function(){
     return function( factory, options ){
       if( !options ){
-        logger.warn('[Map.init] Invalid Options!');
+        Logger.warn('[Map.init] Invalid Options!');
         return null;
       };
       U.extend( this, {
@@ -1544,7 +1544,7 @@ Map = Class.extend({
       case D.bottom:  y += 1; break;
       case D.left:    x -= 1; break;
       default: 
-        logger.warn( '[Map.neighbour] Unknown case', arguments );
+        Logger.warn( '[Map.neighbour] Unknown case', arguments );
         return null;
     }
     return {
@@ -1583,7 +1583,7 @@ Map = Class.extend({
         return null;
       };
     } else {
-      logger.warn( '[Map.getCardAt] Indexes out of bounds', arguments );
+      Logger.warn( '[Map.getCardAt] Indexes out of bounds', arguments );
       return null;
     };
   },
@@ -1593,10 +1593,10 @@ Map = Class.extend({
       if( card.destructible ){
         return true;
       } else {
-        logger.warn('[Map.checkRemoveCardAt] Card is undestructible', arguments);
+        Logger.warn('[Map.checkRemoveCardAt] Card is undestructible', arguments);
       }
     } else {
-      logger.warn('[Map.checkRemoveCardAt] Indexes ouf of bounds', arguments);
+      Logger.warn('[Map.checkRemoveCardAt] Indexes ouf of bounds', arguments);
     };
     
     return false;
@@ -1646,10 +1646,10 @@ Map = Class.extend({
           };
           return ok && !foreverAlone;
         } else {
-          logger.warn( '[Map.check] Must place card on empty slot', arguments );
+          Logger.warn( '[Map.check] Must place card on empty slot', arguments );
         };
       } else {
-        logger.warn( '[Map.check] Not an instance of PathCard', arguments );
+        Logger.warn( '[Map.check] Not an instance of PathCard', arguments );
       };
     };
     return false;
@@ -1675,11 +1675,11 @@ Map = Class.extend({
         };
         return true;
       } else {
-        logger.warn( '[Map.insertCardAt] Unable to place card on map', arguments );
+        Logger.warn( '[Map.insertCardAt] Unable to place card on map', arguments );
         return false;
       };
     } else {
-      logger.warn( '[Map.insertCardAt] Indexes out of bounds (max:'+this.maxCards+')', arguments );
+      Logger.warn( '[Map.insertCardAt] Indexes out of bounds (max:'+this.maxCards+')', arguments );
       return false;
     };
   },
@@ -1870,7 +1870,7 @@ ClientMap = Map.extend({
     if( card === false ){
       card.detach();
     } else {
-      logger.warn( '[MapClient.removeCardAt] Unable to remove card', arguments );
+      Logger.warn( '[MapClient.removeCardAt] Unable to remove card', arguments );
     }
   },
   toElement : function(){
@@ -2052,7 +2052,7 @@ S.Rockfall      = S.MapActionCard.extend({
       return false;
     };
     
-    logger.warn(this._className, 'Failed doing action');
+    Logger.warn(this._className, 'Failed doing action');
     return null;
   }
 });
@@ -2072,7 +2072,7 @@ S.ViewGoalCard = S.MapActionCard.extend({
       };
     };
     
-    logger.warn(this._className, 'Failed doing action');
+    Logger.warn(this._className, 'Failed doing action');
   }
 });
 /******************************************************************************/
@@ -2113,7 +2113,7 @@ S.ViewGoalCard = S.MapActionCard.extend({
         return map.insertCardAt(this.id, posx, posy);
       };
     
-      logger.warn(this._className, 'Failed doing action');
+      Logger.warn(this._className, 'Failed doing action');
       return false;
     },
     isFlipped : false,
@@ -2776,7 +2776,7 @@ var Hand = Class.extend({
         if( pos > -1 ){
           delete this.cards[pos];
         } else {
-          logger.warn('[Hand.remove] Unknown id', arguments);
+          Logger.warn('[Hand.remove] Unknown id', arguments);
           return null;
         }
       }
@@ -2867,7 +2867,7 @@ var ClientHand = Hand.extend({
             .unbind('click.placeCard')
             .bind('click.placeCard', function(){
               if( self.selected.length != 1 ){
-                logger.info('You can only play one card at a time');
+                Logger.info('You can only play one card at a time');
                 return;
               };
               var pos   = $(this).data('pos');
@@ -2881,7 +2881,7 @@ var ClientHand = Hand.extend({
                 event.data.flipped  = card.isFlipped;
                 actions.targetMap.callback(event);
               } else {
-                logger.info('You are unable to place that card on that location');
+                Logger.info('You are unable to place that card on that location');
               };
             });
         });
@@ -2894,7 +2894,7 @@ var ClientHand = Hand.extend({
       this.structure.actions.discard
         .bind( 'click.discard', function(){
           if( self.selected.length == 0 ){
-            logger.info('Select at least 1 card to discard');
+            Logger.info('Select at least 1 card to discard');
             return;
           };
           var ids = self.selected.map(function(){ 
@@ -3271,13 +3271,13 @@ var Saboteur = Class.extend({
         this.events[h] = {};
         U.extend(this.events[h], {
           handle  : function() {
-            logger.warn('Undefined handle for', h);
+            Logger.warn('Undefined handle for', h);
           },
           check : function() {
-            logger.warn('Undefined check for', h);
+            Logger.warn('Undefined check for', h);
           },
           execute : function() {
-            logger.warn('Undefined execute for', h);
+            Logger.warn('Undefined execute for', h);
           }
         });
       };
@@ -3500,7 +3500,7 @@ var ClientSaboteur = Saboteur.extend({
   init : (function(){
     return function( target, options, cards ){
       if( !target || target.length == 0 ){
-        logger.warn( '[SaboteurClient.init] Invalid target', arguments );
+        Logger.warn( '[SaboteurClient.init] Invalid target', arguments );
         return null;
       };
       

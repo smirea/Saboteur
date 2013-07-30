@@ -64,7 +64,7 @@ var ClientMap = Map.extend({
     if( card === false ){
       card.detach();
     } else {
-      logger.warn( '[MapClient.removeCardAt] Unable to remove card', arguments );
+      Logger.warn( '[MapClient.removeCardAt] Unable to remove card', arguments );
     }
   },
   toElement : function(){
