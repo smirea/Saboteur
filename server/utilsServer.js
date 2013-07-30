@@ -46,7 +46,7 @@
   };
 
   function include_file (file) {
-    scope.Logger.log('%s %s', Color.yellow('INCLUDE'), file);
+    scope.Logger.plain(' %s %s', Color.yellow('INCLUDE'), file);
     with (scope) {
       include(file);
     }
