@@ -10,6 +10,7 @@ var app = connect.createServer(
 ).listen(PORT)
 
 var io = require('socket.io').listen(app);
+io.set('log level', 1);
 
 Logger.info('Server started on port `%s`' + "\n", Color.colorize('l;yellow', PORT));
 
